@@ -9,7 +9,7 @@
 - [Benefícios](#benefícios)
 - [Planejamento das sprints](#planejamento-das-sprints)
 - [Tecnologias utilizadas](#tecnologias-utilizadas)
-- [Time](#time)
+- [Equipe](#equipe)
 - [Relatório das sprints](#relatório-das-sprints)
 
 ## O que é
@@ -103,7 +103,7 @@ Sabe-se que o controle de rendimento de qualquer objeto é uma tarefa complexa. 
   <li><a href="./Relatórios/Sprint_04.md">Sprint 04 - 26/11/2023</a></li>
 </ol>
 
-## Time
+## Equipe
 
  <table>
   <thead>

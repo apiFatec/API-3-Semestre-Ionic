@@ -120,8 +120,8 @@ Sabe-se que o controle de rendimento de qualquer objeto é uma tarefa complexa. 
     <tr>
     <tr>
     <td>Claudia Secco (Product Owner)</td>
-    <td><a href="#">Github</a></td>
-    <td><a href="#">LinkedIn</a></td>
+    <td><a href="https://github.com/ClaudiaCBS">Github</a></td>
+    <td><a href="https://www.linkedin.com/in/cl%C3%A1udia-braga-79b6b2278/">LinkedIn</a></td>
     </tr>
     <tr>
     <tr>

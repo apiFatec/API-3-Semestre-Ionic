@@ -13,14 +13,16 @@
 - [Relatório das sprints](#relatório-das-sprints)
 
 ## O que é
- O API é um projeto idealizado pela Fatec de São José dos Campos que visa a integração da grade curricular ao desenvolvimento do aluno através de um projeto real de tecnologia. Neste contexto, a API do terceiro semestre do curso de Análise e Desenvolvimento de Sistemas se dedica à construção de uma sofisticada plataforma web que permitirá à Ionic Health gerenciar, monitorar e documentar meticulosamente cada etapa de seus processos regulatórios essenciais.
+
+O API é um projeto idealizado pela Fatec de São José dos Campos que visa a integração da grade curricular ao desenvolvimento do aluno através de um projeto real de tecnologia. Neste contexto, a API do terceiro semestre do curso de Análise e Desenvolvimento de Sistemas se dedica à construção de uma sofisticada plataforma web que permitirá à Ionic Health gerenciar, monitorar e documentar meticulosamente cada etapa de seus processos regulatórios essenciais.
 <p></p>
 
 
 ## Solução de proposta
- 
-Sabe-se que o controle de rendimento de qualquer objeto é uma tarefa complexa. Sob essa ótica, propomos a criação de uma aplicação de fácil consulta, intuitiva e efetiva. À vista disso, o projeto abriga um sistema de navegação lateral (sidebar), dashboard, gerenciamento de notas, atividades e alunos da instituição.
 
+Desenvolver uma interface de usuário intuitiva e amigável para permitir que os usuários naveguem facilmente pela plataforma e acessem informações relevantes.
+Implementar um design responsivo para garantir que a plataforma seja acessível em diferentes dispositivos (desktop, tablet, smartphone).
+<p></p>
 
 ### Features
 <ul>

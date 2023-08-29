@@ -63,24 +63,39 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
 <table>
   <thead>
     <th><img
-    src="https://user-images.githubusercontent.com/89823203/190718687-f627ce18-9b3e-4ce1-bc9c-ddc3521a7705.png"
-    alt="Alt text"
-    title="Optional title"
-    style="display: inline-block; margin: 0 auto; width: 60px"></th>
-    <th><img
-    src="https://user-images.githubusercontent.com/112170274/228851590-eed20d78-d1ed-475f-a41e-633acb03b46f.png"
-    alt="Alt text"
-    title="Optional title"
-    style="display: inline-block; margin: 0 auto; width: 60px"></th>
-    <th><img
     src="https://user-images.githubusercontent.com/89823203/190877360-8c7f93cf-5f62-4f49-8641-3b605deb513e.png"
     alt="Alt text"
-    title="Optional title"
+    title="Figma"
     style="display: inline-block; margin: 0 auto; width: 60px"></th>
     <th><img
-    src="https://user-images.githubusercontent.com/112170274/229099588-dac6db0c-ef9c-418a-b18c-0f4f962a487a.png"
+    src="https://user-images.githubusercontent.com/89823203/190718687-f627ce18-9b3e-4ce1-bc9c-ddc3521a7705.png"
     alt="Alt text"
-    title="Optional title"
+    title="MySQL"
+    style="display: inline-block; margin: 0 auto; width: 60px"></th>
+    <th><img
+    src="https://user-images.githubusercontent.com/89823203/188508559-2e9b2add-9fb0-427f-b812-3201f43f9c57.png"
+    alt="Alt text"
+    title="HTML"
+    style="display: inline-block; margin: 0 auto; width: 60px"></th>
+    <th><img
+    src="https://user-images.githubusercontent.com/89823203/188508718-75027df1-8a91-4a47-94b5-ce2664c6f2be.png"
+    alt="Alt text"
+    title="CSS"
+    style="display: inline-block; margin: 0 auto; width: 60px"></th>
+     <th><img
+    src="https://user-images.githubusercontent.com/89823203/190717820-53e9f06b-1aec-4e46-91e1-94ea2cf07100.svg"
+    alt="Alt text"
+    title="JavaScript"
+    style="display: inline-block; margin: 0 auto; width: 60px"></th>
+     <th><img
+    src="https://user-images.githubusercontent.com/89823203/188508718-75027df1-8a91-4a47-94b5-ce2664c6f2be.png"
+    alt="Alt text"
+    title="TypeScript"
+    style="display: inline-block; margin: 0 auto; width: 60px"></th>
+     <th><img
+    src="https://user-images.githubusercontent.com/89823203/188508718-75027df1-8a91-4a47-94b5-ce2664c6f2be.png"
+    alt="Alt text"
+    title="Node.Js"
     style="display: inline-block; margin: 0 auto; width: 60px"></th>
   </thead>
 
@@ -91,7 +106,7 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
     <td>CSS</td>
     <td>JavaScript</td>
     <td>Typescript</td>
-    <td>Node.js</td>
+    <td>Node.Js</td>
   </tbody>
 
 </table>

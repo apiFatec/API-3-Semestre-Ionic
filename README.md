@@ -88,12 +88,12 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
     title="JavaScript"
     style="display: inline-block; margin: 0 auto; width: 60px"></th>
      <th><img
-    src="https://user-images.githubusercontent.com/89823203/188508718-75027df1-8a91-4a47-94b5-ce2664c6f2be.png"
+    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
     alt="Alt text"
     title="TypeScript"
     style="display: inline-block; margin: 0 auto; width: 60px"></th>
      <th><img
-    src="https://user-images.githubusercontent.com/89823203/188508718-75027df1-8a91-4a47-94b5-ce2664c6f2be.png"
+    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original-wordmark.svg"
     alt="Alt text"
     title="Node.Js"
     style="display: inline-block; margin: 0 auto; width: 60px"></th>

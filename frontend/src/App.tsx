@@ -1,7 +1,7 @@
 import { BrowserRouter } from 'react-router-dom'
-import { Router } from './routes/routes'
-import { Sidebar } from './components/sidebar'
-import { ThemeProvider } from './components/theme.provider'
+import { Router } from '@/routes/routes'
+import { Sidebar } from '@/components/sidebar'
+import { ThemeProvider } from '@/components/theme.provider'
 
 
 function App() {

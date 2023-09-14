@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { LayoutList, Network, LayoutDashboard, Settings } from "lucide-react";
-import { cn } from "../lib/utils";
+import { cn } from "@/lib/utils";
 import { ModeToggle } from "./mode-toggle";
 
 const routes = [

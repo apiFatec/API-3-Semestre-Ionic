@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { UserModule } from './app/user/user.module';
+import { AuthModule } from './app/auth/auth.module';
+import { UsuariosModule } from './app/usuarios/usuarios.module';
+import { UsuariosEntity } from './app/usuarios/entities/usuarios.entity';
 require('dotenv').config()
 
 @Module({
@@ -11,10 +13,9 @@ require('dotenv').config()
     database: process.env.TYPEORM_DATABASE,
     username: process.env.TYPEORM_USERNAME,
     password: process.env.TYPEORM_PASSWORD,
-    entities: [__dirname + '/*/*/.entity{.ts,.js}'],
-    synchronize: false
-  } as TypeOrmModuleOptions),
-    UserModule,
+    entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    synchronize: true
+  } as TypeOrmModuleOptions), AuthModule, UsuariosModule
   ],
   controllers: [],
   providers: [],

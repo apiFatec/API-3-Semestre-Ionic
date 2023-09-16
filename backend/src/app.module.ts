@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AuthModule } from './app/auth/auth.module';
-import { UsuariosModule } from './app/usuarios/usuarios.module';
-import { UsuariosEntity } from './app/usuarios/entities/usuarios.entity';
+import { UsuariosModule } from './app/users/users.module';
+import { UsersEntity } from './app/users/entities/users.entity';
+import { TokenModule } from './app/token/token.module';
 require('dotenv').config()
-
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: process.env.TYPEORM_CONNECTION,
@@ -15,7 +15,9 @@ require('dotenv').config()
     password: process.env.TYPEORM_PASSWORD,
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize: true
-  } as TypeOrmModuleOptions), AuthModule, UsuariosModule
+  } as TypeOrmModuleOptions),
+    UsuariosModule,
+    TokenModule
   ],
   controllers: [],
   providers: [],

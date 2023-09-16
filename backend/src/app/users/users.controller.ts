@@ -6,7 +6,7 @@ import { LoginUser } from './dto/login-user.dto';
 import { UsersEntity } from './entities/users.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@Controller('usuarios')
+@Controller('users')
 export class UsuariosController {
   constructor(
     private readonly usuariosService: UsuariosService,
@@ -16,7 +16,7 @@ export class UsuariosController {
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
   async login(@Request() req) {
-    return this.authService.login(req.user)
+    return this.authService.login(req.user);
   }
 
   @Post()

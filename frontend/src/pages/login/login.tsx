@@ -3,6 +3,9 @@ import useLogin from "./useLogin";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/theme.provider";
+import { useState } from "react";
+import { InputAnimated } from "@/components/InputAnimated";
+import { Button } from "@/components/ui/button";
 
 interface LoginFormValues {
   username: string;
@@ -20,43 +23,40 @@ export function Login() {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="mb-8 pt-4 space-y-4">
-        <h2 className="text-2xl md:text-4xl font-bold text-center">
-          BERMUDA
-        </h2>
-        <p className="text-muted-foreground font-light text-sm md:text-lg text-center">
-          Ionic healt - System Workflow
-        </p>
+    <div className="flex min-h-screen">
+      <div className="bg-[#53C4CD] w-[50%] flex flex-col items-center gap-14">
+        {/* MUDAR COR DO SVG PARA TEMA ESCURO */}
+        <img src="./Vector.svg" className="mt-[25%] text-ionic-normal" /> 
+        <img src="./ionichealth.svg" className="text-white text-8xl" />
       </div>
-      <form onSubmit={handleSubmit(onSubmit)}
-        className="px-4 md:px-20 lg:px-32 space-y-4">
-        <Card
-          className={`p-4 w-fit border-black/5 flex items-center justify-center hover:shadow-md transition ${theme === "dark" ? "bg-white" : "bg-slate-900" // Use o tema atual para aplicar a classe CSS correta
-            }`}
-        >
-          <div className="flex items-center gap-x-4 flex-col space-y-4">
-            <input className={`w-64  rounded p-3 text-white outline-none
-            ${theme === "dark" ? "bg-slate-900" : "bg-slate-400"}
-            `}
-              type="email"
-              {...register('username')} placeholder="Email"
-            />
-            <input className={`w-64  rounded p-3 text-white outline-none
-            ${theme === "dark" ? "bg-slate-900" : "bg-slate-400"}
-            `}
-              type="password"
-              {...register('password')} placeholder="Senha"
-            />
-            <button
-              className={`p-3 rounded w-64 ${theme === "dark" ? "bg-slate-900" : "bg-white"}`}
-              type="submit"
-            >
-              Entrar
-            </button>
+
+      <div className="bg-white w-[50%] flex flex-col items-center justify-start pt-[8%] px-40 gap-3">
+        <img src="./logo.svg" className="w-24"/>
+        <p className="text-3xl mb-10">Entre na sua conta</p>
+
+        <InputAnimated
+          label="Usuário"
+          id="email"
+          type="email"
+          {...register('username')}
+        />
+
+        <InputAnimated
+          label="Senha"
+          id="senha"
+          type="password"
+          {...register('password')}
+        />
+
+        <div className="flex justify-between py-2 w-full mb-12">
+          <div className="flex items-center gap-2">
+          <input type="checkbox" className="h-5 w-5 rounded-full" />
+            <label htmlFor="remember">Lembre-se de mim</label>
           </div>
-        </Card>
-      </form>
+          <button className="text-gray-500">Esqueceu-se da senha?</button>
+        </div>
+        <Button className="bg-ionic-normal active:bg-ionic-pressed hover:bg-ionic-normal w-full h-16 font-semibold text-3xl" >Entrar</Button>
+      </div>
 
     </div>
   )

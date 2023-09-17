@@ -23,8 +23,7 @@ function PrivateRoute({ element }: { element: React.ReactNode }) {
 export function Router() {
   return (
     <Routes>
-      {/* <Route path="/" element={<Login />} /> */}
-      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
       <Route element={<LoginRoutes />}>
         <Route path="/dashboard" element={<Dashboard />} />
       </Route>

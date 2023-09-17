@@ -4,5 +4,5 @@ import { Navigate, Outlet } from "react-router-dom";
 export default function LoginRoutes() {
   const { isAuthenticated } = useAuth();
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />
 }

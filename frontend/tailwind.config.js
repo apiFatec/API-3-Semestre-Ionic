@@ -17,6 +17,10 @@ module.exports = {
     },
     extend: {
       colors: {
+        ionic: {
+          normal: "#53C4CD",
+          pressed: "#3C949C",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

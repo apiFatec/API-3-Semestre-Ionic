@@ -24,7 +24,7 @@ export function InputAnimated({ label, id, type }: Props) {
       <label
         htmlFor={id}
         className={
-          cn("relative cursor-text transition-top ease-in-out duration-300 h-6", inputFocus ? "top-0 text-sm" : "top-7")
+          cn("relative cursor-text transition-top ease-in-out duration-300 h-6", inputFocus || value ? "top-0 text-sm" : "top-7")
         }
       >
         {label}

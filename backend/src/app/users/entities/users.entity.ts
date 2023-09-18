@@ -1,25 +1,39 @@
-import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { hashSync } from 'bcrypt';
+import { UsersProcessesEntity } from "@/app/processes/entities/usersProcesses.entity";
+import { UsersTasksEntity } from "@/app/tasks/entities/usersTasks.entity";
+import { ProjectsEntity } from "@/app/projects/entities/projects.entity";
 
-@Entity({name: 'users'})
+export enum Role {
+  CLEVEL = "c-level",
+  MANAGER = "gestor",
+  LEADER = "lider",
+  DEVELOPER = "desenvolvedor"
+}
+@Entity({ name: 'users' })
 export class UsersEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: Role })
+  role: Role;
+
+  @Column({ nullable: false, unique: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
-  @CreateDateColumn({name: 'created_at'})
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: string;
-  @UpdateDateColumn({name: 'updated_at'})
+
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: string;
-  @DeleteDateColumn({name: 'deleted_at'})
+
+  @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: string;
 
   @BeforeInsert()
@@ -27,4 +41,12 @@ export class UsersEntity {
     this.password = hashSync(this.password, 10)
   }
 
+  @OneToMany(() => UsersProcessesEntity, (usersProcessesEntity) => usersProcessesEntity.usersId)
+  usersProcesses: UsersProcessesEntity;
+
+  @OneToMany(() => UsersTasksEntity, (usersTasksEntity) => usersTasksEntity.usersId)
+  usersTasks: UsersTasksEntity;
+
+  @OneToMany(() => ProjectsEntity, (projectsEntity) => projectsEntity.usersId)
+  projects: ProjectsEntity;
 }

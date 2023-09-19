@@ -1,12 +1,22 @@
-import { ProcessesEntity } from "@/app/processes/entities/processes.entity";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { UsersTasksEntity } from "./usersTasks.entity";
+import { ProcessesEntity } from '@/app/processes/entities/processes.entity';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { UsersTasksEntity } from './usersTasks.entity';
 
 export enum Status {
-  WAITING = "Aguardando",
-  FINISHED = "Finalizado",
-  INPROGRESS = "Em progresso",
-  LATE = "Atrasado"
+  WAITING = 'Aguardando',
+  FINISHED = 'Finalizado',
+  INPROGRESS = 'Em progresso',
+  LATE = 'Atrasado',
 }
 
 @Entity({ name: 'tasks' })
@@ -20,7 +30,12 @@ export class TasksEntity {
   @Column({ nullable: false, type: 'text' })
   description: string;
 
-  @Column({ nullable: false, type: 'enum', enum: Status, default: Status.WAITING })
+  @Column({
+    nullable: false,
+    type: 'enum',
+    enum: Status,
+    default: Status.WAITING,
+  })
   status: Status;
 
   @CreateDateColumn({ name: 'created_at' })
@@ -36,6 +51,12 @@ export class TasksEntity {
   @JoinColumn({ name: 'processes_id' })
   processesId: ProcessesEntity;
 
-  @OneToMany(() => UsersTasksEntity, (usersTasksEntity) => usersTasksEntity.tasksId)
+  @OneToMany(
+    () => UsersTasksEntity,
+    (usersTasksEntity) => usersTasksEntity.tasksId,
+  )
   usersTasks: UsersTasksEntity;
+
+  @ManyToOne(() => ProcessesEntity, (process) => process.tasks)
+  process: ProcessesEntity;
 }

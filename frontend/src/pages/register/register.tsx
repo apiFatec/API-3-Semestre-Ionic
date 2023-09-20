@@ -1,10 +1,12 @@
 import { BoxInput } from "@/components/BoxInput";
-import { InputAnimated } from "@/components/InputAnimated";
+import { useTheme } from "@/components/theme.provider";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useRef, useState } from "react";
+import userServices from "@/services/userServices";
+import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 export interface RegisterFormValues {
   name: string;
@@ -17,26 +19,33 @@ export function Register() {
 
   const { register, handleSubmit } = useForm<RegisterFormValues>();
   const [role, setRole] = useState("");
-
+  const { theme } = useTheme();
   const onSubmit: SubmitHandler<RegisterFormValues> = (data) => {
     data.role = role;
-    console.log(data);
+    userServices.CreateUser(data)
+      .then((response) => {
+        alert(`tudo certo! ${response}`);
+        console.log(`tudo certo! ${response}`);
+      }).catch((error) => {
+        console.log(error);
+      })
   }
+
   return (
     <div className="flex min-h-screen">
-      <div className="bg-background-secondary w-[50%] flex flex-col items-center gap-14">
-        <img src="./Vector.svg" className="mt-[35%] text-ionic-normal" />
+      <div className="bg-background-login w-[50%] flex flex-col items-center gap-14">
+        <img src={theme === "light" ? "./Vector.svg" : "./Vector_dark.svg"} className="mt-[25%] text-ionic-normal" />
         <img src="./ionichealth.svg" className="w-2/3" />
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="w-[50%] bg-background flex flex-col p-20">
-        <h1 className="text-left font-extrabold text-3xl mb-12">Registration</h1>
+        <div className="flex justify-between">
+          <h1 className="text-left font-extrabold text-3xl mb-12">Registration</h1>
+          <Button className="rounded-3xl bg-background-secondary text-sidebar-text shadow-md hover:bg-background-secondary/10">
+            <ArrowLeft />
+          </Button>
+        </div>
 
         <div className="grid grid-cols-2 gap-3 shadow-xl p-3 rounded items-center justify-center w-full">
-
-          {/* <div className="w-[85%] flex flex-col gap-2 justify-center mb-8 justify-self-center">
-            <label className="font-semibold" htmlFor="email">Nome Completo</label>
-            <Input type="text" className="" id="email" />
-          </div> */}
 
           <BoxInput
             label="Nome Completo"
@@ -57,7 +66,7 @@ export function Register() {
 
           <div className="w-[85%] flex flex-col gap-0 justify-center mb-8 justify-self-center">
             <label className="font-semibold" htmlFor="nivel">Nivel</label>
-            <Select onValueChange={() => ({ ...register('role') })} >
+            <Select onValueChange={(e) => setRole(e)} >
               <SelectTrigger>
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
@@ -68,7 +77,6 @@ export function Register() {
                 <SelectItem value="Desenvolvedor">Desenvolvedor</SelectItem>
               </SelectContent>
             </Select>
-
           </div>
 
           <BoxInput
@@ -80,7 +88,7 @@ export function Register() {
             register={register}
           />
 
-          <Button className="bg-ionic-normal active:bg-ionic-pressed hover:bg-ionic-normal h-14 font-semibold text-2xl col-span-2 w-[80%] justify-self-center text--white" >Cadastrar</Button>
+          <Button className="bg-ionic-normal active:bg-ionic-pressed hover:bg-ionic-normal h-14 font-semibold text-2xl col-span-2 w-[80%] justify-self-center text-white" >Cadastrar</Button>
 
         </div>
       </form >

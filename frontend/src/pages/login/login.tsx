@@ -15,15 +15,13 @@ export function Login() {
   const { register, handleSubmit } = useForm<LoginFormValues>();
   const { loginUser, isLoading } = useLogin();
 
-
   const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
-    console.log(data);
-    loginUser(data); // Chame loginUser com os dados do formulário
+    loginUser(data);  
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex min-h-screen bg-background">
-      <div className="w-[50%] flex flex-col items-center gap-14 bg-background-secondary">
+      <div className="w-[50%] flex flex-col items-center gap-14 bg-background-login">
         {/* MUDAR COR DO SVG PARA TEMA ESCURO */}
         <img src={theme === "light" ? "./Vector.svg" : "./Vector_dark.svg"} className="mt-[25%] text-ionic-normal" />
         <img src="./ionichealth.svg" className="text-white text-8xl" />

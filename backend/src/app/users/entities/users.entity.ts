@@ -5,10 +5,10 @@ import { UsersTasksEntity } from "@/app/tasks/entities/usersTasks.entity";
 import { ProjectsEntity } from "@/app/projects/entities/projects.entity";
 
 export enum Role {
-  CLEVEL = "c-level",
-  MANAGER = "gestor",
-  LEADER = "lider",
-  DEVELOPER = "desenvolvedor"
+  CLEVEL = "C-Level",
+  MANAGER = "Gestor",
+  LEADER = "Lider",
+  DEVELOPER = "Desenvolvedor"
 }
 @Entity({ name: 'users' })
 export class UsersEntity {

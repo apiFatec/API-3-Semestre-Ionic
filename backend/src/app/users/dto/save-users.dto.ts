@@ -4,7 +4,8 @@ export enum Role {
   CLEVEL = "C-Level",
   MANAGER = "Gestor",
   LEADER = "Lider",
-  DEVELOPER = "Desenvolvedor"
+  DEVELOPER = "Desenvolvedor",
+  ADMIN = "Admin"
 }
 
 export class SaveUserDto {

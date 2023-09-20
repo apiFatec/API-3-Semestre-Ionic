@@ -8,14 +8,17 @@ import {
   } from "@/components/ui/dropdown";
 
   import '@/styles/dropdown.css'
-  
+  import '@/styles/navigation.css'
+  import roberta from '@/assets/visaoDetalhada/Roberta.svg'
   
   function DropdownPessoa() {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger id="dropdownBasic">
-          <img src="" alt="" />
-          <p>Roberta</p>
+          <div className="componentes">
+            <img src={roberta} alt="" />
+            <p>Roberta</p>
+          </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="conteudo">
           <DropdownMenuLabel>Time</DropdownMenuLabel>

@@ -29,8 +29,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     setIsAuthenticated(false);
   }, []);
 
-
-
   return (
     <AuthContext.Provider value={{
       isAuthenticated,

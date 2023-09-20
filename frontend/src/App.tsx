@@ -9,6 +9,7 @@ import { cn } from './lib/utils'
 function App() {
   const location = useLocation();
   const isLoginRoute = location.pathname === '/login';
+  // const isLoginRoute = true
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">

@@ -6,7 +6,10 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
+    --background-secondary: 0, 0%, 96%;
     --foreground: 222.2 84% 4.9%;
+
+    --background-secondary: 0, 0%, 96%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -34,11 +37,16 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+    --sidebar-text: 0, 0%, 13%;
+    --sidebar-text-smooth: 0, 0%, 17%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 228, 6%, 15%;
+    --background-secondary: 240, 7%, 23%;
     --foreground: 210 40% 98%;
+
+    --background-secondary: 240, 7%, 23%;
 
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -64,6 +72,8 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+    --sidebar-text: 0, 0%, 100%;
+    --sidebar-text-smooth: 240, 5%, 65%;
   }
 }
 
@@ -71,10 +81,10 @@
   * {
     @apply border-border;
   }
-  
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Poppins', sans-serif;
-     -webkit-font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
   }
 }

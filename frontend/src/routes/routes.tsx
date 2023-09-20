@@ -1,9 +1,9 @@
 import { Dashboard } from "@/pages/dashboard/dashboard";
-// import { Login } from "@/pages/login/login";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginRoutes from "./LoginRoutes";
-import PrivateRoutes from "./PrivateRoutes";
+// import PrivateRoutes from "./PrivateRoutes";
 import { Login } from "@/pages/login/login";
+import { Register } from "@/pages/register/register";
 
 const isUserAuthenticated = () => {
   // Implemente sua lógica de verificação de autenticação aqui
@@ -24,6 +24,7 @@ export function Router() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/admin-register" element={<Register />} />
       <Route element={<LoginRoutes />}>
         <Route path="/dashboard" element={<Dashboard />} />
       </Route>

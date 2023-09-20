@@ -9,6 +9,14 @@ class UserServices {
       }
     })
   }
+
+  async CreateUser(data: any) {
+    return await api.post('/users', data, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+  }
 }
 
 export default new UserServices();

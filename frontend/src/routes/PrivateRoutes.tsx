@@ -3,9 +3,9 @@ import { Navigate, Outlet } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
 function PrivateRoutes() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, role } = useAuth();
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
+  return isAuthenticated && role === 'Admin' ? <Outlet /> : <Navigate to="/" replace />;
 }
 
 export default PrivateRoutes;

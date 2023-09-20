@@ -27,6 +27,7 @@ module.exports = {
         background: {
           DEFAULT: "hsl(var(--background))",
           secondary: "hsl(var(--background-secondary))",
+          login: "hsl(var(--background-login))",
         },
         foreground: "hsl(var(--foreground))",
 
@@ -61,8 +62,10 @@ module.exports = {
         theme: { 
           DEFAULT: "hsl(var(--sidebar-text))",
           smooth: "hsl(var(--sidebar-text-smooth))"
-          
         },
+        sidebar: {
+          text: "hsl(var(--sidebar-text))",
+        }
 
       },
       borderRadius: {

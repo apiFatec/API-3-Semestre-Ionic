@@ -7,6 +7,7 @@
   :root {
     --background: 0 0% 100%;
     --background-secondary: 0, 0%, 96%;
+    --background-login: 184, 55%, 56%;
     --foreground: 222.2 84% 4.9%;
 
     --background-secondary: 0, 0%, 96%;
@@ -44,6 +45,7 @@
   .dark {
     --background: 228, 6%, 15%;
     --background-secondary: 240, 7%, 23%;
+    --background-login: 240, 7%, 23%;
     --foreground: 210 40% 98%;
 
     --background-secondary: 240, 7%, 23%;

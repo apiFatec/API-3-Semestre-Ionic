@@ -16,9 +16,13 @@ export class UsuariosService {
     await this.usuariosRepository.insert(usuario);
     return usuario;
   }
-  
-  async findOne(email: string): Promise<UsersEntity | undefined> {
+
+  async findOneLogin(email: string): Promise<UsersEntity | undefined> {
     return await this.usuariosRepository.findOne({ where: { email: email } });
+  }
+  
+  async findOne(id: string): Promise<UsersEntity | undefined> {
+    return await this.usuariosRepository.findOne({ where: { id: id } });
   }
 
   async findAll(): Promise<UsersEntity[] | undefined> {

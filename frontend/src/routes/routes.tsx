@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LoginRoutes from "./LoginRoutes";
 import PrivateRoutes from "./PrivateRoutes";
 import { Login } from "@/pages/login/login";
-import CadastroProcessos from "@/pages/cadastroProcessos/cadastroProcessos";
+import { CadastroProcessos } from "@/pages/cadastroProcesso/cadastroProcesso";
 
 const isUserAuthenticated = () => {
   // Implemente sua lógica de verificação de autenticação aqui
@@ -25,10 +25,9 @@ export function Router() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/cadastroProcessos" element={<CadastroProcessos />}/>
       <Route element={<LoginRoutes />}>
         <Route path="/dashboard" element={<Dashboard />} />
-        
+        <Route path="/cadastroProcessos" element={<CadastroProcessos />}/>    
       </Route>
     </Routes>
   );

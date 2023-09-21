@@ -15,4 +15,8 @@ describe('ProcessesService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> c0eb06f4ed8125fb042b779a92f8f05e1f8dbe85

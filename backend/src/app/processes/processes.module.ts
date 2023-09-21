@@ -11,4 +11,5 @@ import { ProcessesService } from './processes.service';
   providers:[ProcessesService],
   exports: [ProcessesService]
 })
-export class ProcessesModule { }
+
+export class ProcessesModule{}

@@ -25,8 +25,14 @@ export class UsuariosController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get()
+  @Get('/users')
   async getAll(): Promise<UsersEntity[] | undefined> {
     return await this.usuariosService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/id')
+  async getOne(@Request() req): Promise<UsersEntity | undefined> {
+    return await this.usuariosService.findOne(req.id);
   }
 }

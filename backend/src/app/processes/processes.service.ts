@@ -22,13 +22,13 @@ export class ProcessesService {
     }
 
     async update(id:string, data){
-        const processes = await this.processesRepository.findOneBy({id:id});
-
-        this.processesRepository.merge(processes, data);
-        return await this.processesRepository.save(processes);
+        const process = await this.processesRepository.findOneBy({id:id});
+        
+        this.processesRepository.merge(process, data);
+        return await this.processesRepository.save(process);
     }
-
-    async deleteById(id: string) { 
-        return await this.processesRepository.delete(id);
-    };
+    async deleteById(id: string){
+        await this.processesRepository.findOneByOrFail({id:id});
+        await this.processesRepository.softDelete(id);
+    }
 }

@@ -25,9 +25,10 @@ export function Router() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/cadastroProcesso" element={<CadastroProcessos />}/>   
       <Route element={<LoginRoutes />}>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/cadastroProcessos" element={<CadastroProcessos />}/>    
+         
       </Route>
     </Routes>
   );

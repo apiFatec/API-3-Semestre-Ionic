@@ -5,9 +5,9 @@ import { ModeToggle } from "./mode-toggle";
 
 const routes = [
   {
-    label: "Dashboard",
+    label: "Criar Processo",
     icon: LayoutDashboard,
-    href: "/dashboard",
+    href: "/criar-processo",
     color: "text-sky-500",
   },
   {
@@ -60,7 +60,7 @@ export function Sidebar() {
             </Link>
           ))}
         </div>
-        <ModeToggle />
+          <ModeToggle />
       </div>
     </div>
   )

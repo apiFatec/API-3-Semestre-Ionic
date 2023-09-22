@@ -1,4 +1,5 @@
 import { createContext, useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -18,6 +19,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const storedRole = localStorage.getItem('role');
     return storedRole;
   })
+  const navigate = useNavigate();
 
   const login = useCallback(({ access_token, name, role }: { access_token: string, name: string, role: string }) => {
     localStorage.setItem('token', access_token);
@@ -31,7 +33,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const logout = useCallback(() => {
     localStorage.removeItem('token');
     localStorage.removeItem('name');
-
+    navigate('/login');
     setIsAuthenticated(false);
   }, []);
 

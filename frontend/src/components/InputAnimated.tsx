@@ -38,7 +38,7 @@ export function InputAnimated({ label, id, type, register, name }: Props) {
         onBlur={handleBlur}
         type={type}
         id={id}
-        className="border-b-[1px] border-black w-[100%] text-base p-1 outline-none bg-inherit"
+        className="border-b-[1px] border-background-secondary w-[100%] text-base p-1 outline-none bg-inherit"
         {...register(name)} // Use props.name para atribuir a referência correta
       />
     </div>

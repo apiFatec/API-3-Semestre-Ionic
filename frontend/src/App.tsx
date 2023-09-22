@@ -4,11 +4,12 @@ import { Sidebar } from '@/components/sidebar'
 import { ThemeProvider } from '@/components/theme.provider'
 import AuthProvider from './contexts/AuthContext'
 import { cn } from './lib/utils'
+import { NavBar } from './components/navBar'
 
 function App() {
   const location = useLocation();
   const isRouteSidebar = location.pathname === '/login' || location.pathname === '/admin-register';
-  
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <AuthProvider>
@@ -19,7 +20,9 @@ function App() {
             </div>
           }
           <main className={cn(!isRouteSidebar ? 'md:pl-72' : '')}>
-            <nav className="p-8">nav</nav>
+            {!isRouteSidebar &&
+              <NavBar />
+            }
             <Router />
           </main>
         </div>

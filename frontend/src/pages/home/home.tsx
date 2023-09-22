@@ -55,7 +55,7 @@ export function Home() {
             <input
               type="text"
               placeholder="Pesquisar processo"
-              className="outline-none"
+              className="outline-none text-slate-700"
             />
             <Search className="text-black/30" />
           </form>

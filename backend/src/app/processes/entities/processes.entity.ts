@@ -2,6 +2,12 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryG
 import { UsersProcessesEntity } from "./usersProcesses.entity";
 import { TasksEntity } from "@/app/tasks/entities/tasks.entity";
 
+export enum Status {
+  WAITING = "Aguardando",
+  INPROGRESS = "Em progresso",
+  FINISHED = "Finalizado"
+}
+
 @Entity({ name: 'processes' })
 export class ProcessesEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -16,6 +22,9 @@ export class ProcessesEntity {
   @Column({ nullable: false, type: 'timestamp' })
   deadline: string;
 
+  @Column({ nullable: false, type: 'enum', enum: Status, default: Status.WAITING })
+  status: Status;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: string;
 
@@ -26,8 +35,8 @@ export class ProcessesEntity {
   deletedAt: string;
 
   @OneToMany(() => UsersProcessesEntity, (usersProcessesEntity) => usersProcessesEntity.processesId)
-  usersProcesses: UsersProcessesEntity;
+  usersProcesses: UsersProcessesEntity[];
 
   @OneToMany(() => TasksEntity, (tasksEntity) => tasksEntity.processesId)
-  tasks: TasksEntity;
+  tasks: TasksEntity[];
 }

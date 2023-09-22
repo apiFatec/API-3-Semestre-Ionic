@@ -65,7 +65,8 @@ module.exports = {
         },
         sidebar: {
           text: "hsl(var(--sidebar-text))",
-        }
+        },
+        button: "hsl(var(--bg-button))",
 
       },
       borderRadius: {

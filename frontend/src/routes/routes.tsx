@@ -4,10 +4,12 @@ import LoginRoutes from "./LoginRoutes";
 import { Login } from "@/pages/login/login";
 import { Register } from "@/pages/register/register";
 import PrivateRoutes from "./PrivateRoutes";
+import { Home } from "@/pages/home/home";
 
 export function Router() {
   return (
     <Routes>
+      <Route path="/home" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route element={<PrivateRoutes />}>
         <Route path="/admin-register" element={<Register />} />

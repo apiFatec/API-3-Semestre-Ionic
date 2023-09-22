@@ -8,7 +8,7 @@ import { cn } from './lib/utils'
 function App() {
   const location = useLocation();
   const isRouteSidebar = location.pathname === '/login' || location.pathname === '/admin-register';
-  console.log(isRouteSidebar)
+  
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <AuthProvider>
@@ -19,6 +19,7 @@ function App() {
             </div>
           }
           <main className={cn(!isRouteSidebar ? 'md:pl-72' : '')}>
+            <nav className="p-8">nav</nav>
             <Router />
           </main>
         </div>

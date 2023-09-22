@@ -1,70 +1,110 @@
-import IonicText from "../../assets/IonicText.png";
+import { useEffect, useState } from 'react';
+import { ProcessCard } from "@/components/processCard";
+import { useTheme } from "@/components/theme.provider"
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
+import { Search } from "lucide-react";
+import processService from '@/services/processService';
+
+export interface Process {
+  process_id: string;
+  process_name: string;
+  process_description: string;
+  process_deadline: string;
+  process_status: string;
+  users: Array<Users>
+}
+
+interface Users {
+  name: string;
+  role: string;
+  id: string;
+}
 
 export function Home() {
-  const [findAll, setDadosDoProcesso] = useState(null);
+  const { theme } = useTheme();
+  const [processes, setProcesses] = useState<Process[]>([]);
   
   useEffect(() => {
-    async function carregarDadosDoProcesso() {
-      const dados = await findAll();
-      if (dados) {
-        setDadosDoProcesso(dados); 
-      }
-    }
+    getProcesses();
+  }, [])
 
-    carregarDadosDoProcesso();
-  }, []);
+  async function getProcesses() {
+    processService.getAll()
+      .then((response) => {
+        setProcesses(response.data);
+        console.log(processes);
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
 
   return (
-    <body className="mx-16">
-      <nav className="p-8">nav</nav>
-      <section className="flex justify-between">
-        <div>
-          <img src={IonicText} alt="Minha Imagem" />
-          <p className="text-gray-600">Acompanhamento de processos</p>
+    <div className="flex flex-col px-10 gap-10">
+      <div className="flex items-center">
+        <div className="flex flex-col gap-3 w-1/2">
+          <img src={`./ionic-text-${theme}.svg`} className="w-1/2" alt="logo contendo nome da marca ionichealth" />
+          <h1 className="text-theme-smooth">Acompanhamento de processos</h1>
         </div>
-        <div className="flex gap-[1rem] items-end mr-[8rem]">
-          <Button className="border-solid border-[1px] border-gray-200 bg-white text-gray-400 font-normal text-[9pt] active:bg-ionic-pressed hover:bg-ionic-normal hover:text-white w-[8rem] h-12 hover:border-hidden">
-            Novo processo
+
+        <div className="flex w-1/2 items-center justify-end gap-4">
+          <Button className="bg-button hover:bg-ionic-pressed">
+            Novo Processo
           </Button>
-          <Input
-            className="h-12 w-[25rem] placeholder:text-gray-400 "
-            placeholder="Pesquisar processo..."
-          ></Input>
+
+          <form className="p-2 rounded-md bg-white flex gap-6">
+            <input
+              type="text"
+              placeholder="Pesquisar processo"
+              className="outline-none"
+            />
+            <Search className="text-black/30" />
+          </form>
         </div>
-      </section>
-      <main className="grid grid-cols-3 gap-20px mt-16">
-      if (dadosDoProcesso) {
-        return (
-          <section>
-            <h3>Backlog</h3>
-            <div className="mt-8 flex-column p-[1.4rem] h-[10rem] max-w-[400px] rounded-md shadow-[0px_0px_6px_0px_rgba(0,0,0,0.25)]">
-              <p className="text-gray-600 font-light text-[14pt]">
-              {findAll.name}
-              </p>
-            </div>
-          </section>
-          <section>
-            <h3>Em Andamento</h3>
-            <div className="mt-8 flex-column p-[1.4rem] h-[10rem] max-w-[400px] rounded-md shadow-[0px_0px_6px_0px_rgba(0,0,0,0.25)]">
-              <p className="text-gray-600 font-light text-[14pt]">
-              {findAll.name}
-              </p>
-            </div>
-          </section>
-          <section>
-            <h3>Finalizado</h3>
-            <div className="mt-8 flex-column p-[1.4rem] h-[10rem] max-w-[400px] rounded-md shadow-[0px_0px_6px_0px_rgba(0,0,0,0.25)]">
-              <p className="text-gray-600 font-light text-[14pt]">
-              {findAll.name}
-              </p>
-            </div>
-          </section>
+      </div>
+
+      <div className="flex w-full justify-between gap-10">
+        <div className="flex flex-col w-full gap-3">
+          {processes.map((process) => {
+            if (process.process_status === "Aguardando") {
+              return (
+                <ProcessCard key={process.process_id}
+                  process_description={process.process_description}
+                  process_name={process.process_name}
+                  users={process.users}
+                />
+              )
+            }
+          })}
+        </div>
+
+        <div className="flex flex-col w-full gap-3">
+          {processes.map((process) => {
+            if (process.process_status === "Em progresso") {
+              return (
+                <ProcessCard key={process.process_id}
+                  process_description={process.process_description}
+                  process_name={process.process_name}
+                  users={process.users}
+                />
+              )
+            }
+          })}
+        </div>
+
+        <div className="flex flex-col w-full gap-3">
+          {processes.map((process) => {
+            if (process.process_status === "Finalizado") {
+              return (
+                <ProcessCard key={process.process_id}
+                  process_description={process.process_description}
+                  process_name={process.process_name}
+                  users={process.users}
+                />
+              )
+            }
+          })}
+        </div>
+      </div>
+    </div>
   )
-}
-      </main>
-    </body>
-  );
 }

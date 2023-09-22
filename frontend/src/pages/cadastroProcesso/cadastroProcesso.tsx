@@ -11,7 +11,6 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs"
 import { useState } from 'react';
-import { Checkbox } from "@radix-ui/react-checkbox";
 
 interface ProcessFormValues {
     title: string;
@@ -39,13 +38,9 @@ export function CadastroProcessos() {
     const [descriptionTask, setDescriptionTask] = useState('');
     const [tasks, setTasks] = useState<Tasks[]>([]);
 
-    // const startDate = new Date();
-    // const date = startDate.setDate(startDate.getDate())
-    const defaultValue = new Date('01/01/2001')
-
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [deadline, setDeadline] = useState(defaultValue);
+    const [deadline, setDeadline] = useState(new Date());
     const [teamLeader, setTeamLeader] = useState('');
     const [team, setTeam] = useState<Users[]>([]);
     const [process, setProcesss] = useState<ProcessFormValues[]>([])
@@ -54,7 +49,21 @@ export function CadastroProcessos() {
         'opção 1',
         'opção 2',
         'opção 3',
+        'opção 4',
+        'opção 5'
     ]
+
+    function handleChange(event : any){
+        const {value, checked} = event.target
+
+        if(checked){
+            setTeam(pre => [...pre, value])          
+        }
+        else(
+            setTeam(pre => {return [...pre.filter(skill => skill!==value)]})
+        )
+    }
+
 
     const createProcess: SubmitHandler<ProcessFormValues> = () => {
         const processo: ProcessFormValues = {
@@ -75,7 +84,6 @@ export function CadastroProcessos() {
         }
         setTasks((prevState) => [...prevState, tarefa])
     }
-
 
     return (
         <main className="">
@@ -100,13 +108,14 @@ export function CadastroProcessos() {
                                     setValue={setDescription}
                                 />
                                 <div className="center-normal py-2">
-                                    <label>Atribuir uma Equipe</label>
+                                    <label>Atribuir uma equipe</label>
                                     <ScrollArea id="teamList" className="mt-2 p-4 h-[14.5rem] w-[16.875rem] rounded-md border">
                                         {options.map((option) => (
                                             <section className="flex p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
-                                                <div><Checkbox className="border-8 mr-2"
-                                                onCheckedChange={() => setTeam(team)}/></div>
-                                                <div className="p-1">{option}</div>
+                                                <label className="p-1" htmlFor="">
+                                                    <input type="checkbox" value={option} onChange={handleChange}  className="mr-2"/>
+                                                    {option}
+                                                </label>
                                             </section>
                                         ))}
 

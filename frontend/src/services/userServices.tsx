@@ -10,6 +10,10 @@ class UserServices {
     })
   }
 
+  async getUser() {
+    return await api.get('/users')
+  }
+  
   async CreateUser(data: any) {
     return await api.post('/users', data, {
       headers: {

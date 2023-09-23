@@ -4,6 +4,8 @@ import { useTheme } from "@/components/theme.provider"
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import processService from '@/services/processService';
+import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router';
 
 export interface Process {
   process_id: string;
@@ -23,7 +25,7 @@ interface Users {
 export function Home() {
   const { theme } = useTheme();
   const [processes, setProcesses] = useState<Process[]>([]);
-  
+  const navigate = useNavigate();
   useEffect(() => {
     getProcesses();
   }, [])
@@ -47,17 +49,19 @@ export function Home() {
         </div>
 
         <div className="flex w-1/2 items-center justify-end gap-4">
-          <Button className="bg-button hover:bg-ionic-pressed">
+          <Button className="bg-button hover:bg-ionic-pressed" onClick={() => navigate('/criar-processo')}>
             Novo Processo
           </Button>
 
-          <form className="p-2 rounded-md bg-white flex gap-6">
+          <form className={cn("p-2 rounded-md flex gap-6 shadow-md  border-[1px]", theme === 'light' ? 'bg-white' : 'bg-background-secondary')}>
             <input
               type="text"
               placeholder="Pesquisar processo"
-              className="outline-none text-slate-700"
+              className="outline-none  bg-transparent"
             />
-            <Search className="text-black/30" />
+            <Button className='bg-transparent hover:bg-transparent w-fit h-6'>
+              <Search className="text-primary/60" />
+            </Button>
           </form>
         </div>
       </div>

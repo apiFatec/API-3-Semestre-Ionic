@@ -10,10 +10,12 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import userServices from "@/services/userServices";
+import { cn } from "@/lib/utils";
 
 interface ProcessFormValues {
-    title: string;
+    name: string;
     description: string;
     deadline: Date;
     teamLeader: string;
@@ -22,7 +24,14 @@ interface ProcessFormValues {
 }
 
 interface Users {
+    id: string;
     name: string;
+    role: string;
+    email: string;
+    password: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
 }
 
 interface Tasks {
@@ -37,6 +46,7 @@ export function CadastroProcessos() {
     const [titleTask, setTitleTask] = useState('');
     const [descriptionTask, setDescriptionTask] = useState('');
     const [tasks, setTasks] = useState<Tasks[]>([]);
+    const [users, setUsers] = useState<Users[]>([]);
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -45,29 +55,33 @@ export function CadastroProcessos() {
     const [team, setTeam] = useState<Users[]>([]);
     const [process, setProcesss] = useState<ProcessFormValues[]>([])
 
-    const options = [
-        'opção 1',
-        'opção 2',
-        'opção 3',
-        'opção 4',
-        'opção 5'
-    ]
+    useEffect(() => {
+        getUsers();
+    }, [])
 
-    function handleChange(event : any){
-        const {value, checked} = event.target
+    async function getUsers() {
+        userServices.getUser()
+            .then((response) => {
+                setUsers(response.data);
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
 
-        if(checked){
-            setTeam(pre => [...pre, value])          
+    function handleChange(event: any) {
+        const { value, checked } = event.target
+
+        if (checked) {
+            setTeam(pre => [...pre, value])
         }
-        else(
-            setTeam(pre => {return [...pre.filter(skill => skill!==value)]})
+        else (
+            setTeam(pre => { return [...pre.filter(skill => skill !== value)] })
         )
     }
 
-
     const createProcess: SubmitHandler<ProcessFormValues> = () => {
         const processo: ProcessFormValues = {
-            title: title,
+            name: title,
             description: description,
             teamLeader: teamLeader,
             team: team,
@@ -110,14 +124,21 @@ export function CadastroProcessos() {
                                 <div className="center-normal py-2">
                                     <label>Atribuir uma equipe</label>
                                     <ScrollArea id="teamList" className="mt-2 p-4 h-[14.5rem] w-[16.875rem] rounded-md border">
-                                        {options.map((option) => (
-                                            <section className="flex p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
-                                                <label className="p-1" htmlFor="">
-                                                    <input type="checkbox" value={option} onChange={handleChange}  className="mr-2"/>
-                                                    {option}
-                                                </label>
-                                            </section>
-                                        ))}
+                                        {users.map((user) => {
+                                            if (user.id !== teamLeader)
+                                                return (
+                                                    // <section className="flex p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
+                                                    //     <label className="p-1" htmlFor="">
+                                                    //         <input type="checkbox" value={user.id} onChange={handleChange} className="mr-2" />
+                                                    //         {user.name}
+                                                    //     </label>
+                                                    // </section>
+                                                    <label key={user.id} htmlFor={user.id} className="flex p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
+                                                        <input id={user.id} type="checkbox" value={user.id} onChange={handleChange} className="mr-2" />
+                                                        {user.name}
+                                                    </label>
+                                                )
+                                        })}
 
                                     </ScrollArea>
                                 </div>
@@ -127,7 +148,7 @@ export function CadastroProcessos() {
                                     label="Líder responsável do processo"
                                     id="lider"
                                     setValue={setTeamLeader}
-                                    options={options}
+                                    users={users}
                                 />
 
                                 <Input
@@ -140,10 +161,12 @@ export function CadastroProcessos() {
                                     <label>Tarefas</label>
                                     <ScrollArea id="listTasks" className="mt-2 p-4 h-[17rem] w-[16.875rem] rounded-md border">
                                         {tasks.map((task) => (
-                                            <section className="p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
-                                                <div className="font-semibold p-1">{task.titleTask}</div>
-                                                <div className="pl-2 pb-1 underline">{task.priorityTask}</div>
-                                                <div className="pl-2 text-[#777777]">{task.descriptionTask}</div>
+                                            <section key={task.descriptionTask} className="p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
+                                                <div className="flex items-center justify-between">
+                                                    <span className="font-semibold p-1">{task.titleTask}</span>
+                                                    <span className={cn("pl-2 pb-1 text-blue-600", task.priorityTask === "Alta" ? "text-red-600" : "text-orange-500")}>{task.priorityTask}</span>
+                                                </div>
+                                                <span className="pl-2 text-[#777777]">{task.descriptionTask}</span>
                                             </section>
 
                                         ))}

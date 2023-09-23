@@ -9,6 +9,10 @@ class UserServices {
       }
     })
   }
+
+  async getUser() {
+    return await api.get('/users')
+  }
 }
 
 export default new UserServices();

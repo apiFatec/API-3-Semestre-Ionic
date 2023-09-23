@@ -13,12 +13,13 @@ import {
 import { useEffect, useState } from 'react';
 import userServices from "@/services/userServices";
 import { cn } from "@/lib/utils";
+import processService from "@/services/processService";
 
-interface ProcessFormValues {
+export interface ProcessFormValues {
     name: string;
     description: string;
     deadline: Date;
-    teamLeader: string;
+    leader: string;
     team: Array<Users>;
     tasks: Array<Tasks>;
 }
@@ -35,9 +36,9 @@ interface Users {
 }
 
 interface Tasks {
-    titleTask: string;
-    priorityTask: string;
-    descriptionTask: string;
+    title: string;
+    priority: string;
+    description: string;
 }
 
 export function CadastroProcessos() {
@@ -71,30 +72,38 @@ export function CadastroProcessos() {
     function handleChange(event: any) {
         const { value, checked } = event.target
 
+        const parsedValue = JSON.parse(value);
+
         if (checked) {
-            setTeam(pre => [...pre, value])
+            setTeam(pre => [...pre, parsedValue]);
         }
-        else (
-            setTeam(pre => { return [...pre.filter(skill => skill !== value)] })
-        )
+        else {
+            setTeam(pre => { return [...pre.filter(skill => skill !== parsedValue)] });
+        }
     }
 
     const createProcess: SubmitHandler<ProcessFormValues> = () => {
         const processo: ProcessFormValues = {
             name: title,
             description: description,
-            teamLeader: teamLeader,
-            team: team,
             deadline: deadline,
-            tasks: tasks
+            tasks: tasks,
+            team: team,
+            leader: teamLeader,
         }
-        console.log(processo)
+        console.log(processo);
+        processService.createProcess(processo)
+            .then((response) => {
+                console.log(response);
+            }).catch((error) => {
+                console.log(error);
+            })
     }
     function addTask() {
         const tarefa: Tasks = {
-            titleTask: titleTask,
-            priorityTask: priority,
-            descriptionTask: descriptionTask
+            title: titleTask,
+            priority: priority,
+            description: descriptionTask
         }
         setTasks((prevState) => [...prevState, tarefa])
     }
@@ -134,7 +143,7 @@ export function CadastroProcessos() {
                                                     //     </label>
                                                     // </section>
                                                     <label key={user.id} htmlFor={user.id} className="flex p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
-                                                        <input id={user.id} type="checkbox" value={user.id} onChange={handleChange} className="mr-2" />
+                                                        <input id={user.id} type="checkbox" value={JSON.stringify(user)} onChange={handleChange} className="mr-2" />
                                                         {user.name}
                                                     </label>
                                                 )
@@ -163,10 +172,10 @@ export function CadastroProcessos() {
                                         {tasks.map((task, index) => (
                                             <section key={index} className="p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
                                                 <div className="flex items-center justify-between">
-                                                    <span className="font-semibold p-1">{task.titleTask}</span>
-                                                    <span className={cn("pl-2 pb-1 text-blue-600", task.priorityTask === "Alta" ? "text-red-600" : "text-orange-500")}>{task.priorityTask}</span>
+                                                    <span className="font-semibold p-1">{task.title}</span>
+                                                    <span className={cn("pl-2 pb-1 text-blue-600", task.priority === "Alta" ? "text-red-600" : "text-orange-500")}>{task.priority}</span>
                                                 </div>
-                                                <span className="pl-2 text-[#777777]">{task.descriptionTask}</span>
+                                                <span className="pl-2 text-[#777777]">{task.description}</span>
                                             </section>
 
                                         ))}

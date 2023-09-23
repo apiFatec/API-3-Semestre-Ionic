@@ -28,12 +28,12 @@ export function SelectForm({ label, id, setValue, users }: Props) {
                 id={id}
                 className={cn(
                     "flex w-[16.875rem] h-10 my-2 p-2 overflow-hidden rounded-md border bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2")}
-                onChange={(e) => setValue(e.target.value)}
+                onChange={(e) => setValue(JSON.parse(e.target.value))}
             >
                 {users.map((user, index) => {
                     if (user.role === "Lider" || user.role === "Gestor")
                         return (
-                            <option key={index} value={user.id}>{user.name}</option>
+                            <option key={index} value={JSON.stringify(user)}>{user.name}</option>
                         )
                 })}
             </select>

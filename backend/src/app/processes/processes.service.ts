@@ -1,15 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ProcessesEntity } from './entities/processes.entity';
+import { ProcessesEntity, Status } from './entities/processes.entity';
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { SaveProcessDTO } from './dto/save-processes.dto';
 import { TasksService } from '../tasks/tasks.service';
+import { UsersProcessesEntity } from './entities/usersProcesses.entity';
 
 @Injectable()
 export class ProcessesService {
     constructor(
         @InjectRepository(ProcessesEntity)
         private readonly processesRepository: Repository<ProcessesEntity>,
+        @InjectRepository(UsersProcessesEntity)
+        private readonly usersProcessesRepository: Repository<UsersProcessesEntity>,
         private readonly tasksService: TasksService,
     ) { }
 
@@ -56,14 +59,41 @@ export class ProcessesService {
         return process;
     }
 
-    async update(id:string, data){
-        const process = await this.processesRepository.findOneBy({id:id});
-        
+    async update(id: string, data) {
+        const process = await this.processesRepository.findOneBy({ id: id });
+
         this.processesRepository.merge(process, data);
         return await this.processesRepository.save(process);
     }
-    async deleteById(id: string){
-        await this.processesRepository.findOneByOrFail({id:id});
+    async deleteById(id: string) {
+        await this.processesRepository.findOneByOrFail({ id: id });
         await this.processesRepository.softDelete(id);
+    }
+
+
+    async createProcess(saveProcessDTO: SaveProcessDTO) {
+        const newProcess = new ProcessesEntity();
+        newProcess.name = saveProcessDTO.name;
+        newProcess.description = saveProcessDTO.description;
+        newProcess.deadline = saveProcessDTO.deadline;
+        newProcess.status = saveProcessDTO.status || Status.WAITING;
+
+        const createdProcess = await this.processesRepository.save(newProcess);
+
+        const teamAndLeader = [...saveProcessDTO.team, saveProcessDTO.leader];
+
+        const usersProcesses = teamAndLeader.map(user => {
+            const userProcess = new UsersProcessesEntity();
+            userProcess.role = user.role;
+            userProcess.processesId = createdProcess;
+            userProcess.usersId = user;
+            return userProcess;
+        });
+
+        const createdUsersProcesses = await this.usersProcessesRepository.save(usersProcesses);
+
+        const tasks = await this.tasksService.store(saveProcessDTO.tasks, createdProcess);
+
+        return { createdProcess, createdUsersProcesses, tasks };
     }
 }

@@ -3,9 +3,11 @@ import { ProcessesEntity } from "./processes.entity";
 import { UsersEntity } from "@/app/users/entities/users.entity";
 
 export enum Role {
-  MANAGER = "gestor",
-  LEADER = "lider",
-  DEVELOPER = "desenvolvedor"
+  CLEVEL = "C-Level",
+  MANAGER = "Gestor",
+  LEADER = "Lider",
+  DEVELOPER = "Desenvolvedor",
+  ADMIN = "Admin"
 }
 
 @Entity({name: 'users_processes'})

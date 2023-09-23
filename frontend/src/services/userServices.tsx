@@ -1,4 +1,5 @@
 import { api } from "@/api";
+import axios from "axios";
 
 class UserServices {
 
@@ -8,6 +9,10 @@ class UserServices {
         'Content-Type': 'application/json'
       }
     })
+  }
+
+  async getProcess(){
+    return await axios.get('https://raw.githubusercontent.com/apiFatec/API-3-Semestre-Ionic/main/fakeProcess.json')
   }
 }
 

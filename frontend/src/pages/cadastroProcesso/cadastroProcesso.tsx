@@ -106,7 +106,7 @@ export function CadastroProcessos() {
                 onSubmit={handleSubmit(createProcess)}
             >
                 <section className="">
-                    <h1 className="text-3xl mt-20">Novo Processo</h1>
+                    <h1 className="text-3xl">Novo Processo</h1>
                     <div className="py-4">
                         <Card className="grid grid-cols-2 justify-items-center w-[37.5rem] p-[1.25rem] shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
                             <div className="mr-2">
@@ -160,8 +160,8 @@ export function CadastroProcessos() {
                                 <div className="center-normal py-2">
                                     <label>Tarefas</label>
                                     <ScrollArea id="listTasks" className="mt-2 p-4 h-[17rem] w-[16.875rem] rounded-md border">
-                                        {tasks.map((task) => (
-                                            <section key={task.descriptionTask} className="p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
+                                        {tasks.map((task, index) => (
+                                            <section key={index} className="p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
                                                 <div className="flex items-center justify-between">
                                                     <span className="font-semibold p-1">{task.titleTask}</span>
                                                     <span className={cn("pl-2 pb-1 text-blue-600", task.priorityTask === "Alta" ? "text-red-600" : "text-orange-500")}>{task.priorityTask}</span>
@@ -177,7 +177,7 @@ export function CadastroProcessos() {
                     </div>
                 </section>
                 <section className="">
-                    <div className="grid mt-[8.313rem] justify-items-center">
+                    <div className="grid justify-items-center">
                         <Card className="grid justify-items-center w-[19rem] shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
                             <div className="p-5">
                                 <label>Prioridade</label>

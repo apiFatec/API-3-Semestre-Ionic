@@ -6,7 +6,7 @@ module.exports = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   theme: {
     container: {
       center: true,
@@ -24,8 +24,13 @@ module.exports = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
+        background: {
+          DEFAULT: "hsl(var(--background))",
+          secondary: "hsl(var(--background-secondary))",
+          login: "hsl(var(--background-login))",
+        },
         foreground: "hsl(var(--foreground))",
+
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -54,6 +59,15 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        theme: { 
+          DEFAULT: "hsl(var(--sidebar-text))",
+          smooth: "hsl(var(--sidebar-text-smooth))"
+        },
+        sidebar: {
+          text: "hsl(var(--sidebar-text))",
+        },
+        button: "hsl(var(--bg-button))",
+
       },
       borderRadius: {
         lg: "var(--radius)",

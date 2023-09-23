@@ -31,7 +31,7 @@ export function SelectForm({ label, id, setValue, users }: Props) {
                 onChange={(e) => setValue(e.target.value)}
             >
                 {users.map((user, index) => {
-                    if (user.role === "lider" || user.role === "gestor")
+                    if (user.role === "Lider" || user.role === "Gestor")
                         return (
                             <option key={index} value={user.id}>{user.name}</option>
                         )

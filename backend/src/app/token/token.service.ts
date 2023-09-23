@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { TokenEntity } from './entities/token.entity';
 import { UsuariosService } from 'src/app/users/users.service';
 import { AuthService } from '@/app/auth/auth.service';
-import { TokenReturn } from './dto/return-token.dto';
+import { LoginReturn } from './dto/return-token.dto';
 @Injectable()
 export class TokenService {
   constructor(
@@ -29,7 +29,7 @@ export class TokenService {
     }
   }
 
-  async refreshToken(oldToken: string): Promise<TokenReturn | HttpException> {
+  async refreshToken(oldToken: string): Promise<LoginReturn | HttpException> {
     const hasToken = await this.tokenRepository.findOne({ where: { hash: oldToken } });
     if (hasToken) {
       let user = await this.userService.findOne(hasToken.userName);

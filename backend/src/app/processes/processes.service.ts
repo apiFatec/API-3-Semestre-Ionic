@@ -36,9 +36,19 @@ export class ProcessesService {
     }
 
     async findOne(id: string) {
-        return await this.processesRepository.findOneBy({ id: id });
-    }
+        const query = `
+          SELECT 
+            processes.*,
+            JSON_AGG(tasks.*) AS tasks
+          FROM processes
+          INNER JOIN tasks ON processes.id = tasks."processes_id"
+          WHERE processes.id = $1
+          GROUP BY processes.id
+        `;
 
+        const result = await this.processesRepository.query(query, [id]);
+        return result[0] || null;
+    }
     async store(data: SaveProcessDTO): Promise<ProcessesEntity> {
         const { tasks, ...result } = data;
 
@@ -48,7 +58,7 @@ export class ProcessesService {
 
         if (tasks && tasks.length > 0) {
             const taskEntities = await this.tasksService.storeMultiple(tasks);
-
+            console.log(tasks);
             taskEntities.forEach((task) => {
                 task.processesId = process;
             });

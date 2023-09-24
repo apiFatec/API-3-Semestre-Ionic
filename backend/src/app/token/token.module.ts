@@ -5,12 +5,14 @@ import { AuthModule } from '../auth/auth.module';
 import { UsuariosModule } from '../users/users.module';
 import { TokenService } from './token.service';
 import { TokenController } from './token.controller';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([TokenEntity]),
     forwardRef(() => AuthModule),
-    forwardRef(() => UsuariosModule)
+    forwardRef(() => UsuariosModule),
+    JwtModule
   ],
   controllers: [TokenController],
   exports: [TokenService],

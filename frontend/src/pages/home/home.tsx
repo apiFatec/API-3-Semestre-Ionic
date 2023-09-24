@@ -72,6 +72,7 @@ export function Home() {
             if (process.process_status === "Aguardando") {
               return (
                 <ProcessCard key={process.process_id}
+                  process_id={process.process_id}
                   process_description={process.process_description}
                   process_name={process.process_name}
                   users={process.users}
@@ -86,6 +87,7 @@ export function Home() {
             if (process.process_status === "Em progresso") {
               return (
                 <ProcessCard key={process.process_id}
+                  process_id={process.process_id}
                   process_description={process.process_description}
                   process_name={process.process_name}
                   users={process.users}
@@ -100,6 +102,7 @@ export function Home() {
             if (process.process_status === "Finalizado") {
               return (
                 <ProcessCard key={process.process_id}
+                  process_id={process.process_id}
                   process_description={process.process_description}
                   process_name={process.process_name}
                   users={process.users}

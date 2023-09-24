@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 export interface Process {
   process_name: string;
   process_description: string;
-  users: Array<Users>
+  users: Array<Users>,
+  process_id: string;
 }
 
 interface Users {
@@ -21,7 +22,7 @@ export function ProcessCard(process: Process) {
   const navigate = useNavigate();
 
   function nav() {
-    navigate(`/processos/${encodeURIComponent(process.process_name)}`);
+    navigate(`/processos/${encodeURIComponent(process.process_name)}/${process.process_id}`);
   }
 
   return (

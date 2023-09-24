@@ -3,18 +3,21 @@ import alvo from "@/assets/visaoDetalhada/Alvo.svg";
 import checklist from "@/assets/visaoDetalhada/checkList.svg";
 import CircularDiarioProgressBar from "@/components/progressBars/CircleDiarioProgressBar";
 import { Task } from "@/components/taskCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TaskModal } from "@/components/taskModal";
+import processService from "@/services/processService";
+import { useParams } from "react-router";
 
-interface Task {
+export interface Task {
   id: string;
-  status: string;
   title: string;
-  deadline: any;
   description: string;
+  status: string;
+  priority: string;
+  deadline: any;
 }
 
-interface Processes {
+export interface Processes {
   id: string | undefined;
   deadline: string | undefined;
   tasks: Array<Task> | undefined;
@@ -22,58 +25,69 @@ interface Processes {
   description: string | undefined;
 }
 
-const task = {
-  id: '5c684a46 - 5791 - 4e29 - b464 - c35cfce04a7b', title: 'tarefa 1', description: `Nome e Descrição do Processo:
-Um campo para inserir o nome do processo.
-Um campo para adicionar uma descrição ou resumo do processo para referência futura.
-Responsável pelo Processo:
-A capacidade de atribuir um responsável pelo processo. Pode ser um usuário específico ou uma equipe.
-Etapa Inicial:
-Uma seção para adicionar a primeira etapa do processo, que é a etapa de validação. Isso pode incluir:
-Título da etapa.
-Descrição da etapa.
-Responsável pela etapa.
-Prazo para conclusão da etapa.
-Adicionar Etapas Adicionais:
-A capacidade de adicionar múltiplas etapas ao processo.
-Lista de Colaboradores Envolvidos:
-Uma área para listar os colaboradores envolvidos em cada etapa.
-Documentação Anexa:
-A possibilidade de anexar documentos relevantes para cada etapa ou para o processo como um todo. Isso pode incluir diretrizes, formulários, modelos, etc.
-Datas e Prazos:
-Uma exibição visual de datas e prazos para cada etapa do processo em um formato de calendário ou linha do tempo.`, status: 'Aguardando', priority: 'Média'
-}
-
 export function Process() {
+  const { id } = useParams();
   const currentDate = formatDate(new Date());
   const [showModal, setShowModal] = useState(false);
+  const [currentTask, setCurrentTask] = useState<Task | undefined>();
+  const [process, setProcess] = useState<Processes>({
+    id: '',
+    deadline: '',
+    tasks: [],
+    name: '',
+    description: '',
+  });
 
-  const toggleModal = () => {
-    setShowModal(!showModal);
+  useEffect(() => {
+    getProcess(id);
+  }, [])
+
+  const toggleModal = (task: Task) => {
+    setCurrentTask(!showModal ? task : undefined);
+    setShowModal(true);
+  };
+  const closeModal = () => {
+    setShowModal(false);
   };
 
   function formatDate(date: Date) {
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês começa em 0 (janeiro)
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   }
 
+  async function getProcess(id: string | undefined) {
+    console.log("aaaaaaaa");
+    if (id) {
+      processService.getOne(id)
+        .then((response) => {
+          setProcess(response.data);
+          console.log(response.data);
+        }).catch((error) => {
+          console.log(error);
+        })
+    }
+  }
+
   return (
     <div className="flex flex-col items-center justify-center w-full px-12 gap-4">
-      <section className="flex justify-between items-start mb-5">
-        <div className="flex flex-col gap-8">
+      <section className="flex justify-between items-start mb-3 w-full">
+        <div className="flex flex-col gap-8 w-1/2">
           <div className="flex flex-col ">
             <h1 className="font-medium text-4xl">Hoje</h1>
             <p>{currentDate}</p>
           </div>
 
           <div className="flex flex-col w-3/4">
-            <h2 className="font-bold text-2xl">Processo xpto</h2>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptates iusto aut laudantium repudiandae sapiente quidem itaque incidunt voluptatem.</p>
+            <h2 className="font-bold text-2xl">{process.name}</h2>
+            <p className="text-sm h-20 overflow-hidden whitespace-normal break-words text-ellipsis">
+              {process.description}
+            </p>
+
           </div>
         </div>
-        <div className="flex flex-col justify-between items-start w-full gap-4">
+        <div className="flex flex-col justify-between items-start w-1/2 gap-4">
           <article className="flex gap-6">
             <img src={alvo} alt="" />
             <div className="">
@@ -84,9 +98,9 @@ export function Process() {
                 Acompanhe como está o andamento total do processo
               </p>
             </div>
-            <CircularTotalProgressBar />
+            <CircularTotalProgressBar tasks={process?.tasks} />
           </article>
-          <article className="flex gap-6">
+          {/* <article className="flex gap-6">
             <img src={checklist} alt="" />
             <div>
               <h1 className="text-2xl">
@@ -97,45 +111,66 @@ export function Process() {
               </p>
             </div>
             <CircularDiarioProgressBar />
-          </article>
+          </article> */}
         </div>
       </section>
       <section className="flex justify-between items-start w-full gap-4 ">
-        <div className="flex flex-col w-full gap-2">
+        <div className="flex flex-col w-full gap-4">
           <p>Aguardando</p>
           <div className="flex flex-col pr-4 gap-7 overflow-auto max-h-[420px] pb-4">
-            <Task showModal={() => toggleModal()} />
-            <Task showModal={() => toggleModal()} />
-            <Task showModal={() => toggleModal()} />
-
+            {process?.tasks?.map((task) => {
+              if (task.status === "Aguardando")
+                return (
+                  <Task
+                    key={task.id}
+                    showModal={() => toggleModal(task)}
+                    task={task}
+                  />
+                )
+            })}
           </div>
         </div>
-        <div className="flex flex-col w-full gap-2">
+        <div className="flex flex-col w-full gap-4">
           <p>Em progresso</p>
           <div className="flex flex-col pr-4 gap-7 overflow-auto max-h-[420px] pb-4">
-            <Task showModal={() => toggleModal()} />
-            <Task showModal={() => toggleModal()} />
-            <Task showModal={() => toggleModal()} />
-            <Task showModal={() => toggleModal()} />
-            <Task showModal={() => toggleModal()} />
+            {process?.tasks?.map((task) => {
+              if (task.status === "Em progresso")
+                return (
+                  <Task
+                    key={task.id}
+                    showModal={() => toggleModal(task)}
+                    task={task}
+                  />
+                )
+            })}
           </div>
         </div>
-        <div className="flex flex-col w-full gap-2">
+        <div className="flex flex-col w-full gap-4">
           <p>Finalizado</p>
           <div className="flex flex-col pr-4 gap-7 overflow-auto max-h-[420px] pb-4">
-            <Task showModal={() => toggleModal()} />
+            {process?.tasks?.map((task) => {
+              if (task.status === "Finalizado")
+                return (
+                  <Task
+                    key={task.id}
+                    showModal={() => toggleModal(task)}
+                    task={task}
+                  />
+                )
+            })}
           </div>
         </div>
       </section>
 
       {showModal && (
         <TaskModal
-          description={task.description}
-          id={task.id}
-          members={"task."}
-          priority={task.priority}
-          title={task.title}
+          description={currentTask?.description}
+          id={currentTask?.id}
+          members={"currentTask?"}
+          priority={currentTask?.priority}
+          title={currentTask?.title}
           toggleModal={toggleModal}
+          closeModal={closeModal}
         />
       )}
     </div>

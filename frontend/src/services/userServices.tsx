@@ -1,4 +1,5 @@
 import { api } from "@/api";
+import axios from "axios";
 
 class UserServices {
 
@@ -13,13 +14,17 @@ class UserServices {
   async getUser() {
     return await api.get('/users')
   }
-  
+
   async CreateUser(data: any) {
     return await api.post('/users', data, {
       headers: {
         'Accept': 'application/json'
       }
     })
+  }
+
+  async getProcess() {
+    return await axios.get('https://raw.githubusercontent.com/apiFatec/API-3-Semestre-Ionic/main/fakeProcess.json')
   }
 }
 

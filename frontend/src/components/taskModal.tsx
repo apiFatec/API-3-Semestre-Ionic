@@ -3,6 +3,7 @@ import photo from '../../public/lula.jpg';
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { Task } from "@/pages/process/process";
+import userServices from "@/services/userServices";
 
 interface Modal {
   id: string | undefined;
@@ -10,11 +11,12 @@ interface Modal {
   members: string | undefined;
   description: string | undefined;
   priority: string | undefined;
+  task?: Task
   toggleModal: (task: Task) => void;
   closeModal: () => void;
 }
 
-export function TaskModal({ id, title, members, description, priority, toggleModal, closeModal }: Modal) {
+export function TaskModal({ task, id, title, members, description, priority, toggleModal, closeModal }: Modal) {
 
   const priorityColor = () => {
     if (priority === "Baixa") {
@@ -24,6 +26,18 @@ export function TaskModal({ id, title, members, description, priority, toggleMod
     } else {
       return "bg-red-300/30 text-red-900"
     }
+  }
+
+  async function joinTask() {
+    userServices.joinTask({
+      task: task,
+      user: localStorage.getItem('token')
+    })
+      .then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      })
   }
 
   return (
@@ -74,7 +88,9 @@ export function TaskModal({ id, title, members, description, priority, toggleMod
 
           <div>
             <p>Entrar</p>
-            <Button className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-3">
+            <Button
+              onClick={() => joinTask()}
+              className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-3">
               <User size={18} />
               Ingressar
             </Button>

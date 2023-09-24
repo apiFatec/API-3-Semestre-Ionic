@@ -34,9 +34,9 @@ export function ProcessCard(process: Process) {
         <p className="text-sm text-orange-600">{process.process_name}</p>
       </div>
 
-      <div className="flex w-full flex-col">
-        <p className="mb-2">{process.process_description}</p>
-        <Progress value={33} />
+      <div className="flex flex-col">
+        <p className="mb-2 w-80 truncate">{process.process_description}</p>
+        <Progress value={33} className="mb-1"/>
       </div>
 
       <div className="flex w-full">

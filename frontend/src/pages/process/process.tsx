@@ -58,12 +58,10 @@ export function Process() {
   }
 
   async function getProcess(id: string | undefined) {
-    console.log("aaaaaaaa");
     if (id) {
       processService.getOne(id)
         .then((response) => {
           setProcess(response.data);
-          console.log(response.data);
         }).catch((error) => {
           console.log(error);
         })
@@ -164,6 +162,7 @@ export function Process() {
 
       {showModal && (
         <TaskModal
+          task={currentTask}
           description={currentTask?.description}
           id={currentTask?.id}
           members={"currentTask?"}

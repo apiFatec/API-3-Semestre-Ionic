@@ -5,8 +5,6 @@ import useAuth from "@/hooks/useAuth";
 
 export default function useLogin() {
   const [isLoading, setIsLoading] = useState(false);
-  const [textEntry, setTextEntry] = useState('password');
-  const [iconPassword, setIconPassword] = useState(true);
 
   const navigate = useNavigate();
 

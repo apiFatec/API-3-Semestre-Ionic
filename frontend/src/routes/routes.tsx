@@ -12,7 +12,6 @@ import { Process } from "@/pages/process/process";
 export function Router() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
       <Route path="/criar-processo" element={<CadastroProcessos />} />
       <Route element={<IsLogged />}>
         <Route path="/login" element={<Login />} />

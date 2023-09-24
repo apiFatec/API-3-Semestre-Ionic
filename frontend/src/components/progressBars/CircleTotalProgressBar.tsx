@@ -19,15 +19,11 @@ function CircularTotalProgressBar({ tasks }: { tasks?: Task[] }) {
       }
       return result;
     }, 0);
-    console.log(lenTasks);
-    console.log(finishedTasks);
-    console.log(tasks);
     if (lenTasks === 0) {
       return 0; // Retorna 0 se não houver tarefas
     }
 
     const porcentagem = (finishedTasks || 0) / lenTasks * 100;
-    console.log(porcentagem);
     setPercentual(porcentagem);
   }
 

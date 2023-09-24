@@ -50,7 +50,7 @@ export class ProcessesService {
             const taskEntities = await this.tasksService.storeMultiple(tasks);
 
             taskEntities.forEach((task) => {
-                task.process = process;
+                task.processesId = process;
             });
 
             await this.tasksService.saveMultiple(taskEntities);

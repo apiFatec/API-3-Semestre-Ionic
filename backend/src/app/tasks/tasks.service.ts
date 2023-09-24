@@ -18,6 +18,7 @@ export class TasksService {
       task.title = taskDTO.title;
       task.description = taskDTO.description;
       task.status = Status.WAITING;
+      task.priority = taskDTO.priority
       task.processesId = process;
       return task;
     });

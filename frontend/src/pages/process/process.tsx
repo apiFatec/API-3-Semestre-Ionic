@@ -61,7 +61,7 @@ export function Process() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full px-12 gap-4">
-      <section className="flex justify-between items-start mb-8">
+      <section className="flex justify-between items-start mb-5">
         <div className="flex flex-col gap-8">
           <div className="flex flex-col ">
             <h1 className="font-medium text-4xl">Hoje</h1>
@@ -103,7 +103,7 @@ export function Process() {
       <section className="flex justify-between items-start w-full gap-4 ">
         <div className="flex flex-col w-full gap-2">
           <p>Aguardando</p>
-          <div className="flex flex-col pr-4 gap-7 overflow-auto max-h-[430px] pb-4">
+          <div className="flex flex-col pr-4 gap-7 overflow-auto max-h-[420px] pb-4">
             <Task showModal={() => toggleModal()} />
             <Task showModal={() => toggleModal()} />
             <Task showModal={() => toggleModal()} />
@@ -112,7 +112,7 @@ export function Process() {
         </div>
         <div className="flex flex-col w-full gap-2">
           <p>Em progresso</p>
-          <div className="flex flex-col pr-4 gap-7 overflow-auto max-h-[430px] pb-4">
+          <div className="flex flex-col pr-4 gap-7 overflow-auto max-h-[420px] pb-4">
             <Task showModal={() => toggleModal()} />
             <Task showModal={() => toggleModal()} />
             <Task showModal={() => toggleModal()} />
@@ -122,7 +122,7 @@ export function Process() {
         </div>
         <div className="flex flex-col w-full gap-2">
           <p>Finalizado</p>
-          <div className="flex flex-col pr-4 gap-7 overflow-auto max-h-[430px] pb-4">
+          <div className="flex flex-col pr-4 gap-7 overflow-auto max-h-[420px] pb-4">
             <Task showModal={() => toggleModal()} />
           </div>
         </div>

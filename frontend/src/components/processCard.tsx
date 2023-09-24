@@ -20,8 +20,12 @@ export function ProcessCard(process: Process) {
   const { theme } = useTheme();
   const navigate = useNavigate();
 
+  function nav() {
+    navigate(`/processos/${encodeURIComponent(process.process_name)}`);
+  }
+
   return (
-    <Card  onClick={() => navigate(`/processo/${process.process_name}`)}
+    <Card onClick={() => nav()}
       className={
         cn("p-3 flex flex-col items-center justify-center cursor-pointer", theme === 'light' ? 'bg-white' : 'bg-background-secondary')
       }>
@@ -39,4 +43,4 @@ export function ProcessCard(process: Process) {
       </div>
     </Card>
   )
-}
+} 

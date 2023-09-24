@@ -25,7 +25,6 @@ export function Router() {
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/processos/:process" element={<Process />} />
-
       </Route>
     </Routes>
   );

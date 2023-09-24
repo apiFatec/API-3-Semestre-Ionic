@@ -12,7 +12,7 @@ export class TasksController {
 
   @Post('/join-task')
   async joinTask(@Body() body: JoinTaskDto) {
-    const token = body.user.token;
+    const token = body.user;
     const decodedToken = await this.tokenService.decodeJwt(token);
     console.log(decodedToken);
     return await this.tasksService.joinTask(body.task, decodedToken.email);

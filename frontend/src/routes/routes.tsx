@@ -2,9 +2,10 @@ import { Dashboard } from "@/pages/dashboard/dashboard";
 // import { Login } from "@/pages/login/login";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginRoutes from "./LoginRoutes";
-import PrivateRoutes from "./PrivateRoutes";
+// import PrivateRoutes from "./PrivateRoutes";
 import { Login } from "@/pages/login/login";
-import VisaoDetalhada from "@/pages/processos/VisaoDetalhada";
+// import VisaoDetalhada from "@/pages/processos/VisaoDetalhada";
+import { Process } from "@/pages/process/process";
 
 
 const isUserAuthenticated = () => {
@@ -29,7 +30,8 @@ export function Router() {
       <Route element={<LoginRoutes />}>
         <Route path="/dashboard" element={<Dashboard />} />
       </Route>
-      <Route path="/processos/visaoDetalhada" element={<VisaoDetalhada />} />
+      <Route path="/processos/:process" element={<Process />} />
+      {/* <Route path="/processos/visaoDetalhada" element={<VisaoDetalhada />} /> */}
     </Routes>
   );
 }

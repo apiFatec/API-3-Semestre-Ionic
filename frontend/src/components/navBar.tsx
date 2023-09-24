@@ -15,7 +15,7 @@ export function NavBar() {
   const { theme } = useTheme();
   const { logout } = useAuth();
   return (
-    <div className="p-8 flex w-full justify-end ">
+    <div className="p-6 flex w-full justify-end ">
       <DropdownMenu>
         <DropdownMenuTrigger
           className={

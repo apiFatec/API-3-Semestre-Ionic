@@ -2,17 +2,21 @@ import { ArrowLeftFromLine, CheckSquare, ClipboardList, Text, User } from "lucid
 import photo from '../../public/lula.jpg';
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { Task } from "@/pages/process/process";
+import userServices from "@/services/userServices";
 
 interface Modal {
-  id: string;
-  title: string;
-  members: string;
-  description: string;
-  priority: string;
-  toggleModal: () => void;
+  id: string | undefined;
+  title: string | undefined;
+  members: string | undefined;
+  description: string | undefined;
+  priority: string | undefined;
+  task?: Task
+  toggleModal: (task: Task) => void;
+  closeModal: () => void;
 }
 
-export function TaskModal({ id, title, members, description, priority, toggleModal }: Modal) {
+export function TaskModal({ task, id, title, members, description, priority, toggleModal, closeModal }: Modal) {
 
   const priorityColor = () => {
     if (priority === "Baixa") {
@@ -24,8 +28,20 @@ export function TaskModal({ id, title, members, description, priority, toggleMod
     }
   }
 
+  async function joinTask() {
+    userServices.joinTask({
+      task: task,
+      user: localStorage.getItem('token')
+    })
+      .then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50" onClick={toggleModal}>
+    <div className="fixed inset-0 flex items-center justify-center z-50" onClick={closeModal}>
       {/* Fundo escuro */}
       <div className="bg-black opacity-50 inset-0 absolute"></div>
 
@@ -72,9 +88,11 @@ export function TaskModal({ id, title, members, description, priority, toggleMod
 
           <div>
             <p>Entrar</p>
-            <Button className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-3">
+            <Button
+              onClick={() => joinTask()}
+              className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-3">
               <User size={18} />
-              Baixa
+              Ingressar
             </Button>
 
             <p>Ações</p>

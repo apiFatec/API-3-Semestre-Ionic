@@ -15,6 +15,10 @@ class ProcessServices {
       }
     });
   }
+
+  async getOne(id: string) {
+    return await api.get(`/processes/${id}`)
+  }
 }
 
 export default new ProcessServices();

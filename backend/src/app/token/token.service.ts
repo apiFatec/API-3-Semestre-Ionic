@@ -5,6 +5,7 @@ import { TokenEntity } from './entities/token.entity';
 import { UsuariosService } from 'src/app/users/users.service';
 import { AuthService } from '@/app/auth/auth.service';
 import { LoginReturn } from './dto/return-token.dto';
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class TokenService {
   constructor(
@@ -13,6 +14,7 @@ export class TokenService {
     private readonly userService: UsuariosService,
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+    private readonly jwtService: JwtService,
   ) { }
 
   async saveToken(hash: string, username: string): Promise<void> {
@@ -38,6 +40,15 @@ export class TokenService {
       return new HttpException({
         message: "Token invalido",
       }, HttpStatus.UNAUTHORIZED)
+    }
+  }
+
+  decodeJwt(token: string): Promise<{email: string}> {
+    try {
+      const decoded = this.jwtService.verify(token);
+      return decoded;
+    } catch (error) {
+      throw new Error('Token JWT inválido');
     }
   }
 

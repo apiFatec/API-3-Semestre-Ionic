@@ -91,7 +91,6 @@ export function CadastroProcessos() {
             team: team,
             leader: teamLeader,
         }
-        console.log(processo);
         processService.createProcess(processo)
             .then((response) => {
                 console.log(response);

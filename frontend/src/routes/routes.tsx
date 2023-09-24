@@ -12,7 +12,6 @@ import { Process } from "@/pages/process/process";
 export function Router() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
       <Route path="/criar-processo" element={<CadastroProcessos />} />
       <Route element={<IsLogged />}>
         <Route path="/login" element={<Login />} />
@@ -24,8 +23,7 @@ export function Router() {
         <Route path="/processos" element={<Home />} />
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/processos/:process" element={<Process />} />
-
+        <Route path="/processos/:process/:id" element={<Process />} />
       </Route>
     </Routes>
   );

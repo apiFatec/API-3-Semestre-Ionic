@@ -8,7 +8,7 @@ class UserServices {
       headers: {
         'Content-Type': 'application/json'
       }
-    })
+    });
   }
 
   async getUser() {
@@ -20,11 +20,15 @@ class UserServices {
       headers: {
         'Accept': 'application/json'
       }
-    })
+    });
   }
 
-  async getProcess() {
-    return await axios.get('https://raw.githubusercontent.com/apiFatec/API-3-Semestre-Ionic/main/fakeProcess.json')
+  async joinTask(data: any) {
+    return await api.post('/tasks/join-task', data, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
   }
 }
 

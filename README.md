@@ -6,11 +6,13 @@
 
 - [O que é](#o-que-é)
 - [Solução de proposta](#solução-de-proposta)
-- [Benefícios](#benefícios)
-- [Planejamento das sprints](#planejamento-das-sprints)
+- [Protótipo](#protótipo)
+- [Backlog das Sprints](#backlog-das-sprints)
+- [Backlog do Produto](#backlog-do-produto)
 - [Tecnologias utilizadas](#tecnologias-utilizadas)
+- [Relatório das Sprints](#relatório-das-sprints)
 - [Equipe](#equipe)
-- [Relatório das sprints](#relatório-das-sprints)
+
 
 ## O que é
 
@@ -25,36 +27,36 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
 <p></p>
 
 ### Features
-<ul>
-  <li>Navegação via sidebar.</li>
-  <li>Dashboard para demontrar médias gerais.</li>
-  <li>Manuseio de notas dos alunos.</li>
-  <li>Manuseio das entregas de atividade dos alunos.</li>
+<ol>
+  <li>Gestão de Processos Regulatórios: A plataforma permite que a Ionic Health gerencie todos os seus processos regulatórios essenciais em um único sistema centralizado.</li>
+  <li>Monitoramento em Tempo Real: Os processos regulatórios podem ser monitorados em tempo real, fornecendo informações atualizadas sobre o status de cada etapa.</li>
+  <li>Documentação Completa: A plataforma possibilita a documentação meticulosa de todas as etapas dos processos regulatórios, garantindo a rastreabilidade e conformidade.</li>
+  <li>Acompanhamento de Prazos: Os prazos para cada processo regulatório são registrados e monitorados, ajudando a evitar atrasos e garantindo conformidade com as datas de vencimento.</li>
+  <li>Notificações e Lembretes: Os usuários podem configurar notificações e receber lembretes automáticos sobre tarefas e prazos importantes.</li>
+  <li>Relatórios e Análises: A plataforma pode gerar relatórios detalhados e análises sobre o desempenho dos processos regulatórios, permitindo a tomada de decisões informadas.</li>
+  <li>Controle de Acesso: Recursos de controle de acesso garantem que apenas usuários autorizados tenham acesso às informações e documentos sensíveis.</li>
+  <li>Segurança de Dados: A segurança dos dados é priorizada, com medidas para proteger informações sensíveis e manter a conformidade com regulamentos de privacidade.</li>
+  <li>Colaboração: A plataforma pode permitir a colaboração entre diferentes departamentos ou equipes envolvidos nos processos regulatórios.</li>
+  <li>Integração com Ferramentas Externas: Integração com outras ferramentas e sistemas usados pela Ionic Health, como sistemas de gerenciamento de documentos ou sistemas de comunicação interna.</li>
+  <li>Auditoria e Rastreabilidade: Recursos de auditoria permitem o acompanhamento de quem fez o quê e quando em relação aos processos regulatórios.</li>
+  <li>Histórico de Alterações: Registro de todas as alterações feitas nos documentos e processos regulatórios, garantindo a transparência.</li>
+  <li>Gerenciamento de Workflow: A plataforma pode oferecer recursos para configurar fluxos de trabalho personalizados para processos específicos.</li>
+  
+</ol>
 
-</ul>
 
-## Benefícios
- <ul>
-
-  <li>Acesso rápido e fácil as informações.</li>
-  <li>Cadastro simplificado de alunos e salas.</li>
-  <li>Aplicação offline.</li>
-  <li>Controle simplificado de notas e tarefas.</li>
-
-</ul>
 
 ## Protótipo
 ![giffatec](https://user-images.githubusercontent.com/112128418/229379893-c1b6dad3-675a-4d1e-9046-973c1842a30b.gif)
-<a href="https://www.youtube.com/watch?v=zVpzRRMtF34" target="_blank">Link para a visualização mais detalhada do protótipo</a>
-
-## Planejamento das sprints
-
-![Untitled (4)](https://user-images.githubusercontent.com/112128418/229379231-41a15faf-a3e5-40be-aa63-c3bfe15cd7d0.png)
 
 
-  
-## Backlog do projeto
-![backlogtotal (1)](https://user-images.githubusercontent.com/112128418/229377033-4b580304-8879-42bf-b32a-08989be9bf18.jpg)
+
+## Backlog das Sprints
+![Roadmap](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/fab8cad1-2a8c-4685-90bd-fcdb2f2d15f1)
+
+
+## Backlog do Produto
+![Backlog_Produto](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/84f02690-a0c0-4ee3-8b17-8224f7fb7c54)
 
 
 
@@ -68,9 +70,9 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
     title="Figma"
     style="display: inline-block; margin: 0 auto; width: 60px"></th>
     <th><img
-    src="https://user-images.githubusercontent.com/89823203/190718687-f627ce18-9b3e-4ce1-bc9c-ddc3521a7705.png"
+    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original-wordmark.svg"
     alt="Alt text"
-    title="MySQL"
+    title="PostgreSQL"
     style="display: inline-block; margin: 0 auto; width: 60px"></th>
     <th><img
     src="https://user-images.githubusercontent.com/89823203/188508559-2e9b2add-9fb0-427f-b812-3201f43f9c57.png"
@@ -101,7 +103,7 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
 
   <tbody>
     <td>Figma</td>
-    <td>MySQL</td>
+    <td>PostgreSQL</td>
     <td>HTML</td>
     <td>CSS</td>
     <td>JavaScript</td>
@@ -114,10 +116,10 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
 ## Relatório das Sprints
 
 <ol>
-  <li><a href="./Relatórios/Sprint_01.md">Sprint 01 - 24/09/2023</a></li>
-  <li><a href="./Relatórios/Sprint_02.md">Sprint 02 - 15/10/2023</a></li>
-  <li><a href="./Relatórios/Sprint_03.md">Sprint 03 - 05/11/2023</a></li>
-  <li><a href="./Relatórios/Sprint_04.md">Sprint 04 - 26/11/2023</a></li>
+  <li><a href="./sprints/Sprint_01.md">Sprint 01 - 24/09/2023</a></li>
+  <li><a href="./sprints/Sprint_02.md">Sprint 02 - 15/10/2023</a></li>
+  <li><a href="./sprints/Sprint_03.md">Sprint 03 - 05/11/2023</a></li>
+  <li><a href="./sprints/Sprint_04.md">Sprint 04 - 26/11/2023</a></li>
 </ol>
 
 ## Equipe

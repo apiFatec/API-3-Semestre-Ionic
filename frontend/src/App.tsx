@@ -4,22 +4,25 @@ import { Sidebar } from '@/components/sidebar'
 import { ThemeProvider } from '@/components/theme.provider'
 import AuthProvider from './contexts/AuthContext'
 import { cn } from './lib/utils'
-
+import { NavBar } from './components/navBar'
 
 function App() {
   const location = useLocation();
-  const isLoginRoute = location.pathname === '/login';
+  const isRouteSidebar = location.pathname === '/login' || location.pathname === '/admin-register';
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <AuthProvider>
         <div className="h-full relative">
-          {!isLoginRoute &&
+          {!isRouteSidebar &&
             <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed md:inser-y-0 z-[80] bg-gray-900">
               <Sidebar />
             </div>
           }
-          <main className={cn(!isLoginRoute ? 'md:pl-72' : '')}>
+          <main className={cn(!isRouteSidebar ? 'md:pl-72' : '')}>
+            {!isRouteSidebar &&
+              <NavBar />
+            }
             <Router />
           </main>
         </div>

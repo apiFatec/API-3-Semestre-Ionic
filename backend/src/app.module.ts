@@ -4,6 +4,9 @@ import { AuthModule } from './app/auth/auth.module';
 import { UsuariosModule } from './app/users/users.module';
 import { UsersEntity } from './app/users/entities/users.entity';
 import { TokenModule } from './app/token/token.module';
+import { ProcessesModule } from './app/processes/processes.module';
+import { TasksModule } from './app/tasks/tasks.module';
+import { ProjectsModule } from './app/projects/projects.module';
 require('dotenv').config()
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -17,7 +20,10 @@ require('dotenv').config()
     synchronize: true
   } as TypeOrmModuleOptions),
     UsuariosModule,
-    TokenModule
+    TokenModule,
+    ProcessesModule,
+    TasksModule,
+    ProjectsModule
   ],
   controllers: [],
   providers: [],

@@ -1,0 +1,33 @@
+.visaoDetalhada_processo_gridPai{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 350px);
+    margin: 3em 10em;
+}
+
+.visaoDetalhada_hoje{
+    place-content: center;
+    text-align: start;
+    margin: 0;
+    max-width: 100%;
+}
+
+.visaoDetalhada_tituloHoje{
+    font-size: 3em;
+}
+
+.visaoDetalhada_dataHoje{
+    grid-column: 1;
+    color: #858585;
+}
+
+.visaoDetalhada_processo{
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.visaoDetalhda_processoTexto{
+    grid-column: 1;
+    max-width: 75%;
+    color: #858585;
+}

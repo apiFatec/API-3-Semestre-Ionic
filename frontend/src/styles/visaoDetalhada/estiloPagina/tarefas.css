@@ -1,0 +1,9 @@
+.visaoDetalhada_tarefas{
+    grid-column: 1;
+    max-width: 100%;
+}
+
+.visaoDetalhada_tarefasEstilo{
+    font-size: 20px;
+    font-weight: bold;
+}

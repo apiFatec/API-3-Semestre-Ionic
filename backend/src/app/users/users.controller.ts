@@ -5,6 +5,7 @@ import { AuthService } from '../auth/auth.service';
 import { LoginUser } from './dto/login-user.dto';
 import { UsersEntity } from './entities/users.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { SaveUserDto } from './dto/save-users.dto';
 
 @Controller('users')
 export class UsuariosController {
@@ -20,11 +21,11 @@ export class UsuariosController {
   }
 
   @Post()
-  async createUser(@Body() body): Promise<any> {
+  async createUser(@Body() body: SaveUserDto): Promise<any> {
     return await this.usuariosService.store(body);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   async getAll(): Promise<UsersEntity[] | undefined> {
     return await this.usuariosService.findAll();

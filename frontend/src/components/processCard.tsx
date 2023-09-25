@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 export interface Process {
   process_name: string;
   process_description: string;
-  users: Array<Users>
+  users: Array<Users>,
+  process_id: string;
 }
 
 interface Users {
@@ -20,8 +21,12 @@ export function ProcessCard(process: Process) {
   const { theme } = useTheme();
   const navigate = useNavigate();
 
+  function nav() {
+    navigate(`/processos/${encodeURIComponent(process.process_name)}/${process.process_id}`);
+  }
+
   return (
-    <Card  onClick={() => navigate(`/processo/${process.process_name}`)}
+    <Card onClick={() => nav()}
       className={
         cn("p-3 flex flex-col items-center justify-center cursor-pointer", theme === 'light' ? 'bg-white' : 'bg-background-secondary')
       }>
@@ -29,9 +34,9 @@ export function ProcessCard(process: Process) {
         <p className="text-sm text-orange-600">{process.process_name}</p>
       </div>
 
-      <div className="flex w-full flex-col">
-        <p className="mb-2">{process.process_description}</p>
-        <Progress value={33} />
+      <div className="flex flex-col">
+        <p className="mb-2 w-80 truncate">{process.process_description}</p>
+        <Progress value={33} className="mb-1"/>
       </div>
 
       <div className="flex w-full">
@@ -39,4 +44,4 @@ export function ProcessCard(process: Process) {
       </div>
     </Card>
   )
-}
+} 

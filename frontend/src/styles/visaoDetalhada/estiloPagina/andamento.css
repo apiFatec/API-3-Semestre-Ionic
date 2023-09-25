@@ -1,0 +1,21 @@
+.visaoDetalhada_andamentoProcesso{
+    display: flex;
+    gap: 30px;
+    margin-bottom: 4em;
+}
+
+.visaoDetalhada_tarefasDiarias{
+    display: flex;
+    gap: 30px;
+}
+
+.visaoDetalhada_andamentoTitulo{
+    font-size: 25px;
+}
+
+.visaoDetalhada_andamentoTexto{
+    max-width: 75%;
+    font-size: 15px;
+    color: #858585;
+}
+

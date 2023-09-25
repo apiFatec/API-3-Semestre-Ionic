@@ -13,8 +13,8 @@ export class ProcessesController {
     }
 
     @Post()
-    async createProcess(@Body() body: SaveProcessDTO): Promise<ProcessesEntity> {
-        return await this.processesService.store(body);
+    async createProcess(@Body() body: SaveProcessDTO) {
+        return await this.processesService.createProcess(body);
     }
 
     @Get(':id')

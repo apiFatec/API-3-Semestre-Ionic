@@ -19,6 +19,12 @@ export enum Status {
   LATE = 'Atrasado',
 }
 
+export enum Priority {
+  LOW = "Baixa",
+  MEDIUM = "Média",
+  HIGH = "Alta",
+}
+
 @Entity({ name: 'tasks' })
 export class TasksEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -30,13 +36,11 @@ export class TasksEntity {
   @Column({ nullable: false, type: 'text' })
   description: string;
 
-  @Column({
-    nullable: false,
-    type: 'enum',
-    enum: Status,
-    default: Status.WAITING,
-  })
+  @Column({ nullable: false, type: 'enum', enum: Status, default: Status.WAITING, })
   status: Status;
+
+  @Column({ nullable: false, type: 'enum', enum: Priority, default: Priority.LOW })
+  priority: Priority;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: string;
@@ -51,12 +55,6 @@ export class TasksEntity {
   @JoinColumn({ name: 'processes_id' })
   processesId: ProcessesEntity;
 
-  @OneToMany(
-    () => UsersTasksEntity,
-    (usersTasksEntity) => usersTasksEntity.tasksId,
-  )
+  @OneToMany(() => UsersTasksEntity, (usersTasksEntity) => usersTasksEntity.tasksId)
   usersTasks: UsersTasksEntity;
-
-  @ManyToOne(() => ProcessesEntity, (process) => process.tasks)
-  process: ProcessesEntity;
 }

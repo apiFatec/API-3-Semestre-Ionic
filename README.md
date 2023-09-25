@@ -45,10 +45,8 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
 </ol>
 
 
-
 ## Protótipo
-![giffatec](https://user-images.githubusercontent.com/112128418/229379893-c1b6dad3-675a-4d1e-9046-973c1842a30b.gif)
-
+![Protótipo API - Figma 2023-09-23 13-46-03](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112128418/5249386f-277d-4cd3-89ea-8a833b5b45b9)
 
 
 ## Backlog das Sprints

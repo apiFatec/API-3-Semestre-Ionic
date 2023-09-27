@@ -1,4 +1,3 @@
-import { Dashboard } from "@/pages/dashboard/dashboard";
 import { Routes, Route } from "react-router-dom";
 import LoginRoutes from "./LoginRoutes";
 import { Login } from "@/pages/login/login";
@@ -22,7 +21,6 @@ export function Router() {
       <Route element={<LoginRoutes />}>
         <Route path="/processos" element={<Home />} />
         <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/processos/:process/:id" element={<Process />} />
       </Route>
     </Routes>

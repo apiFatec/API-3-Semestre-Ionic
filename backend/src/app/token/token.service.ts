@@ -43,13 +43,13 @@ export class TokenService {
     }
   }
 
-  decodeJwt(token: string): Promise<{email: string}> {
+  decodeJwt(token: string): Promise<{ email: string }> {
+    let decoded;
     try {
-      const decoded = this.jwtService.verify(token);
-      return decoded;
+      decoded = this.jwtService.verify(token);
     } catch (error) {
-      throw new Error('Token JWT inválido');
+      decoded = this.refreshToken(token);
     }
+    return decoded;
   }
-
 }

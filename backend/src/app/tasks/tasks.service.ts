@@ -56,9 +56,18 @@ export class TasksService {
       userTask.tasksId = task
       userTask.usersId = user
       await this.usersTasksRepository.insert(userTask);
+      await this.tasksRepository.update({ id: task.id }, { status: Status.INPROGRESS });
     } catch {
-      throw new Error('Usuário não encontrado')
+      throw new Error('Usuário não encontrado');
     }
 
+  }
+
+  async finishTask(id: string) {
+    try {
+      await this.tasksRepository.update({ id: id }, { status: Status.FINISHED });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

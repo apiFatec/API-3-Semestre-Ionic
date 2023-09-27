@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Request } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put, Request } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { JoinTaskDto } from './dto/join-task.dto';
 import { TokenService } from '../token/token.service';
@@ -16,5 +16,10 @@ export class TasksController {
     const decodedToken = await this.tokenService.decodeJwt(token);
     console.log(decodedToken);
     return await this.tasksService.joinTask(body.task, decodedToken.email);
+  }
+
+  @Put('/finish-task/:id')
+  async finishTask(@Param('id') id: string) {
+    return await this.tasksService.finishTask(id);
   }
 }

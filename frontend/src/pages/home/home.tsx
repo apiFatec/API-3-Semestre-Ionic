@@ -65,9 +65,11 @@ export function Home() {
           </form>
         </div>
       </div>
-
+      {processes.length === 0 &&
+        <p className='w-full p-3 text-center text-2xl border-b-2 font-semibold'>Nenhum Processo Criado</p>
+      }
       <div className="flex w-full justify-between gap-10">
-        <div className="flex flex-col w-full gap-3">
+        <div className="flex flex-col w-full gap-3 max-h-[580px] overflow-auto">
           {processes.map((process) => {
             if (process.process_status === "Aguardando") {
               return (
@@ -82,7 +84,7 @@ export function Home() {
           })}
         </div>
 
-        <div className="flex flex-col w-full gap-3">
+        <div className="flex flex-col w-full gap-3 max-h-[580px]  overflow-auto">
           {processes.map((process) => {
             if (process.process_status === "Em progresso") {
               return (
@@ -97,7 +99,7 @@ export function Home() {
           })}
         </div>
 
-        <div className="flex flex-col w-full gap-3">
+        <div className="flex flex-col w-full gap-3 max-h-[580px]  overflow-auto">
           {processes.map((process) => {
             if (process.process_status === "Finalizado") {
               return (

@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import userServices from "@/services/userServices";
 import { cn } from "@/lib/utils";
 import processService from "@/services/processService";
+import { useNavigate } from "react-router-dom";
 
 export interface ProcessFormValues {
   name: string;
@@ -55,7 +56,7 @@ export function CadastroProcessos() {
   const [teamLeader, setTeamLeader] = useState('');
   const [team, setTeam] = useState<Users[]>([]);
   const [process, setProcesss] = useState<ProcessFormValues[]>([])
-
+  const navigate = useNavigate();
   useEffect(() => {
     getUsers();
   }, [])
@@ -95,6 +96,7 @@ export function CadastroProcessos() {
     processService.createProcess(processo)
       .then((response) => {
         console.log(response);
+        navigate('/processos');
       }).catch((error) => {
         console.log(error);
       })

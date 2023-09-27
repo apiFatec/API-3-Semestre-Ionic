@@ -11,14 +11,14 @@ import { Process } from "@/pages/process/process";
 export function Router() {
   return (
     <Routes>
-      <Route path="/criar-processo" element={<CadastroProcessos />} />
       <Route element={<IsLogged />}>
         <Route path="/login" element={<Login />} />
       </Route>
+      <Route path="/admin-register" element={<Register />} />
       <Route element={<PrivateRoutes />}>
-        <Route path="/admin-register" element={<Register />} />
       </Route>
       <Route element={<LoginRoutes />}>
+        <Route path="/criar-processo" element={<CadastroProcessos />} />
         <Route path="/processos" element={<Home />} />
         <Route path="/" element={<Home />} />
         <Route path="/processos/:process/:id" element={<Process />} />

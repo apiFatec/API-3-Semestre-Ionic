@@ -28,6 +28,7 @@ export interface Processes {
 export function Process() {
   const { id } = useParams();
   const currentDate = formatDate(new Date());
+  const [reload, setReload] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | undefined>();
   const [process, setProcess] = useState<Processes>({
@@ -40,7 +41,7 @@ export function Process() {
 
   useEffect(() => {
     getProcess(id);
-  }, [])
+  }, [reload])
 
   const toggleModal = (task: Task) => {
     setCurrentTask(!showModal ? task : undefined);
@@ -98,18 +99,6 @@ export function Process() {
             </div>
             <CircularTotalProgressBar tasks={process?.tasks} />
           </article>
-          {/* <article className="flex gap-6">
-            <img src={checklist} alt="" />
-            <div>
-              <h1 className="text-2xl">
-                Tarefas diárias
-              </h1>
-              <p className="max-w-3/4 text-base text-[#858585]">
-                Acompanhe como está o andamento das tarefas diárias
-              </p>
-            </div>
-            <CircularDiarioProgressBar />
-          </article> */}
         </div>
       </section>
       <section className="flex justify-between items-start w-full gap-4 ">
@@ -170,6 +159,8 @@ export function Process() {
           title={currentTask?.title}
           toggleModal={toggleModal}
           closeModal={closeModal}
+          reload={reload}
+          setReload={setReload}
         />
       )}
     </div>

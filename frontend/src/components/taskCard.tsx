@@ -29,7 +29,7 @@ export function Task({ showModal, task }: Props) {
         {task?.description &&
           <Text />
         }
-        <div className="h-8 w-[100px] absolute right-0 flex items-center">
+        {/* <div className="h-8 w-[100px] absolute right-0 flex items-center">
           <div className="w-7 h-7 rounded-full overflow-hidden absolute top-0">
             <img className="w-full h-full" src={photo} alt="caralho" />
           </div>
@@ -42,7 +42,7 @@ export function Task({ showModal, task }: Props) {
           <div className="w-7 h-7 rounded-full overflow-hidden absolute top-0 left-[62%] bg-white border-2 flex items-center justify-center text-center text-sm font-semibold">
             +2
           </div>
-        </div>
+        </div> */}
       </CardFooter>
     </Card>
   )

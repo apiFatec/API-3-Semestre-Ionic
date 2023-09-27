@@ -6,6 +6,7 @@ import userServices from "@/services/userServices";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export interface RegisterFormValues {
@@ -20,6 +21,8 @@ export function Register() {
   const { register, handleSubmit } = useForm<RegisterFormValues>();
   const [role, setRole] = useState("");
   const { theme } = useTheme();
+  const navigate = useNavigate();
+
   const onSubmit: SubmitHandler<RegisterFormValues> = (data) => {
     data.role = role;
     userServices.CreateUser(data)
@@ -39,8 +42,8 @@ export function Register() {
       <form onSubmit={handleSubmit(onSubmit)} className="w-[50%] bg-background flex flex-col p-20">
         <div className="flex justify-between">
           <h1 className="text-left font-extrabold text-3xl mb-12">Registration</h1>
-          <Button className="rounded-3xl bg-background-secondary text-sidebar-text shadow-md hover:bg-background-secondary/10">
-            <ArrowLeft />
+          <Button onClick={() => navigate('/')} className="rounded-3xl bg-background-secondary 'text-sidebar-text shadow-md hover:bg-background-secondary/10">
+            <ArrowLeft className="text-primary"/>
           </Button>
         </div>
 

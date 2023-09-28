@@ -1,6 +1,10 @@
 # API 3º Semestre ADS
 
 
+https://github.com/apiFatec/API-3-Semestre-Ionic/assets/89823203/6a04213b-b719-4b84-a3c8-a35a5474ad2b
+
+https://www.youtube.com/watch?v=-VoDVQC6TCU
+
 
 ## Índice
 

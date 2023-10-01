@@ -1,7 +1,3 @@
-import CircularTotalProgressBar from "@/components/progressBars/CircleTotalProgressBar";
-import alvo from "@/assets/visaoDetalhada/Alvo.svg";
-import checklist from "@/assets/visaoDetalhada/checkList.svg";
-import CircularDiarioProgressBar from "@/components/progressBars/CircleDiarioProgressBar";
 import { Task } from "@/components/taskCard";
 import { useState, useEffect } from "react";
 import { TaskModal } from "@/components/taskModal";
@@ -27,21 +23,20 @@ export interface Processes {
 
 export function Process() {
   const { id } = useParams();
-  const currentDate = formatDate(new Date());
   const [reload, setReload] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | undefined>();
   const [process, setProcess] = useState<Processes>({
-    id: '',
-    deadline: '',
+    id: "",
+    deadline: "",
     tasks: [],
-    name: '',
-    description: '',
+    name: "",
+    description: "",
   });
 
   useEffect(() => {
     getProcess(id);
-  }, [reload])
+  }, [reload]);
 
   const toggleModal = (task: Task) => {
     setCurrentTask(!showModal ? task : undefined);
@@ -51,102 +46,79 @@ export function Process() {
     setShowModal(false);
   };
 
-  function formatDate(date: Date) {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  }
-
   async function getProcess(id: string | undefined) {
     if (id) {
-      processService.getOne(id)
+      processService
+        .getOne(id)
         .then((response) => {
           setProcess(response.data);
-        }).catch((error) => {
-          console.log(error);
         })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
 
   return (
     <div className="flex flex-col items-center justify-center w-full px-12 gap-4">
-      <section className="flex justify-between items-start mb-3 w-full">
-        <div className="flex flex-col gap-8 w-1/2">
+      <section className="flex-row w-full ">
+        <div className="flex flex-col gap-8 w-1/2 mb-16">
           <div className="flex flex-col ">
-            <h1 className="font-medium text-4xl">Hoje</h1>
-            <p>{currentDate}</p>
-          </div>
-
-          <div className="flex flex-col w-3/4">
-            <h2 className="font-bold text-2xl">{process.name}</h2>
-            <p className="text-sm h-20 overflow-hidden whitespace-normal break-words text-ellipsis">
-              {process.description}
-            </p>
-
+            <h1 className="font-thin text-4xl ">Processo XPTO</h1>
           </div>
         </div>
-        <div className="flex flex-col justify-between items-start w-1/2 gap-4">
-          <article className="flex gap-6">
-            <img src={alvo} alt="" />
-            <div className="">
-              <h1 className="text-2xl">
-                Andamento do processo
-              </h1>
-              <p className="max-w-3/4 text-base text-[#858585]">
-                Acompanhe como está o andamento total do processo
-              </p>
-            </div>
-            <CircularTotalProgressBar tasks={process?.tasks} />
-          </article>
+        <div className="flex gap-12 ">
+          <div>
+            <a href="#" className="border-b-4  border-[#53C4CD]">
+              Informações
+            </a>
+          </div>
+          <div>
+            <a href="#">Tarefas</a>
+          </div>
         </div>
       </section>
-      <section className="flex justify-between items-start w-full gap-4 ">
-        <div className="flex flex-col w-full gap-4">
-          <p>Aguardando</p>
-          <div className="flex flex-col pr-4 gap-7 overflow-auto max-h-[420px] pb-4">
-            {process?.tasks?.map((task) => {
-              if (task.status === "Aguardando")
-                return (
-                  <Task
-                    key={task.id}
-                    showModal={() => toggleModal(task)}
-                    task={task}
-                  />
-                )
-            })}
+
+      <section className="w-full grid grid-cols-2 mt-4">
+        <div>
+          <p>Descrição</p>
+          <hr className="max-w-2xl" />
+          <p className="text-sm h-20 overflow-hidden whitespace-normal break-words text-ellipsis min-h-[20rem] mt-6">
+            {process.description}
+          </p>
+          <p>Comentários</p>
+          <hr className="max-w-2xl" />
+          <div className="flex items-center gap-4 mt-4">
+            <img src="./Roberta.svg" alt="img" className="w-10" />
+            <input
+              type="text"
+              placeholder="Adicionar comentário..."
+              className="p-2 border-solid border w-[38.5rem] rounded"
+            />
           </div>
         </div>
-        <div className="flex flex-col w-full gap-4">
-          <p>Em progresso</p>
-          <div className="flex flex-col pr-4 gap-7 overflow-auto max-h-[420px] pb-4">
-            {process?.tasks?.map((task) => {
-              if (task.status === "Em progresso")
-                return (
-                  <Task
-                    key={task.id}
-                    showModal={() => toggleModal(task)}
-                    task={task}
-                  />
-                )
-            })}
+        <section>
+          <div className="flex gap-6">
+            <div>
+              <p className="">Planejamento</p>
+              <hr className="w-72" />
+              <p className="text-xs text-slate-500 overflow-hidden whitespace-normal break-words text-ellipsis mt-4 ">
+                Prazo de entrega
+              </p>
+              <p className="mt-2 text-sm">{process.deadline}</p>
+            </div>
+            <div>
+              <p className="">Regulatório</p>
+              <hr className="w-72" />
+              <p className="text-xs h-20 text-slate-500 overflow-hidden whitespace-normal break-words text-ellipsis mt-4 ">
+                Requisitos
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col w-full gap-4">
-          <p>Finalizado</p>
-          <div className="flex flex-col pr-4 gap-7 overflow-auto max-h-[420px] pb-4">
-            {process?.tasks?.map((task) => {
-              if (task.status === "Finalizado")
-                return (
-                  <Task
-                    key={task.id}
-                    showModal={() => toggleModal(task)}
-                    task={task}
-                  />
-                )
-            })}
+          <div>
+            <h2 className="mt-40 text-xl">Minhas tarefas</h2>
           </div>
-        </div>
+        </section>
       </section>
 
       {showModal && (
@@ -164,5 +136,5 @@ export function Process() {
         />
       )}
     </div>
-  )
+  );
 }

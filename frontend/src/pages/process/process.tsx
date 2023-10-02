@@ -1,8 +1,8 @@
 import { Task } from "@/components/taskCard";
 import { useState, useEffect } from "react";
-import { TaskModal } from "@/components/taskModal";
 import processService from "@/services/processService";
 import { useParams } from "react-router";
+import { Progress } from "@/components/ui/progress";
 
 export interface Task {
   id: string;
@@ -23,9 +23,7 @@ export interface Processes {
 
 export function Process() {
   const { id } = useParams();
-  const [reload, setReload] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState(false);
-  const [currentTask, setCurrentTask] = useState<Task | undefined>();
+  const [reload] = useState<boolean>(false);
   const [process, setProcess] = useState<Processes>({
     id: "",
     deadline: "",
@@ -34,17 +32,15 @@ export function Process() {
     description: "",
   });
 
+  const completedTaskCounter = process.tasks
+    ? process.tasks.filter((task) => task.status === "INPROGRESS").length
+    : 0;
+
+  const totalTaskCounter = process.tasks ? process.tasks.length : 0;
+
   useEffect(() => {
     getProcess(id);
   }, [reload]);
-
-  const toggleModal = (task: Task) => {
-    setCurrentTask(!showModal ? task : undefined);
-    setShowModal(true);
-  };
-  const closeModal = () => {
-    setShowModal(false);
-  };
 
   async function getProcess(id: string | undefined) {
     if (id) {
@@ -117,24 +113,40 @@ export function Process() {
           </div>
           <div>
             <h2 className="mt-40 text-xl">Minhas tarefas</h2>
+            <p className="text-slate-500 text-xs">
+              {completedTaskCounter}/{totalTaskCounter} Tarefas concluídas
+            </p>
+            <Progress
+              className="w-[78%] h-2 bg-gray-200 mt-5"
+              value={completedTaskCounter}
+            />
+            {process.tasks &&
+              process.tasks
+                .filter(
+                  (task) =>
+                    task.priority === "HIGH" && task.status === "WAITING"
+                )
+                .map((task) => (
+                  <div
+                    key={task.id}
+                    className="flex gap-5 -center mt-6 items-center"
+                  >
+                    <input
+                      type="checkbox"
+                      id={`taskCheck-${task.id}`}
+                      className="appearance-none w-14 h-10 border rounded-full focus:outline-none checked:bg-[#53C4CD]"
+                    />
+                    <div>
+                      <h2>{task.title}</h2>
+                      <p className="text-gray-500 text-xs max-w-[78%]">
+                        {task.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
           </div>
         </section>
       </section>
-
-      {showModal && (
-        <TaskModal
-          task={currentTask}
-          description={currentTask?.description}
-          id={currentTask?.id}
-          members={"currentTask?"}
-          priority={currentTask?.priority}
-          title={currentTask?.title}
-          toggleModal={toggleModal}
-          closeModal={closeModal}
-          reload={reload}
-          setReload={setReload}
-        />
-      )}
     </div>
   );
 }

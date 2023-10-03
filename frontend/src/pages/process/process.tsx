@@ -1,5 +1,6 @@
 import { Task } from "@/components/taskCard";
 import { useState, useEffect } from "react";
+import userService from "@/services/userServices";
 import processService from "@/services/processService";
 import { useParams } from "react-router";
 import { Progress } from "@/components/ui/progress";
@@ -55,10 +56,19 @@ export function Process() {
     }
   }
 
+  async function completeTask(id: string | undefined) {
+    try {
+      await userService.finishTask(id);
+      getProcess(id);
+    } catch (error) {
+      console.error("Erro ao concluir a tarefa:", error);
+    }
+  }
+
   return (
     <div className="flex flex-col items-center justify-center w-full px-12 gap-4">
       <section className="flex-row w-full ">
-        <div className="flex flex-col gap-8 w-1/2 mb-16">
+        <div className="flex flex-col gap-8 w-1/2 mb-10">
           <div className="flex flex-col ">
             <h1 className="font-thin text-4xl ">Processo XPTO</h1>
           </div>
@@ -89,7 +99,7 @@ export function Process() {
             <input
               type="text"
               placeholder="Adicionar comentário..."
-              className="p-2 border-solid border w-[38.5rem] rounded"
+              className="p-2 border-solid border w-9/12 rounded"
             />
           </div>
         </div>
@@ -117,7 +127,7 @@ export function Process() {
               {completedTaskCounter}/{totalTaskCounter} Tarefas concluídas
             </p>
             <Progress
-              className="w-[78%] h-2 bg-gray-200 mt-5"
+              className="w-9/12 h-2 bg-gray-200 mt-5"
               value={completedTaskCounter}
             />
             {process.tasks &&
@@ -134,11 +144,12 @@ export function Process() {
                     <input
                       type="checkbox"
                       id={`taskCheck-${task.id}`}
-                      className="appearance-none w-14 h-10 border rounded-full focus:outline-none checked:bg-[#53C4CD]"
+                      className="appearance-none w-12 h-12 border rounded-full focus:outline-none checked:bg-[#53C4CD]"
+                      onClick={() => completeTask(task.id)}
                     />
                     <div>
                       <h2>{task.title}</h2>
-                      <p className="text-gray-500 text-xs max-w-[78%]">
+                      <p className="text-gray-500 text-xs max-w-9/12">
                         {task.description}
                       </p>
                     </div>

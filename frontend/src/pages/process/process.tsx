@@ -33,11 +33,24 @@ export function Process() {
     description: "",
   });
 
+  const deadline = new Date();
+  const formattedDate = `${deadline.getDate()}/${
+    deadline.getMonth() + 1
+  }/${deadline.getFullYear()}`;
+  const formattedTime = `${String(deadline.getHours()).padStart(
+    2,
+    "0"
+  )}:${String(deadline.getMinutes()).padStart(2, "0")}`;
+  const formattedDateTime = `${formattedDate} ${formattedTime}`;
+
   const completedTaskCounter = process.tasks
-    ? process.tasks.filter((task) => task.status === "INPROGRESS").length
+    ? process.tasks.filter((task) => task.status === "Finalizado").length
     : 0;
 
   const totalTaskCounter = process.tasks ? process.tasks.length : 0;
+
+  const taskPercentage =
+    totalTaskCounter > 0 ? (completedTaskCounter / totalTaskCounter) * 100 : 0;
 
   useEffect(() => {
     getProcess(id);
@@ -89,7 +102,7 @@ export function Process() {
         <div>
           <p>Descrição</p>
           <hr className="max-w-2xl" />
-          <p className="text-sm h-20 overflow-hidden whitespace-normal break-words text-ellipsis min-h-[20rem] mt-6">
+          <p className="text-sm h-20 overflow-hidden whitespace-normal break-words text-ellipsis min-h-[20rem] mt-6 max-w-xl">
             {process.description}
           </p>
           <p>Comentários</p>
@@ -111,7 +124,7 @@ export function Process() {
               <p className="text-xs text-slate-500 overflow-hidden whitespace-normal break-words text-ellipsis mt-4 ">
                 Prazo de entrega
               </p>
-              <p className="mt-2 text-sm">{process.deadline}</p>
+              <p className="mt-2 text-sm">{formattedDateTime}</p>
             </div>
             <div>
               <p className="">Regulatório</p>
@@ -128,13 +141,13 @@ export function Process() {
             </p>
             <Progress
               className="w-9/12 h-2 bg-gray-200 mt-5"
-              value={completedTaskCounter}
+              value={taskPercentage}
             />
             {process.tasks &&
               process.tasks
                 .filter(
                   (task) =>
-                    task.priority === "HIGH" && task.status === "WAITING"
+                    task.priority === "Alta" && task.status === "Aguardando"
                 )
                 .map((task) => (
                   <div
@@ -147,9 +160,9 @@ export function Process() {
                       className="appearance-none w-12 h-12 border rounded-full focus:outline-none checked:bg-[#53C4CD]"
                       onClick={() => completeTask(task.id)}
                     />
-                    <div>
-                      <h2>{task.title}</h2>
-                      <p className="text-gray-500 text-xs max-w-9/12">
+                    <div className="max-w-sm">
+                      <h2 className="break-words">{task.title}</h2>
+                      <p className="text-gray-500 text-xs max-w-9/12 break-words">
                         {task.description}
                       </p>
                     </div>

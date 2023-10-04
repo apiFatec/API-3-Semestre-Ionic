@@ -1,27 +1,11 @@
-import { Task } from "@/components/taskCard";
 import { useState, useEffect, useContext } from "react";
 import userService from "@/services/userServices";
 import processService from "@/services/processService";
 import { useParams } from "react-router";
 import { Progress } from "@/components/ui/progress";
 import { TitleContext } from "@/contexts/TitleContext";
-
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  status: string;
-  priority: string;
-  deadline: any;
-}
-
-export interface Processes {
-  id: string | undefined;
-  deadline: string | undefined;
-  tasks: Array<Task> | undefined;
-  name: string | undefined;
-  description: string | undefined;
-}
+import { Tasks } from "@/interfaces/tasks";
+import { Processes } from "@/interfaces/processes";
 
 export function Process() {
   const { id } = useParams();
@@ -63,7 +47,7 @@ export function Process() {
     (task) => task.priority === "Baixa"
   );
 
-  let orderedTasks: Task[] = [];
+  let orderedTasks: Tasks[] = [];
   if (altaPrioridadeTasks && mediaPrioridadeTasks && baixaPrioridadeTasks) {
     orderedTasks = [
       ...altaPrioridadeTasks,
@@ -102,7 +86,7 @@ export function Process() {
     }
   }
 
-  async function joinTask(updateTask: Task) {
+  async function joinTask(updateTask: Tasks) {
     try {
       const userToken = localStorage.getItem("token");
       await userService.joinTask({ task: updateTask, user: userToken });

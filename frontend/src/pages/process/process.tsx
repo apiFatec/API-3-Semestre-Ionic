@@ -1,9 +1,12 @@
 import { Task } from "@/components/taskCard";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import userService from "@/services/userServices";
 import processService from "@/services/processService";
 import { useParams } from "react-router";
 import { Progress } from "@/components/ui/progress";
+import { TitleContext } from "@/contexts/TitleContext";
+import { Button } from "@/components/ui/button";
+import { LogIn } from "lucide-react";
 
 export interface Task {
   id: string;
@@ -24,7 +27,7 @@ export interface Processes {
 
 export function Process() {
   const { id } = useParams();
-  const [reload] = useState<boolean>(false);
+  const { handleTitle } = useContext(TitleContext);
   const [process, setProcess] = useState<Processes>({
     id: "",
     deadline: "",
@@ -34,9 +37,8 @@ export function Process() {
   });
 
   const deadline = new Date();
-  const formattedDate = `${deadline.getDate()}/${
-    deadline.getMonth() + 1
-  }/${deadline.getFullYear()}`;
+  const formattedDate = `${deadline.getDate()}/${deadline.getMonth() + 1
+    }/${deadline.getFullYear()}`;
   const formattedTime = `${String(deadline.getHours()).padStart(
     2,
     "0"
@@ -54,14 +56,16 @@ export function Process() {
 
   useEffect(() => {
     getProcess(id);
-  }, [reload]);
+  }, []);
 
   async function getProcess(id: string | undefined) {
     if (id) {
       processService
         .getOne(id)
         .then((response) => {
-          setProcess(response.data);
+          const data = response.data;
+          setProcess(data);
+          handleTitle(data.name);
         })
         .catch((error) => {
           console.log(error);
@@ -72,20 +76,34 @@ export function Process() {
   async function completeTask(id: string | undefined) {
     try {
       await userService.finishTask(id);
-      getProcess(id);
+      const updatedTasks = process.tasks?.map(task =>
+        task.id === id ? { ...task, status: "Finalizado" } : task
+      );
+      setProcess(prev => ({ ...prev, tasks: updatedTasks }));
     } catch (error) {
       console.error("Erro ao concluir a tarefa:", error);
+    }
+  }
+
+  async function joinTask(updateTask: Task) {
+    try {
+      const userToken = localStorage.getItem('token');
+      await userService.joinTask({ task: updateTask, user: userToken });
+      if (id && process.tasks) {
+        const updatedTasks = process.tasks.map(task =>
+          task.id === updateTask.id ? { ...task, status: "Em progresso" } : task
+        );
+
+        setProcess(prev => ({ ...prev, tasks: updatedTasks }));
+      }
+    } catch (error) {
+      console.error("Erro ao ingressar na tarefa:", error);
     }
   }
 
   return (
     <div className="flex flex-col items-center justify-center w-full px-12 gap-4">
       <section className="flex-row w-full ">
-        <div className="flex flex-col gap-8 w-1/2 mb-10">
-          <div className="flex flex-col ">
-            <h1 className="font-thin text-4xl ">Processo XPTO</h1>
-          </div>
-        </div>
         <div className="flex gap-12 ">
           <div>
             <a href="#" className="border-b-4  border-[#53C4CD]">
@@ -100,13 +118,12 @@ export function Process() {
 
       <section className="w-full grid grid-cols-2 mt-4">
         <div>
-          <p>Descrição</p>
-          <hr className="max-w-2xl" />
+          <p className="w-11/12 border-b ">Descrição</p>
           <p className="text-sm h-20 overflow-hidden whitespace-normal break-words text-ellipsis min-h-[20rem] mt-6 max-w-xl">
             {process.description}
           </p>
-          <p>Comentários</p>
-          <hr className="max-w-2xl" />
+          <p className="w-11/12 border-b ">Comentários</p>
+
           <div className="flex items-center gap-4 mt-4">
             <img src="./Roberta.svg" alt="img" className="w-10" />
             <input
@@ -117,18 +134,19 @@ export function Process() {
           </div>
         </div>
         <section>
-          <div className="flex gap-6">
-            <div>
-              <p className="">Planejamento</p>
-              <hr className="w-72" />
+          <div className="flex gap-14
+           justify-start">
+            <div className="w-1/3">
+              <p className="border-b">Planejamento</p>
+
               <p className="text-xs text-slate-500 overflow-hidden whitespace-normal break-words text-ellipsis mt-4 ">
                 Prazo de entrega
               </p>
               <p className="mt-2 text-sm">{formattedDateTime}</p>
             </div>
-            <div>
-              <p className="">Regulatório</p>
-              <hr className="w-72" />
+            <div className="w-1/3">
+              <p className="border-b">Regulatório</p>
+
               <p className="text-xs h-20 text-slate-500 overflow-hidden whitespace-normal break-words text-ellipsis mt-4 ">
                 Requisitos
               </p>
@@ -143,14 +161,31 @@ export function Process() {
               className="w-9/12 h-2 bg-gray-200 mt-5"
               value={taskPercentage}
             />
-            {process.tasks &&
-              process.tasks
-                .filter(
-                  (task) =>
-                    task.priority === "Alta" && task.status === "Aguardando"
+            {process.tasks?.map((task) => {
+              if (task.status === 'Aguardando') {
+                return (
+                  < div
+                    key={task.id}
+                    className="flex gap-5 -center mt-6 items-center"
+                  >
+                    <button
+                      id={`taskCheck-${task.id}`}
+                      className="flex items-center justify-center appearance-none w-12 h-12 border rounded-full focus:outline-none checked:bg-[#53C4CD] bg-none"
+                      onClick={() => joinTask(task)}
+                    >
+                      <LogIn size={21} />
+                    </button>
+                    <div className="max-w-sm">
+                      <h2 className="break-words">{task.title}</h2>
+                      <p className="text-gray-500 text-xs max-w-9/12 break-words">
+                        {task.description}
+                      </p>
+                    </div>
+                  </div>
                 )
-                .map((task) => (
-                  <div
+              } else if (task.status === 'Em progresso') {
+                return (
+                  < div
                     key={task.id}
                     className="flex gap-5 -center mt-6 items-center"
                   >
@@ -167,10 +202,12 @@ export function Process() {
                       </p>
                     </div>
                   </div>
-                ))}
+                )
+              }
+            })}
           </div>
         </section>
       </section>
-    </div>
+    </div >
   );
 }

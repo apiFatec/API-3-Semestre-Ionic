@@ -37,8 +37,9 @@ export function Process() {
   });
 
   const deadline = new Date();
-  const formattedDate = `${deadline.getDate()}/${deadline.getMonth() + 1
-    }/${deadline.getFullYear()}`;
+  const formattedDate = `${deadline.getDate()}/${
+    deadline.getMonth() + 1
+  }/${deadline.getFullYear()}`;
   const formattedTime = `${String(deadline.getHours()).padStart(
     2,
     "0"
@@ -54,6 +55,21 @@ export function Process() {
   const taskPercentage =
     totalTaskCounter > 0 ? (completedTaskCounter / totalTaskCounter) * 100 : 0;
 
+  const altaPrioridadeTasks = process.tasks?.filter(
+    (task) => task.priority === "Alta"
+  );
+  const mediaPrioridadeTasks = process.tasks?.filter(
+    (task) => task.priority === "Média"
+  );
+  const baixaPrioridadeTasks = process.tasks?.filter(
+    (task) => task.priority === "Baixa"
+  );
+
+  const orderedTasks = [
+    ...altaPrioridadeTasks,
+    ...mediaPrioridadeTasks,
+    ...baixaPrioridadeTasks,
+  ];
   useEffect(() => {
     getProcess(id);
   }, []);
@@ -76,10 +92,10 @@ export function Process() {
   async function completeTask(id: string | undefined) {
     try {
       await userService.finishTask(id);
-      const updatedTasks = process.tasks?.map(task =>
+      const updatedTasks = process.tasks?.map((task) =>
         task.id === id ? { ...task, status: "Finalizado" } : task
       );
-      setProcess(prev => ({ ...prev, tasks: updatedTasks }));
+      setProcess((prev) => ({ ...prev, tasks: updatedTasks }));
     } catch (error) {
       console.error("Erro ao concluir a tarefa:", error);
     }
@@ -87,14 +103,14 @@ export function Process() {
 
   async function joinTask(updateTask: Task) {
     try {
-      const userToken = localStorage.getItem('token');
+      const userToken = localStorage.getItem("token");
       await userService.joinTask({ task: updateTask, user: userToken });
       if (id && process.tasks) {
-        const updatedTasks = process.tasks.map(task =>
+        const updatedTasks = process.tasks.map((task) =>
           task.id === updateTask.id ? { ...task, status: "Em progresso" } : task
         );
 
-        setProcess(prev => ({ ...prev, tasks: updatedTasks }));
+        setProcess((prev) => ({ ...prev, tasks: updatedTasks }));
       }
     } catch (error) {
       console.error("Erro ao ingressar na tarefa:", error);
@@ -134,8 +150,10 @@ export function Process() {
           </div>
         </div>
         <section>
-          <div className="flex gap-14
-           justify-start">
+          <div
+            className="flex gap-14
+           justify-start"
+          >
             <div className="w-1/3">
               <p className="border-b">Planejamento</p>
 
@@ -161,31 +179,66 @@ export function Process() {
               className="w-9/12 h-2 bg-gray-200 mt-5"
               value={taskPercentage}
             />
-            {process.tasks?.map((task) => {
-              if (task.status === 'Aguardando') {
+            {orderedTasks?.map((task) => {
+              if (task.status === "Aguardando") {
                 return (
-                  < div
+                  <div
                     key={task.id}
-                    className="flex gap-5 -center mt-6 items-center"
+                    className="flex gap-5 -center mt-6 items-center justify-between max-w-lg"
                   >
-                    <button
-                      id={`taskCheck-${task.id}`}
-                      className="flex items-center justify-center appearance-none w-12 h-12 border rounded-full focus:outline-none checked:bg-[#53C4CD] bg-none"
-                      onClick={() => joinTask(task)}
-                    >
-                      <LogIn size={21} />
-                    </button>
-                    <div className="max-w-sm">
+                    <div className="max-w-sm ">
                       <h2 className="break-words">{task.title}</h2>
                       <p className="text-gray-500 text-xs max-w-9/12 break-words">
                         {task.description}
                       </p>
                     </div>
+                    {task.priority === "Média" && (
+                      <div className="ml-52">
+                        <p className="text-amber-500 text-sm max-w-9/12 break-words pl-6 pr-6 rounded bg-amber-100 text-center">
+                          {task.priority}
+                        </p>
+                        <button
+                          id={`taskCheck-${task.id}`}
+                          className="text-sm"
+                          onClick={() => joinTask(task)}
+                        >
+                          Iniciar tarefa
+                        </button>
+                      </div>
+                    )}
+                    {task.priority === "Alta" && (
+                      <div className="ml-52">
+                        <p className="bg-red-200 text-sm max-w-9/12 break-words pl-6 pr-6 rounded text-amber-700 text-center">
+                          {task.priority}
+                        </p>
+                        <button
+                          id={`taskCheck-${task.id}`}
+                          className="text-sm"
+                          onClick={() => joinTask(task)}
+                        >
+                          Iniciar tarefa
+                        </button>
+                      </div>
+                    )}
+                    {task.priority === "Baixa" && (
+                      <div className="ml-52">
+                        <p className="bg-green-200 text-sm max-w-9/12 break-words pl-6 pr-6 rounded text-green-600 text-center">
+                          {task.priority}
+                        </p>
+                        <button
+                          id={`taskCheck-${task.id}`}
+                          className="text-sm"
+                          onClick={() => joinTask(task)}
+                        >
+                          Iniciar tarefa
+                        </button>
+                      </div>
+                    )}
                   </div>
-                )
-              } else if (task.status === 'Em progresso') {
+                );
+              } else if (task.status === "Em progresso") {
                 return (
-                  < div
+                  <div
                     key={task.id}
                     className="flex gap-5 -center mt-6 items-center"
                   >
@@ -201,13 +254,37 @@ export function Process() {
                         {task.description}
                       </p>
                     </div>
+                    {task.priority === "Baixa" && (
+                      <div className="ml-36">
+                        <p className="bg-green-200 text-sm max-w-9/12 break-words pl-6 pr-6 rounded text-green-600 text-center">
+                          {task.priority}
+                        </p>
+                        <div className="h-4"></div>
+                      </div>
+                    )}
+                    {task.priority === "Média" && (
+                      <div className="ml-36">
+                        <p className="text-amber-500 text-sm max-w-9/12 pl-6 pr-6 break-words rounded bg-amber-100 text-center">
+                          {task.priority}
+                        </p>
+                        <div className="h-4"></div>
+                      </div>
+                    )}
+                    {task.priority === "Alta" && (
+                      <div className="ml-36">
+                        <p className="bg-red-200 text-sm max-w-9/12 pl-6 pr-6 break-words rounded text-amber-700 text-center">
+                          {task.priority}
+                        </p>
+                        <div className="h-4"></div>
+                      </div>
+                    )}
                   </div>
-                )
+                );
               }
             })}
           </div>
         </section>
       </section>
-    </div >
+    </div>
   );
 }

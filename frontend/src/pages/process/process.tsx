@@ -5,8 +5,6 @@ import processService from "@/services/processService";
 import { useParams } from "react-router";
 import { Progress } from "@/components/ui/progress";
 import { TitleContext } from "@/contexts/TitleContext";
-import { Button } from "@/components/ui/button";
-import { LogIn } from "lucide-react";
 
 export interface Task {
   id: string;
@@ -65,11 +63,14 @@ export function Process() {
     (task) => task.priority === "Baixa"
   );
 
-  const orderedTasks = [
-    ...altaPrioridadeTasks,
-    ...mediaPrioridadeTasks,
-    ...baixaPrioridadeTasks,
-  ];
+  let orderedTasks: Task[] = [];
+  if (altaPrioridadeTasks && mediaPrioridadeTasks && baixaPrioridadeTasks) {
+    orderedTasks = [
+      ...altaPrioridadeTasks,
+      ...mediaPrioridadeTasks,
+      ...baixaPrioridadeTasks,
+    ];
+  }
   useEffect(() => {
     getProcess(id);
   }, []);
@@ -184,7 +185,7 @@ export function Process() {
                 return (
                   <div
                     key={task.id}
-                    className="flex gap-5 -center mt-6 items-center justify-between max-w-lg"
+                    className="flex gap-5 -center mt-6 items-center justify-between max-w-lg  "
                   >
                     <div className="max-w-sm ">
                       <h2 className="break-words">{task.title}</h2>
@@ -240,7 +241,7 @@ export function Process() {
                 return (
                   <div
                     key={task.id}
-                    className="flex gap-5 -center mt-6 items-center"
+                    className="flex gap-5 -center mt-6 items-center justify-between max-w-lg"
                   >
                     <input
                       type="checkbox"

@@ -24,10 +24,12 @@ export class ProcessesService {
             processes.deadline AS process_deadline,
             processes.status AS process_status,
             processes.id AS process_id,
-            JSON_AGG(json_build_object('name', users.name, 'role', users.role, 'id', users.id)) AS users
+            JSON_AGG(json_build_object('name', users.name, 'url_photo', user.url_photo)) AS users
+            JSON_AGG(json_build_object('status', task.status)) AS tasks
             FROM processes
             INNER JOIN users_processes ON processes.id = users_processes.processes_id
             INNER JOIN users ON users_processes.users_id = users.id
+            INNER JOIN tasks ON processes.id = tasks.processes_id
             GROUP BY processes.id
         `;
 

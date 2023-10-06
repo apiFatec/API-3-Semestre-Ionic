@@ -13,7 +13,7 @@ export interface Process {
   process_description: string;
   process_deadline: string;
   process_status: string;
-  users: Array<Users>
+  users: Array<Users>;
 }
 
 interface Users {
@@ -68,23 +68,29 @@ export function Home() {
       {processes.length === 0 &&
         <p className='w-full p-3 text-center text-2xl border-b-2 font-semibold'>Nenhum Processo Criado</p>
       }
-      <div className="flex w-full justify-between gap-10">
-        <div className="flex flex-col w-full gap-3 max-h-[580px] overflow-auto">
-          {processes.map((process) => {
-            if (process.process_status === "Aguardando") {
-              return (
-                <ProcessCard key={process.process_id}
-                  process_id={process.process_id}
-                  process_description={process.process_description}
-                  process_name={process.process_name}
-                  users={process.users}
-                />
-              )
-            }
-          })}
+      <div className="grid grid-cols-3 w-full justify-between gap-10">
+        <div className="grid w-full gap-3 max-h-[580px] overflow-auto">
+          <p>Backlog</p>
+          <div>
+            {processes.map((process) => {
+              if (process.process_status === "Aguardando") {
+                return (
+                  <ProcessCard key={process.process_id}
+                    process_id={process.process_id}
+                    process_description={process.process_description}
+                    process_name={process.process_name}
+                    users={process.users}
+                    process_progress={50}
+                  />
+                )
+              }
+            })}
+          </div>
+
         </div>
 
-        <div className="flex flex-col w-full gap-3 max-h-[580px]  overflow-auto">
+        <div className="flex flex-col w-full gap-3 max-h-[580px] overflow-auto">
+          <p>Em progresso</p>
           {processes.map((process) => {
             if (process.process_status === "Em progresso") {
               return (
@@ -93,6 +99,7 @@ export function Home() {
                   process_description={process.process_description}
                   process_name={process.process_name}
                   users={process.users}
+                  process_progress={50}
                 />
               )
             }
@@ -100,6 +107,7 @@ export function Home() {
         </div>
 
         <div className="flex flex-col w-full gap-3 max-h-[580px]  overflow-auto">
+          <p>Finalizado</p>
           {processes.map((process) => {
             if (process.process_status === "Finalizado") {
               return (
@@ -108,6 +116,7 @@ export function Home() {
                   process_description={process.process_description}
                   process_name={process.process_name}
                   users={process.users}
+                  process_progress={50}
                 />
               )
             }

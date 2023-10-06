@@ -113,7 +113,7 @@ export function CadastroProcessos() {
   return (
     <main className="">
       <form
-        className="grid grid-cols-2 gap-40 ml-12 content-evenly"
+        className="grid grid-cols-2 gap-24 place-content-evenly ml-8"
         onSubmit={handleSubmit(createProcess)}
       >
         <section className="">
@@ -154,7 +154,7 @@ export function CadastroProcessos() {
                   id="lider"
                   setValue={setTeamLeader}
                   users={users}
-                  value={users[0]}
+                  value={users[-1]}
                 />
 
                 <Input
@@ -170,7 +170,7 @@ export function CadastroProcessos() {
                       <section key={index} className="p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
                         <div className="flex items-center justify-between">
                           <span className="font-semibold p-1">{task.title}</span>
-                          <span className={cn("pl-2 pb-1 text-blue-600", task.priority === "Alta" ? "text-red-600" : "text-orange-500")}>{task.priority}</span>
+                          <span className={cn("pl-2 pb-1", task.priority === "Alta" ? "text-red-600" : task.priority=== "Média" ? "text-orange-500" : "text-blue-600")}>{task.priority}</span>
                         </div>
                         <span className="pl-2 text-[#777777]">{task.description}</span>
                       </section>
@@ -182,9 +182,9 @@ export function CadastroProcessos() {
             </Card>
           </div>
         </section>
-        <section className="">
+        <section className="grid justify-items-end w-[25rem]">
           <div className="grid justify-items-center">
-            <Card className="grid justify-items-center w-[19rem] shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
+            <Card className="grid justify-items-center w-[19rem] mt-[3.25rem] shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
               <div className="p-5">
                 <label>Prioridade</label>
                 <Tabs id="priorityTask" defaultValue="Baixa" className="mt-2">
@@ -214,7 +214,7 @@ export function CadastroProcessos() {
               </div>
             </Card>
           </div>
-          <div className="ml-52 mt-20">
+          <div className="mt-20">
             <Button type="submit"
               className="w-40 h-11 rounded bg-[#53C4CD] text-white text-sm shadow-[0px_0px_4px_0px_rgba(0,0,0,0.25)] hover:bg-sky-600">Criar Processo</Button>
           </div>

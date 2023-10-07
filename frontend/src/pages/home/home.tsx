@@ -14,6 +14,8 @@ export interface Process {
   process_deadline: string;
   process_status: string;
   users: Array<Users>;
+  tasks: Array<Tasks>;
+  // process_progress: number;
 }
 
 interface Users {
@@ -22,14 +24,24 @@ interface Users {
   id: string;
 }
 
+interface Tasks{
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  priority: string;
+}
+
 export function Home() {
   const { theme } = useTheme();
   const [processes, setProcesses] = useState<Process[]>([]);
   const navigate = useNavigate();
+  // const [percentual, setPercentual] = useState(0);
+
   useEffect(() => {
     getProcesses();
   }, [])
-
+ 
   async function getProcesses() {
     processService.getAll()
       .then((response) => {
@@ -69,7 +81,7 @@ export function Home() {
         <p className='w-full p-3 text-center text-2xl border-b-2 font-semibold'>Nenhum Processo Criado</p>
       }
       <div className="grid grid-cols-3 w-full justify-between gap-10">
-        <div className="grid w-full gap-3 max-h-[580px] overflow-auto">
+        <div className="flex flex-col w-full gap-3 max-h-[580px]">
           <p>Backlog</p>
           <div>
             {processes.map((process) => {
@@ -80,7 +92,8 @@ export function Home() {
                     process_description={process.process_description}
                     process_name={process.process_name}
                     users={process.users}
-                    process_progress={50}
+                    tasks={process?.tasks}
+                    // process_progress={0}
                   />
                 )
               }
@@ -89,7 +102,7 @@ export function Home() {
 
         </div>
 
-        <div className="flex flex-col w-full gap-3 max-h-[580px] overflow-auto">
+        <div className="flex flex-col w-full gap-3 max-h-[580px] overflow-visible">
           <p>Em progresso</p>
           {processes.map((process) => {
             if (process.process_status === "Em progresso") {
@@ -99,7 +112,25 @@ export function Home() {
                   process_description={process.process_description}
                   process_name={process.process_name}
                   users={process.users}
-                  process_progress={50}
+                  tasks={process.tasks}
+
+                  // {...processes.map((process) => {
+                  //   const lenTasks = process?.tasks?.length || 0
+                  //   const finishedTasks = process?.tasks?.reduce((result, task) => {
+                  //     if (task.status === "Finalizado") {
+                  //       return result + 1;
+                  //     }
+                  //     return result;
+                  //   }, 0);
+                  //   if (lenTasks === 0) {
+                  //     return 0;
+                  //   }
+                  //   const porcentagem = (finishedTasks || 0) / lenTasks * 100;
+                  //   console.log(porcentagem)
+                  //   setPercentual(porcentagem);
+                  // })}
+                  
+                  // process_progress={}
                 />
               )
             }
@@ -116,7 +147,8 @@ export function Home() {
                   process_description={process.process_description}
                   process_name={process.process_name}
                   users={process.users}
-                  process_progress={50}
+                  tasks={process.tasks}
+                  // process_progress={100}
                 />
               )
             }

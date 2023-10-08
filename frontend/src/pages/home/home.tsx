@@ -14,34 +14,29 @@ export interface Process {
   process_deadline: string;
   process_status: string;
   users: Array<Users>;
-  tasks: Array<Tasks>;
-  // process_progress: number;
+  tasks: Array<Task>;
 }
 
 interface Users {
   name: string;
   role: string;
   id: string;
+  url_photo: string;
 }
 
-interface Tasks{
-  id: string;
-  title: string;
-  description: string;
+interface Task {
   status: string;
-  priority: string;
 }
 
 export function Home() {
   const { theme } = useTheme();
-  const [processes, setProcesses] = useState<Process[]>([]);
   const navigate = useNavigate();
-  // const [percentual, setPercentual] = useState(0);
+  const [processes, setProcesses] = useState<Process[]>([]);
 
   useEffect(() => {
     getProcesses();
   }, [])
- 
+
   async function getProcesses() {
     processService.getAll()
       .then((response) => {
@@ -91,9 +86,10 @@ export function Home() {
                     process_id={process.process_id}
                     process_description={process.process_description}
                     process_name={process.process_name}
+                    process_deadline={process.process_deadline}
+                    process_status={process.process_status}
                     users={process.users}
-                    tasks={process?.tasks}
-                    // process_progress={0}
+                    tasks={process.tasks}
                   />
                 )
               }
@@ -102,42 +98,26 @@ export function Home() {
 
         </div>
 
-        <div className="flex flex-col w-full gap-3 max-h-[580px] overflow-visible">
+        <div className="flex flex-col w-full gap-3 max-h-[580px]">
           <p>Em progresso</p>
-          {processes.map((process) => {
+          {processes.map((process) => { 
             if (process.process_status === "Em progresso") {
               return (
                 <ProcessCard key={process.process_id}
                   process_id={process.process_id}
                   process_description={process.process_description}
                   process_name={process.process_name}
+                  process_deadline={process.process_deadline}
+                  process_status={process.process_status}
                   users={process.users}
                   tasks={process.tasks}
-
-                  // {...processes.map((process) => {
-                  //   const lenTasks = process?.tasks?.length || 0
-                  //   const finishedTasks = process?.tasks?.reduce((result, task) => {
-                  //     if (task.status === "Finalizado") {
-                  //       return result + 1;
-                  //     }
-                  //     return result;
-                  //   }, 0);
-                  //   if (lenTasks === 0) {
-                  //     return 0;
-                  //   }
-                  //   const porcentagem = (finishedTasks || 0) / lenTasks * 100;
-                  //   console.log(porcentagem)
-                  //   setPercentual(porcentagem);
-                  // })}
-                  
-                  // process_progress={}
                 />
               )
             }
           })}
         </div>
 
-        <div className="flex flex-col w-full gap-3 max-h-[580px]  overflow-auto">
+        <div className="flex flex-col w-full gap-3 max-h-[580px]">
           <p>Finalizado</p>
           {processes.map((process) => {
             if (process.process_status === "Finalizado") {
@@ -146,9 +126,10 @@ export function Home() {
                   process_id={process.process_id}
                   process_description={process.process_description}
                   process_name={process.process_name}
+                  process_deadline={process.process_deadline}
+                  process_status={process.process_status}
                   users={process.users}
-                  tasks={process.tasks}
-                  // process_progress={100}
+                  tasks={process?.tasks}
                 />
               )
             }

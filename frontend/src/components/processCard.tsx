@@ -4,43 +4,56 @@ import { Progress } from "./ui/progress";
 import { useTheme } from "./theme.provider";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { PhotoProfile } from "./photoProfile";
+import { Badge } from "./ui/badge";
 
 
 export interface Process {
+  process_id: string;
   process_name: string;
   process_description: string;
+  process_deadline: string;
+  process_status: string;
   users: Array<Users>;
-  process_id: string;
-  // process_progress: number;
-  tasks: Array<Tasks>;
+  tasks: Array<Task>;
 }
 
 interface Users {
   name: string;
   role: string;
   id: string;
+  url_photo: string;
 }
 
-interface Tasks {
-  id: string;
+interface Task {
   status: string;
 }
 
-export function ProcessCard(process: Process, { tasks }: { tasks?: Tasks[] }) {
+export function ProcessCard(process: Process, { tasks }: { tasks?: Task[] }) {
   const { theme } = useTheme();
+  const currentDate = formatDate(new Date(process.process_deadline));
   const navigate = useNavigate();
   const [percentual, setPercentual] = useState(50);
 
+
   useEffect(() => {
     porcentagem();
-  })
+  }, [])
+
+  function formatDate(date: Date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
 
   function nav() {
     navigate(`/processos/${encodeURIComponent(process.process_name)}/${process.process_id}`);
   }
 
   function porcentagem() {
-    const lenTasks = tasks?.length || 0
+    const lenTasks = tasks?.length || 0;
     const finishedTasks = tasks?.reduce((result, task) => {
       if (task.status === "Finalizado") {
         return result + 1;
@@ -51,10 +64,9 @@ export function ProcessCard(process: Process, { tasks }: { tasks?: Tasks[] }) {
       return 0;
     }
     const porcentagem = (finishedTasks || 0) / lenTasks * 100;
-    console.log(porcentagem)
     setPercentual(porcentagem);
   }
-  
+
   return (
     <Card onClick={() => nav()}
       className={
@@ -69,12 +81,22 @@ export function ProcessCard(process: Process, { tasks }: { tasks?: Tasks[] }) {
       </div>
 
       <div className="w-[17.3rem]">
-        <Progress value={percentual} />
+        <Progress className="h-[0.65rem]" value={percentual} />
       </div>
 
-      <div className="flex w-56 truncate gap-2">
-        {process.users.map((user) => { return (<span key={user.id}>{user.name}</span>) })}
+      <div className="grid grid-cols-2 w-full">
+        <div className="w-[50%] flex items-end">
+          <Badge className="" variant={"secondary"}>{currentDate}</Badge>
+        </div>
+        <div className="flex flex-row-reverse gap-5 py-4 mb-3 w-[50%]">
+          {process.users.map((user) => {
+            return (
+              <span className="" key={user.id}><PhotoProfile /></span>
+            )
+          })}
+        </div>
       </div>
+
     </Card>
   )
 } 

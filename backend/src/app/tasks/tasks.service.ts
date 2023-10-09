@@ -1,3 +1,4 @@
+import { IsEmail } from 'class-validator';
 import { Injectable } from '@nestjs/common';
 import { Status, TasksEntity } from './entities/tasks.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,6 +8,7 @@ import { ProcessesEntity } from '../processes/entities/processes.entity';
 import { UsersTasksEntity } from './entities/usersTasks.entity';
 import { UsersEntity } from '../users/entities/users.entity';
 import { UsuariosService } from '../users/users.service';
+import { use } from 'passport';
 
 @Injectable()
 export class TasksService {
@@ -69,5 +71,9 @@ export class TasksService {
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  async leaveTask(idTask: string, id: string) {
+    const tasksUsers = await this.usersTasksRepository.delete({tasksId: { id: idTask },usersId: { id: id }})
   }
 }

@@ -9,11 +9,11 @@ import { Badge } from "./ui/badge";
 
 
 export interface Process {
-  process_id: string;
-  process_name: string;
-  process_description: string;
-  process_deadline: string;
-  process_status: string;
+  processId: string;
+  processName: string;
+  processDescription: string;
+  processDeadline: string;
+  processStatus: string;
   users: Array<Users>;
   tasks: Array<Task>;
 }
@@ -22,23 +22,18 @@ interface Users {
   name: string;
   role: string;
   id: string;
-  url_photo: string;
+  // url_photo: string;
 }
 
 interface Task {
   status: string;
 }
 
-export function ProcessCard(process: Process, { tasks }: { tasks?: Task[] }) {
+export function ProcessCard(process: Process) {
   const { theme } = useTheme();
-  const currentDate = formatDate(new Date(process.process_deadline));
+  const currentDate = formatDate(new Date(process.processDeadline));
   const navigate = useNavigate();
-  const [percentual, setPercentual] = useState(50);
 
-
-  useEffect(() => {
-    porcentagem();
-  }, [])
 
   function formatDate(date: Date) {
     const day = String(date.getDate()).padStart(2, '0');
@@ -47,25 +42,20 @@ export function ProcessCard(process: Process, { tasks }: { tasks?: Task[] }) {
     return `${day}/${month}/${year}`;
   }
 
+  console.log(currentDate)
+
+  
 
   function nav() {
-    navigate(`/processos/${encodeURIComponent(process.process_name)}/${process.process_id}`);
+    navigate(`/processos/${encodeURIComponent(process.processName)}/${process.processId}`);
   }
 
-  function porcentagem() {
-    const lenTasks = tasks?.length || 0;
-    const finishedTasks = tasks?.reduce((result, task) => {
-      if (task.status === "Finalizado") {
-        return result + 1;
-      }
-      return result;
-    }, 0);
-    if (lenTasks === 0) {
-      return 0;
-    }
-    const porcentagem = (finishedTasks || 0) / lenTasks * 100;
-    setPercentual(porcentagem);
-  }
+  const totalTasks = process.tasks ? process.tasks.length : 0;
+
+  const finishedTasks = process.tasks ? process.tasks.filter((task) => task.status === "Finalizado").length : 0;
+
+  const percentage = totalTasks > 0 ? (finishedTasks / totalTasks) * 100 : 0;
+
 
   return (
     <Card onClick={() => nav()}
@@ -73,15 +63,15 @@ export function ProcessCard(process: Process, { tasks }: { tasks?: Task[] }) {
         cn("grid w-88 p-3 mb-3 justify-items-start cursor-pointer", theme === 'light' ? 'bg-white' : 'bg-background-secondary')
       }>
       <div className="flex w-full mb-2">
-        <p className="text-sm text-orange-600">{process.process_name}</p>
+        <p className="text-sm text-orange-600">{process.processName}</p>
       </div>
 
       <div className="flex flex-col">
-        <p className="mb-2 w-80 truncate">{process.process_description}</p>
+        <p className="mb-2 w-80 truncate">{process.processDescription}</p>
       </div>
 
       <div className="w-[17.3rem]">
-        <Progress className="h-[0.65rem]" value={percentual} />
+        <Progress className="h-[0.65rem]" value={percentage} />
       </div>
 
       <div className="grid grid-cols-2 w-full">
@@ -89,9 +79,9 @@ export function ProcessCard(process: Process, { tasks }: { tasks?: Task[] }) {
           <Badge className="" variant={"secondary"}>{currentDate}</Badge>
         </div>
         <div className="flex flex-row-reverse gap-5 py-4 mb-3 w-[50%]">
-          {process.users.map((user) => {
+          {process.users.map((user, index) => {
             return (
-              <span className="" key={user.id}><PhotoProfile /></span>
+              <span className="" key={index}><PhotoProfile /></span>
             )
           })}
         </div>

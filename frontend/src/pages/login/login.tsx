@@ -1,14 +1,10 @@
 import useLogin from "./useLogin";
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useTheme } from "@/components/theme.provider";
 import { InputAnimated } from "@/components/InputAnimated";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-export interface LoginFormValues {
-  username: string;
-  password: string;
-}
+import { LoginFormValues } from "@/interfaces/loginFormValues";
 
 export function Login() {
   const { theme } = useTheme();
@@ -16,14 +12,20 @@ export function Login() {
   const { loginUser, isLoading } = useLogin();
 
   const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
-    loginUser(data);  
+    loginUser(data);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex min-h-screen bg-background">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex min-h-screen bg-background"
+    >
       <div className="w-[50%] flex flex-col items-center gap-14 bg-background-login">
         {/* MUDAR COR DO SVG PARA TEMA ESCURO */}
-        <img src={theme === "light" ? "./Vector.svg" : "./Vector_dark.svg"} className="mt-[25%] text-ionic-normal" />
+        <img
+          src={theme === "light" ? "./Vector.svg" : "./Vector_dark.svg"}
+          className="mt-[25%] text-ionic-normal"
+        />
         <img src="./ionichealth.svg" className="text-white text-8xl" />
       </div>
 
@@ -54,9 +56,10 @@ export function Login() {
           </div>
           <button className="text-gray-500">Esqueceu-se da senha?</button>
         </div>
-        <Button className="bg-ionic-normal active:bg-ionic-pressed hover:bg-ionic-normal w-full h-16 font-semibold text-3xl text-white" >Entrar</Button>
+        <Button className="bg-ionic-normal active:bg-ionic-pressed hover:bg-ionic-normal w-full h-16 font-semibold text-3xl text-white">
+          Entrar
+        </Button>
       </div>
-
     </form>
-  )
+  );
 }

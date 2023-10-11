@@ -74,6 +74,16 @@ export class TasksService {
   }
 
   async leaveTask(idTask: string, id: string) {
-    const tasksUsers = await this.usersTasksRepository.delete({tasksId: { id: idTask },usersId: { id: id }})
+    await this.usersTasksRepository.delete({tasksId: { id: idTask },usersId: { id: id }})
+  }
+
+  async getMembers(idTask: string){
+    const query = `SELECT users.name, users.id
+    FROM users
+    JOIN users_tasks ON users.id = users_tasks.users_id
+    JOIN tasks ON users_tasks.tasks_id = tasks.id
+    WHERE tasks.id = $1;`
+
+    return await this.usersTasksRepository.query(query,[idTask])
   }
 }

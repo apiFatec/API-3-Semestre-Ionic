@@ -18,6 +18,10 @@ export class UsuariosService {
     return usuario;
   }
 
+  async saveProfileImage(pathImage: string, id: string): Promise<void> {
+    await this.usuariosRepository.update(id, { profileImage: pathImage });
+  }
+
   async findOne(email: string): Promise<UsersEntity | undefined> {
     return await this.usuariosRepository.findOne({ where: { email: email } });
   }

@@ -27,6 +27,9 @@ export class UsersEntity {
 
   @Column({ nullable: false })
   password: string;
+  
+  @Column({ nullable: true })
+  profileImage: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: string;

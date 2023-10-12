@@ -1,5 +1,5 @@
-import { Controller, UseGuards, Post, Request, Get, Body, Param, UseInterceptors, UploadedFile, Res } from '@nestjs/common';
-import { Express, Response } from 'express';
+import { Controller, UseGuards, Post, Request, Get, Body, Param, UseInterceptors, UploadedFile, Res, ParseUUIDPipe, Req } from '@nestjs/common';
+import { Express, Request as ReqImage, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { UsuariosService } from './users.service';
 import { AuthService } from '../auth/auth.service';
@@ -25,10 +25,11 @@ export class UsuariosController {
   @UseInterceptors(FileInterceptor('image'))
   async postImage(
     @Param('username') username: string,
-    @Param('id') id: string,
-    @UploadedFile() file: Express.Multer.File
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: ReqImage
   ): Promise<void> {
-    const pathName: string = `/${username}/${file.filename}`;
+    const pathName: string = `${req.protocol}://${req.get('host')}/${username}/${file.filename}`;
     return await this.usuariosService.saveProfileImage(pathName, id);
   }
 

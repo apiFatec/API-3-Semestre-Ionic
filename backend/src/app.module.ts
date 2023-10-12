@@ -7,6 +7,7 @@ import { TokenModule } from './app/token/token.module';
 import { ProcessesModule } from './app/processes/processes.module';
 import { TasksModule } from './app/tasks/tasks.module';
 import { ProjectsModule } from './app/projects/projects.module';
+import { FilesModule } from './app/files/files.module';
 require('dotenv').config()
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -23,7 +24,8 @@ require('dotenv').config()
     TokenModule,
     ProcessesModule,
     TasksModule,
-    ProjectsModule
+    ProjectsModule,
+    FilesModule
   ],
   controllers: [],
   providers: [],

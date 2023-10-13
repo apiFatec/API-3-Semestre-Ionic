@@ -15,15 +15,17 @@ import { Request } from 'express';
 
 @Controller('files')
 export class FilesController {
-  constructor(private readonly filesService: FilesService) {}
+  constructor(private readonly filesService: FilesService) { }
 
-  @Post(':id')
+  @Post('/task/:taskId/user/:userId/username/:userName')
   @UseInterceptors(FileInterceptor('arquivo', multerConfig))
   uploadArquivo(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('taskId', new ParseUUIDPipe()) taskId: string,
+    @Param('userId', new ParseUUIDPipe()) userId: string,
+    @Param('userName') userName: string,
     @UploadedFile() file: Express.Multer.File,
     @Req() req: Request,
   ) {
-    return this.filesService.salvarDados(id,file, req);
+    return this.filesService.salvarDados(userName, userId, taskId, file, req);
   }
 }

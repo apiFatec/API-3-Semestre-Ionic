@@ -10,13 +10,14 @@ export class FilesService {
     @InjectRepository(File)
     private fotoRepository: Repository<File>,
   ) {}
-  async salvarDados(tasksId: string,file: Express.Multer.File, req: Request) {
+  async salvarDados(userName:string, userId:string, tasksId: string,file: Express.Multer.File, req: Request) {
     const arquivo = new File();
     arquivo.fileName = file.filename;
     arquivo.contentLength = file.size;
     arquivo.contentType = file.mimetype;
     arquivo.taskId = tasksId;
-    arquivo.url = `${req.protocol}://${req.get('host')}/files/${file.filename}`;
+    arquivo.usersId = userId
+    arquivo.url = `${req.protocol}://${req.get('host')}/files/${userName}/${file.filename}`;
 
     return await this.fotoRepository.save(arquivo);
   }

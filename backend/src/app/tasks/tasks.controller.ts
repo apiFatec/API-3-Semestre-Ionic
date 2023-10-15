@@ -22,4 +22,9 @@ export class TasksController {
   async finishTask(@Param('id') id: string) {
     return await this.tasksService.finishTask(id);
   }
+
+  @Get('/:id')
+  async getTask(@Param('id') id: string){
+    return await this.tasksService.getTask(id)
+  }
 }

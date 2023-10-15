@@ -173,10 +173,12 @@ export function CadastroProcessos() {
                           </span>
                           <span
                             className={cn(
-                              "pl-2 pb-1 text-blue-600",
+                              "pl-2 pb-1",
                               task.priority === "Alta"
                                 ? "text-red-600"
-                                : "text-orange-500"
+                                : task.priority === "Média"
+                                ? "text-orange-500"
+                                : "text-blue-600"
                             )}
                           >
                             {task.priority}

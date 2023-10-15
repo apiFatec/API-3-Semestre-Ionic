@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router";
 import { Process } from "@/interfaces/process";
 import { TitleContext } from "@/contexts/TitleContext";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function Home() {
   const { theme } = useTheme();
@@ -76,61 +77,82 @@ export function Home() {
           Nenhum Processo Criado
         </p>
       )}
-      <div className="flex w-full justify-between gap-10">
-        <div className="flex flex-col w-full gap-3 max-h-[580px] overflow-auto">
-          {processes.map((process) => {
-            if (process.processStatus === "Aguardando") {
-              return (
-                <ProcessCard
-                  key={process.processId}
-                  processId={process.processId}
-                  processDescription={process.processDescription}
-                  processName={process.processName}
-                  users={process.users}
-                  processDeadline={""}
-                  processStatus={""}
-                  tasks={process.tasks} />
-              );
-            }
-          })}
+      <div className="grid grid-cols-3 w-full justify-between gap-10">
+        {processes.map((process) => {
+          const totalTasks = process.tasks ? process.tasks.length : 0;
+          const tasksInProgress = process.tasks ? process.tasks.filter((task) => task.status === "Em progresso").length : 0;
+          const finishedTasks = process.tasks ? process.tasks.filter((task) => task.status === "Finalizado").length : 0;
+          if (totalTasks == finishedTasks){
+            process.process_status = "Finalizado"
+          }
+          else if (finishedTasks == 0 && tasksInProgress == 0){
+            process.process_status = "Aguardando"
+          } else {
+            process.process_status = "Em progresso"
+          }
+          return null
+        })}
+        <div className="flex flex-col w-full gap-3 max-h-[580px]">
+          <p>Backlog</p>
+          <ScrollArea className="h-full w-[20rem]">
+            {processes.map((process) => {
+              if (process.process_status === "Aguardando") {
+                return (
+                  <ProcessCard
+                    key={process.process_id}
+                    processId={process.process_id}
+                    processDescription={process.process_description}
+                    processName={process.process_name}
+                    users={process.users}
+                    processDeadline={process.process_deadline}
+                    processStatus={process.process_status}
+                    tasks={process.tasks} />
+                );
+              }
+            })}
+          </ScrollArea>
         </div>
 
         <div className="flex flex-col w-full gap-3 max-h-[580px]">
           <p>Em progresso</p>
-          {processes.map((process) => {
-            if (process.processStatus === "Em progresso") {
-              return (
-                <ProcessCard
-                  key={process.processId}
-                  processId={process.processId}
-                  processDescription={process.processDescription}
-                  processName={process.processName}
-                  users={process.users}
-                  processDeadline={""}
-                  processStatus={""}
-                  tasks={process.tasks} />
-              );
-            }
-          })}
+          <ScrollArea className="h-full w-[20rem]">
+            {processes.map((process) => {
+              if (process.process_status === "Em progresso") {
+                return (
+                  <ProcessCard
+                    key={process.process_id}
+                    processId={process.process_id}
+                    processDescription={process.process_description}
+                    processName={process.process_name}
+                    users={process.users}
+                    processDeadline={process.process_deadline}
+                    processStatus={process.process_status}
+                    tasks={process.tasks} />
+                );
+              }
+            })}
+          </ScrollArea>
         </div>
 
         <div className="flex flex-col w-full gap-3 max-h-[580px]">
           <p>Finalizado</p>
-          {processes.map((process) => {
-            if (process.processStatus === "Finalizado") {
-              return (
-                <ProcessCard
-                  key={process.processId}
-                  processId={process.processId}
-                  processDescription={process.processDescription}
-                  processName={process.processName}
-                  users={process.users}
-                  processDeadline={""}
-                  processStatus={""}
-                  tasks={process.tasks} />
-              );
-            }
-          })}
+          <ScrollArea className="h-full w-[20rem]">
+            {processes.map((process) => {
+              if (process.process_status === "Finalizado") {
+                return (
+                  <ProcessCard
+                    key={process.process_id}
+                    processId={process.process_id}
+                    processDescription={process.process_description}
+                    processName={process.process_name}
+                    users={process.users}
+                    processDeadline={process.process_deadline}
+                    processStatus={process.process_status}
+                    tasks={process.tasks} />
+                );
+              }
+            })}
+          </ScrollArea>
         </div>
       </div>
     </div>

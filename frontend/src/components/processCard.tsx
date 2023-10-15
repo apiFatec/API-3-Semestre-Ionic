@@ -3,7 +3,6 @@ import { Card } from "./ui/card";
 import { Progress } from "./ui/progress";
 import { useTheme } from "./theme.provider";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { PhotoProfile } from "./photoProfile";
 import { Badge } from "./ui/badge";
 
@@ -12,7 +11,7 @@ export interface Process {
   processId: string;
   processName: string;
   processDescription: string;
-  processDeadline: string;
+  processDeadline: Date;
   processStatus: string;
   users: Array<Users>;
   tasks: Array<Task>;
@@ -31,20 +30,17 @@ interface Task {
 
 export function ProcessCard(process: Process) {
   const { theme } = useTheme();
-  const currentDate = formatDate(new Date(process.processDeadline));
+  const currentDate = formatDate(process.processDeadline);
   const navigate = useNavigate();
 
 
   function formatDate(date: Date) {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    const deadline = new Date(date);
+    const day = deadline.toLocaleString('default', { day: '2-digit' });
+    const month = deadline.toLocaleString('default', { month: 'short' });
+    const year = deadline.toLocaleString('default', { year: 'numeric' });
+    return day + ' ' + month[0].toUpperCase()+month.substring(1) + ' ' + year;
   }
-
-  console.log(currentDate)
-
-  
 
   function nav() {
     navigate(`/processos/${encodeURIComponent(process.processName)}/${process.processId}`);
@@ -56,32 +52,46 @@ export function ProcessCard(process: Process) {
 
   const percentage = totalTasks > 0 ? (finishedTasks / totalTasks) * 100 : 0;
 
+  let contUsers = 0;
 
   return (
     <Card onClick={() => nav()}
       className={
-        cn("grid w-88 p-3 mb-3 justify-items-start cursor-pointer", theme === 'light' ? 'bg-white' : 'bg-background-secondary')
+        cn("grid w-[19rem] p-3 mb-3 justify-items-start cursor-pointer", theme === 'light' ? 'bg-white' : 'bg-background-secondary')
       }>
       <div className="flex w-full mb-2">
         <p className="text-sm text-orange-600">{process.processName}</p>
       </div>
 
       <div className="flex flex-col">
-        <p className="mb-2 w-80 truncate">{process.processDescription}</p>
+        <p className="mb-2 w-full line-clamp-1">{process.processDescription}</p>
       </div>
-
-      <div className="w-[17.3rem]">
-        <Progress className="h-[0.65rem]" value={percentage} />
-      </div>
+      
+      {process.processStatus == "Em progresso" && (
+        <div className="w-[17.3rem]">
+          
+          <p className="flex justify-end text-xs text-[#949494]">{finishedTasks}/{totalTasks} etapas</p>
+          <Progress className="h-2 bg-gray-200" value={percentage} />
+        </div>
+      ) }
 
       <div className="grid grid-cols-2 w-full">
-        <div className="w-[50%] flex items-end">
-          <Badge className="" variant={"secondary"}>{currentDate}</Badge>
+        <div className="w-full flex items-end">
+          <Badge className="]" variant={"secondary"}>{currentDate}</Badge>
         </div>
-        <div className="flex flex-row-reverse gap-5 py-4 mb-3 w-[50%]">
-          {process.users.map((user, index) => {
+        <div className="flex flex-row-reverse pt-4">
+          {
+            process.users.slice(2, process.users.length).map(() => {
+              contUsers = contUsers + 1
+              return null
+            })}
+            {contUsers > 0 && (
+              <span className="flex p-1 w-8 h-8 rounded-full bg-slate-200 ">+{contUsers}</span>
+            )
+          }
+          {process.users.slice(0,2).map((user, index) => {
             return (
-              <span className="" key={index}><PhotoProfile /></span>
+              <span className="mx-[-4px]" key={index}><PhotoProfile /></span>
             )
           })}
         </div>

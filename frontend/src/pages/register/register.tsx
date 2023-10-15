@@ -82,8 +82,12 @@ export function Register() {
     data.role = role;
     userServices
       .CreateUser(data)
+    userServices
+      .CreateUser(data)
       .then((response) => {
         alert(`tudo certo!`);
+      })
+      .catch((error) => {
       })
       .catch((error) => {
         console.log(error);
@@ -256,3 +260,4 @@ export function Register() {
     </div>
   );
 }
+

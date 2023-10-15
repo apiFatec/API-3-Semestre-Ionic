@@ -18,17 +18,19 @@ export class ProcessesService {
 
     async findAll(): Promise<ProcessesEntity[]> {
         const query = `
-            SELECT 
-            processes.name AS process_name,
-            processes.description AS process_description,
-            processes.deadline AS process_deadline,
-            processes.status AS process_status,
-            processes.id AS process_id,
-            JSON_AGG(json_build_object('name', users.name, 'role', users.role, 'id', users.id)) AS users
-            FROM processes
-            INNER JOIN users_processes ON processes.id = users_processes.processes_id
-            INNER JOIN users ON users_processes.users_id = users.id
-            GROUP BY processes.id
+        SELECT 
+        processes.name AS process_name,
+        processes.description AS process_description,
+        processes.deadline AS process_deadline,
+        processes.status AS process_status,
+        processes.id AS process_id,
+        JSON_AGG(json_build_object('name', users.name)) AS users,
+        JSON_AGG(json_build_object('status', tasks.status)) AS tasks
+        FROM processes
+        INNER JOIN users_processes ON processes.id = users_processes.processes_id
+        INNER JOIN users ON users_processes.users_id = users.id
+        INNER JOIN tasks ON processes.id = tasks.processes_id
+        GROUP BY processes.id;
         `;
 
         const result = await this.processesRepository.query(query);

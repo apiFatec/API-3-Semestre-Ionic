@@ -10,12 +10,17 @@ import { cn } from "@/lib/utils"
 import { useTheme } from "./theme.provider"
 import { LogOut } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
+import { useContext } from "react";
+import { TitleContext } from "@/contexts/TitleContext";
 
 export function NavBar() {
   const { theme } = useTheme();
   const { logout } = useAuth();
+  const { title } = useContext(TitleContext);
+
   return (
-    <div className="p-6 flex w-full justify-end ">
+    <div className="p-6 flex w-full justify-between ">
+      <h1 className="font-thin text-4xl pl-6 text">{title}</h1>
       <DropdownMenu>
         <DropdownMenuTrigger
           className={

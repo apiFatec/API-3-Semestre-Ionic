@@ -31,16 +31,16 @@ export class UsersEntity {
   @Column({ nullable: true })
   profileImage: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   adress: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   gender: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   phone: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   birthdate: Date;
 
   @CreateDateColumn({ name: 'created_at' })

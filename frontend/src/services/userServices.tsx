@@ -1,4 +1,5 @@
 import { api } from "@/api";
+import { TeamFormValues } from "@/interfaces/teamFormValues";
 import axios from "axios";
 
 class UserServices {
@@ -30,8 +31,16 @@ class UserServices {
     });
   }
 
-  async getTeamMembers(teamId: string) {
-    return await api.get(`/teams/${teamId}/users`);
+  async getTeamMembers(id: string) {
+    return await api.get(`/teams/${id}`);
+  }
+
+  async createTeam(data: TeamFormValues) {
+    return await api.post("/teams", data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 
   async finishTask(id: string | undefined) {

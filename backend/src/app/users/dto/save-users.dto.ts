@@ -22,4 +22,15 @@ export class SaveUserDto {
   @IsNotEmpty()
   password: string;
 
+  @IsNotEmpty()
+  adress: string;
+
+  @IsNotEmpty()
+  gender: string;
+
+  @IsNotEmpty()
+  phone: string;
+
+  @IsNotEmpty()
+  birthdate: Date;
 }

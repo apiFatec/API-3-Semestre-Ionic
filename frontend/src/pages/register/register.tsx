@@ -40,8 +40,7 @@ const createUserFormSchema = z.object({
   adress: z
     .string()
     .nonempty("o endereço é obrigatório")
-    .refine((adress) => /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+$/
-    .test(adress), {
+    .refine((adress) => /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+$/.test(adress), {
       message: "o endereço deve conter apenas letras, números e espaços",
     }),
   phone: z
@@ -80,15 +79,13 @@ export function Register() {
 
   const onSubmit: SubmitHandler<RegisterFormValues> = (data) => {
     data.role = role;
-    userServices
-      .CreateUser(data)
+    userServices.CreateUser(data);
     userServices
       .CreateUser(data)
       .then((response) => {
         alert(`tudo certo!`);
       })
-      .catch((error) => {
-      })
+      .catch((error) => {})
       .catch((error) => {
         console.log(error);
       });
@@ -260,4 +257,3 @@ export function Register() {
     </div>
   );
 }
-

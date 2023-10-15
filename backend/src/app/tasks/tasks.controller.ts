@@ -23,7 +23,7 @@ export class TasksController {
     return await this.tasksService.finishTask(id);
   }
 
-  @Get('/get-tasks/:id')
+  @Get('/:id')
   async getTask(@Param('id') id: string){
     return await this.tasksService.getTask(id)
   }

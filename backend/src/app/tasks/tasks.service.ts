@@ -79,7 +79,7 @@ export class TasksService {
     INNER JOIN tasks ON task.id = tasks."task_id"
     WHERE task.id = $1
     GROUP BY task.id
-`
+    `
     const result = await this.tasksRepository.query(query, [id]);
     return result[0] || null;
   }
@@ -97,4 +97,5 @@ export class TasksService {
     `
     const tasks = await this.tasksRepository.query(query, [id]);
     return tasks;
+  }
 }

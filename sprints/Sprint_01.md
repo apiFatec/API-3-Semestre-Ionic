@@ -14,15 +14,16 @@ A primeira sprint foi dedicada à abordagem do escopo estrutural do projeto. Ini
 
 
 ## Modelagem do Banco de Dados
-![Modelagem Banco de dados](https://user-images.githubusercontent.com/111662298/229387423-1d6fb3b9-1c75-4230-b41d-a65eb066149d.png)
+
+![02_BD](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/9f624d01-c58b-400f-8425-55089962b7d3)
 
 
 ## Backlog da Sprint:
+![01_Sprint_Backlog](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/03d656b9-e3df-4e9f-81e1-d0e4790888fe)
 
-<img src="https://user-images.githubusercontent.com/112170274/229106631-a8c49352-8ca4-426c-beca-8b0332143a1d.PNG" />
-![01_Sprint_Backlog](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/dc72f4f0-6ad3-4d08-b431-26ca6de4b7d8)
 
 
 ## Burndown:
+![Burndown](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/ac4763ca-cf43-415e-858f-901cd3c65f66)
 
-<img src="https://user-images.githubusercontent.com/112170274/229329453-7edb0a4e-8ad3-4cfe-ac61-15fef83b834e.png" />
+

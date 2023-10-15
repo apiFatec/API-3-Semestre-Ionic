@@ -1,6 +1,30 @@
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import UserServices from "@/services/userServices";
+import { Teams } from "@/interfaces/teams";
+import { useParams } from "react-router-dom";
 
 export function EditarEquipe() {
+  const { id } = useParams();
+  const [teamMembers, setTeamMembers] = useState<Teams>();
+
+  useEffect(() => {
+    async function getTeam() {
+      try {
+        const response = await UserServices.getTeamMembers("teamId");
+        setTeamMembers(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar os membros do time:", error);
+      }
+    }
+
+    getTeam();
+  }, []);
+
+  const middleIndex = Math.ceil(teamMembers.length / 2);
+  const leftColumn = teamMembers.slice(0, middleIndex);
+  const rightColumn = teamMembers.slice(middleIndex);
+
   return (
     <section className="grid grid-cols-2 border p-4 rounded-lg m-auto w-fit gap-4">
       <div className="mt-4 flex flex-col gap-6">
@@ -14,45 +38,29 @@ export function EditarEquipe() {
             className="p-2 pr-6 border rounded"
           />
         </div>
-        <div className="flex gap-4 items-center ">
+        <div className="flex gap-4 items-center">
           <h3>Colaboradores</h3>
           <Button
             variant={"outline"}
-            className="text-gray-300 font-thin text-center"
+            className="text-gray-300 font-thin text-center "
           >
             Adicionar colaborador
           </Button>
         </div>
-        <div className="flex gap-4 p-4 border rounded-sm">
-          <img src="/" alt="img" className="rounded-full" />
-          <div>
-            <p>Roberta Diaz</p>
-            <p className="text-xs text-gray-500	">Gestora de processos</p>
-          </div>
-          <a href="/" className="ml-12 text-zinc-700 text-sm  ">
-            Editar
-          </a>
-        </div>
-        <div className="flex gap-4 p-4 border rounded-sm">
-          <img src="/" alt="img" className="rounded-full" />
-          <div>
-            <p>Roberta Diaz</p>
-            <p className="text-xs text-gray-500	">Gestora de processos</p>
-          </div>
-          <a href="/" className="ml-12 text-zinc-700 text-sm  ">
-            Editar
-          </a>
-        </div>
-        <div className="flex gap-4 p-4 border rounded-sm">
-          <img src="/" alt="img" className="rounded-full" />
-          <div>
-            <p>Roberta Diaz</p>
-            <p className="text-xs text-gray-500	">Gestora de processos</p>
-          </div>
-          <a href="/" className="ml-12 text-zinc-700 text-sm  ">
-            Editar
-          </a>
-        </div>
+        {leftColumn?.map((member) => {
+          return (
+            <div key={member.id} className="flex gap-4 p-4 border rounded-sm">
+              <img src="/" alt="img" className="rounded-full" />
+              <div>
+                <p>{member.name}</p>
+                <p className="text-xs text-gray-500	">{member.function}</p>
+              </div>
+              <a href="/" className="ml-12 text-zinc-700 text-sm  ">
+                Editar
+              </a>
+            </div>
+          );
+        })}
       </div>
       <div className="mt-4 flex flex-col gap-6">
         <div className="flex flex-col gap-2">
@@ -66,36 +74,20 @@ export function EditarEquipe() {
           />
         </div>
         <div></div>
-        <div className="flex gap-4 p-4 border rounded-sm mt-10">
-          <img src="/" alt="img" className="rounded-full" />
-          <div>
-            <p>Roberta Diaz</p>
-            <p className="text-xs text-gray-500	">Gestora de processos</p>
-          </div>
-          <a href="/" className="ml-12 text-zinc-700 text-sm  ">
-            Editar
-          </a>
-        </div>
-        <div className="flex gap-4 p-4 border rounded-sm">
-          <img src="/" alt="img" className="rounded-full" />
-          <div>
-            <p>Roberta Diaz</p>
-            <p className="text-xs text-gray-500	">Gestora de processos</p>
-          </div>
-          <a href="/" className="ml-12 text-zinc-700 text-sm  ">
-            Editar
-          </a>
-        </div>
-        <div className="flex gap-4 p-4 border rounded-sm">
-          <img src="/" alt="img" className="rounded-full" />
-          <div>
-            <p>Roberta Diaz</p>
-            <p className="text-xs text-gray-500	">Gestora de processos</p>
-          </div>
-          <a href="/" className="ml-12 text-zinc-700 text-sm  ">
-            Editar
-          </a>
-        </div>
+        {rightColumn?.map((member) => {
+          return (
+            <div key={member.id} className="flex gap-4 p-4 border rounded-sm">
+              <img src="/" alt="img" className="rounded-full" />
+              <div>
+                <p>{member.name}</p>
+                <p className="text-xs text-gray-500	">{member.function}</p>
+              </div>
+              <a href="/" className="ml-12 text-zinc-700 text-sm  ">
+                Editar
+              </a>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

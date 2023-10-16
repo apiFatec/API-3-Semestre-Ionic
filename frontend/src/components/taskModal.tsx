@@ -56,14 +56,14 @@ export function TaskModal({ task, id, title, members, description, priority, tog
       });
   }
 
-  async function leaveTask(idTask:string | undefined, tokenUser: string | null) {
+  async function leaveTask(idTask: string | undefined, tokenUser: string | null) {
     userServices.leaveTask(idTask, tokenUser)
-    .then((response) => {
-      console.log(response);
-      setReload(!reload);
-    }).catch((error) => {
-      console.log(error);
-    })
+      .then((response) => {
+        console.log(response);
+        setReload(!reload);
+      }).catch((error) => {
+        console.log(error);
+      })
   }
 
   return (

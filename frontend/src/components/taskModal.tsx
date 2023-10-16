@@ -14,9 +14,11 @@ interface Modal {
   task?: Task
   toggleModal: (task: Task) => void;
   closeModal: () => void;
+  setReload: (state: boolean) => void;
+  reload: boolean;
 }
 
-export function TaskModal({ task, id, title, members, description, priority, toggleModal, closeModal }: Modal) {
+export function TaskModal({ task, id, title, members, description, priority, toggleModal, closeModal, setReload, reload }: Modal) {
 
   const priorityColor = () => {
     if (priority === "Baixa") {
@@ -35,9 +37,20 @@ export function TaskModal({ task, id, title, members, description, priority, tog
     })
       .then((response) => {
         console.log(response);
+        setReload(!reload);
       }).catch((error) => {
         console.log(error);
-      })
+      });
+  }
+
+  async function finishTask(id: string | undefined) {
+    userServices.finishTask(id)
+      .then((response) => {
+        console.log('finalizado', response);
+        setReload(!reload);
+      }).catch((error) => {
+        console.log(error);
+      });
   }
 
   return (
@@ -54,7 +67,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
           </header>
 
           <div className="flex flex-col ml-10 mb-5">
-            <p>Membros</p>
+            {/* <p>Membros</p>
             <div className="flex gap-2 items-center">
               <div className="flex w-8 h-8 rounded-full overflow-hidden">
                 <img src={photo} alt="caralho" />
@@ -65,7 +78,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
               <div className="flex w-8 h-8 rounded-full overflow-hidden">
                 <img src={photo} alt="caralho" />
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex flex-col gap-3">
@@ -96,7 +109,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
             </Button>
 
             <p>Ações</p>
-            <Button className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2">
+            <Button onClick={() => finishTask(id)} className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2">
               <CheckSquare size={18} />
               Concluir
             </Button>

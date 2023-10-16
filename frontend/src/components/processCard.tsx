@@ -39,7 +39,7 @@ export function ProcessCard(process: Process) {
         <Progress value={33} className="mb-1"/>
       </div>
 
-      <div className="flex w-full">
+      <div className="flex w-56 truncate gap-2">
         {process.users.map((user) => { return (<span key={user.id}>{user.name}</span>) })}
       </div>
     </Card>

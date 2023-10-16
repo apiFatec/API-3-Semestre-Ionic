@@ -54,11 +54,11 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
 
 
 ## Backlog das Sprints
-![Roadmap](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/fab8cad1-2a8c-4685-90bd-fcdb2f2d15f1)
+![02_Sprint_Roadmap](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/76aa52d8-b251-43e0-aec4-c272b09c625e)
 
 
 ## Backlog do Produto
-![Backlog_Produto](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/84f02690-a0c0-4ee3-8b17-8224f7fb7c54)
+![02_Backlog_Produto](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/557f887f-336c-46ae-a3d6-db1c394d6cef)
 
 
 

@@ -16,7 +16,7 @@ export default function useLogin() {
       const response = await services.Login(data);
       login(response.data);
 
-      navigate('/dashboard');
+      navigate('/');
 
     } catch (error) {
       console.log(error);

@@ -38,5 +38,9 @@ export class TasksController {
   @Get('/members/:idTask')
   async getMembers(@Param("idTask") idTask : string){
     return await this.tasksService.getMembers(idTask);
+  @Get('/:id')
+  async getTask(@Param('id') id: string){
+    return await this.tasksService.getTask(id);
   }
+}
 }

@@ -1,0 +1,29 @@
+{
+    "name": "Processo Foda!!!",
+    "description": "Brasil",
+    "deadline": "24/09",
+    "status": "aguardando",
+    "tasks": [
+        {
+            "id": "1",
+            "status": "finalizado",
+            "title": "Implementar funcionalidade de busca",
+            "deadline": "21/09",
+            "description": "A equipe de desenvolvimento é responsável por implementar uma nova funcionalidade de pesquisa no site da empresa. A funcionalidade de pesquisa permitirá aos usuários buscar por produtos, serviços e conteúdo específico de forma eficiente e precisa. Isso envolverá a criação de uma interface de usuário amigável para a pesquisa, a configuração de um mecanismo de busca robusto, a integração de filtros de pesquisa avançados e a exibição de resultados relevantes. A equipe também deve considerar a otimização para dispositivos móveis e garantir uma experiência de usuário consistente em todos os navegadores. Além disso, é importante realizar testes de qualidade abrangentes para garantir que a funcionalidade de pesquisa esteja livre de erros e atenda aos requisitos do cliente. Esta tarefa envolve colaboração entre designers, desenvolvedores front-end e back-end, bem como testadores de qualidade para garantir um resultado final de alta qualidade e totalmente funcional."
+        },
+        {
+            "id": "2",
+            "status": "aguardando",
+            "title": "Implementar autenticação do usuário",
+            "deadline": "21/09",
+            "description": "A equipe de desenvolvimento é encarregada de adicionar uma funcionalidade de autenticação de usuário a um aplicativo web existente. Esta autenticação permitirá que os usuários se registrem, façam login e gerenciem suas contas com segurança. Os principais componentes incluem a criação de páginas de registro e login, a validação de informações do usuário, a autenticação por email e senha, bem como a recuperação de senhas esquecidas. Além disso, a equipe deve considerar a segurança, implementando medidas como hashing de senhas e proteção contra ataques de força bruta. A integração com serviços de terceiros, como provedores de autenticação social, também pode ser parte dessa tarefa. Garantir que a experiência do usuário seja amigável e intuitiva é fundamental. A equipe trabalhará em estreita colaboração com designers de interface, desenvolvedores front-end e back-end, além de realizar testes rigorosos para garantir que a autenticação seja robusta e confiável. Esta tarefa é essencial para garantir a segurança e a acessibilidade do aplicativo aos usuários finais."
+        },
+        {
+            "id": "3",
+            "title": "tarefaTres",
+            "status": "finalizado",
+            "deadline": "08/05",
+            "description": "do projeto"
+        }
+    ]
+}

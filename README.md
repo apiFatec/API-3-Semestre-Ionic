@@ -1,6 +1,10 @@
 # API 3º Semestre ADS
 
 
+https://github.com/apiFatec/API-3-Semestre-Ionic/assets/89823203/6a04213b-b719-4b84-a3c8-a35a5474ad2b
+
+https://www.youtube.com/watch?v=-VoDVQC6TCU
+
 
 ## Índice
 
@@ -45,18 +49,16 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
 </ol>
 
 
-
 ## Protótipo
-![giffatec](https://user-images.githubusercontent.com/112128418/229379893-c1b6dad3-675a-4d1e-9046-973c1842a30b.gif)
-
+![Protótipo API - Figma 2023-09-23 13-46-03](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112128418/5249386f-277d-4cd3-89ea-8a833b5b45b9)
 
 
 ## Backlog das Sprints
-![Roadmap](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/fab8cad1-2a8c-4685-90bd-fcdb2f2d15f1)
+![02_Sprint_Roadmap](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/76aa52d8-b251-43e0-aec4-c272b09c625e)
 
 
 ## Backlog do Produto
-![Backlog_Produto](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/84f02690-a0c0-4ee3-8b17-8224f7fb7c54)
+![02_Backlog_Produto](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/557f887f-336c-46ae-a3d6-db1c394d6cef)
 
 
 

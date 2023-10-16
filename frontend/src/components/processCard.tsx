@@ -86,7 +86,7 @@ export function ProcessCard(process: Process) {
               return null
             })}
             {contUsers > 0 && (
-              <span className="flex p-1 w-8 h-8 rounded-full bg-slate-200 ">+{contUsers}</span>
+              <span className="flex p-1 w-8 h-8 rounded-full bg-slate-200 dark:bg-secondary">+{contUsers}</span>
             )
           }
           {process.users.slice(0,2).map((user, index) => {

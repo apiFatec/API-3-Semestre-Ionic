@@ -1,3 +1,4 @@
+import { TokenController } from './../token/token.controller';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

@@ -1,9 +1,11 @@
-import { ArrowLeftFromLine, CheckSquare, ClipboardList, Text, User } from "lucide-react";
+import { ArrowLeftFromLine, CheckSquare, ClipboardList, Text, User , Paperclip} from "lucide-react";
 import photo from '../../public/lula.jpg';
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { Task } from "@/pages/process/process";
 import userServices from "@/services/userServices";
+import { TaskFileModal } from "./taskFileModal";
+import { useEffect, useState } from "react";
 
 interface Modal {
   id: string | undefined;
@@ -19,6 +21,7 @@ interface Modal {
 }
 
 export function TaskModal({ task, id, title, members, description, priority, toggleModal, closeModal, setReload, reload }: Modal) {
+  const [modalFile, setModalFile] = useState<boolean>(false);
 
   const priorityColor = () => {
     if (priority === "Baixa") {
@@ -51,6 +54,16 @@ export function TaskModal({ task, id, title, members, description, priority, tog
       }).catch((error) => {
         console.log(error);
       });
+  }
+
+  async function leaveTask(idTask: string | undefined, tokenUser: string | null) {
+    userServices.leaveTask(idTask, tokenUser)
+      .then((response) => {
+        console.log(response);
+        setReload(!reload);
+      }).catch((error) => {
+        console.log(error);
+      })
   }
 
   return (
@@ -111,12 +124,23 @@ export function TaskModal({ task, id, title, members, description, priority, tog
             <p>Ações</p>
             <Button onClick={() => finishTask(id)} className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2">
               <CheckSquare size={18} />
-              Concluir
+              Finalizar
             </Button>
+
             <Button className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2">
+              <Paperclip size={18}/>
+              Anexo
+            </Button>
+
+            <Button onClick={() => leaveTask(task?.id, localStorage.getItem('token'))} className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2">
               <ArrowLeftFromLine size={18} />
               Sair
             </Button>
+
+            {modalFile && (
+              <TaskFileModal taskId={task?.id} />
+            )}
+            
           </div>
         </aside>
       </div>

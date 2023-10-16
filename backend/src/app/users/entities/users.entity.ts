@@ -3,6 +3,7 @@ import { hashSync } from 'bcrypt';
 import { UsersProcessesEntity } from "@/app/processes/entities/usersProcesses.entity";
 import { UsersTasksEntity } from "@/app/tasks/entities/usersTasks.entity";
 import { ProjectsEntity } from "@/app/projects/entities/projects.entity";
+import { File } from "@/app/files/entities/file.entity";
 
 export enum Role {
   CLEVEL = "C-Level",
@@ -53,4 +54,7 @@ export class UsersEntity {
 
   @OneToMany(() => ProjectsEntity, (projectsEntity) => projectsEntity.usersId)
   projects: ProjectsEntity;
+
+  @OneToMany(() => File, (file) => file.usersId)
+  files: File;
 }

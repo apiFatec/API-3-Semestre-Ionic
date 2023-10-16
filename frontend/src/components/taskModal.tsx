@@ -4,6 +4,8 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { Task } from "@/pages/process/process";
 import userServices from "@/services/userServices";
+import { TaskFileModal } from "./taskFileModal";
+import { useEffect, useState } from "react";
 
 interface Modal {
   id: string | undefined;
@@ -19,6 +21,7 @@ interface Modal {
 }
 
 export function TaskModal({ task, id, title, members, description, priority, toggleModal, closeModal, setReload, reload }: Modal) {
+  const [modalFile, setModalFile] = useState<boolean>(false);
 
   const priorityColor = () => {
     if (priority === "Baixa") {
@@ -134,6 +137,9 @@ export function TaskModal({ task, id, title, members, description, priority, tog
               Sair
             </Button>
 
+            {modalFile && (
+              <TaskFileModal taskId={task?.id} />
+            )}
             
           </div>
         </aside>

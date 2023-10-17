@@ -41,7 +41,9 @@ export function TaskFileModal({ taskId }: Props) {
         taskService.postFile(taskId, user.id, user.name, formData)
             .then((response) => {
                 console.log(response)
+                alert('Arquivo enviado');
             }).catch(error => console.log(error))
+
     }
 
     return (

@@ -5,6 +5,9 @@ class TaskService {
         return await api.post(`files/task/${taskId}/user/${userId}/username/${userName}`, data);
     }
 
+    async getUserTask(taskId: string | undefined, userId : string | null){
+        return await api.get(`tasks/${taskId}/user/${userId}`)
+    }
 }
 
 export default new TaskService();

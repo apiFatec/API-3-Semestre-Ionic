@@ -7,6 +7,7 @@ import { TitleContext } from "@/contexts/TitleContext";
 import { Tasks } from "@/interfaces/tasks";
 import { Processes } from "@/interfaces/processes";
 import { TaskModal } from "@/components/taskModal";
+import userServices from "@/services/userServices";
 
 export function Process() {
   const { id } = useParams();
@@ -27,11 +28,11 @@ export function Process() {
     deadline: undefined,
   })
   const [modalTask, setModalTask] = useState<any>(false);
+  const [user, setUser] = useState<any>();
 
   const deadline = new Date();
-  const formattedDate = `${deadline.getDate()}/${
-    deadline.getMonth() + 1
-  }/${deadline.getFullYear()}`;
+  const formattedDate = `${deadline.getDate()}/${deadline.getMonth() + 1
+    }/${deadline.getFullYear()}`;
   const formattedTime = `${String(deadline.getHours()).padStart(
     2,
     "0"
@@ -113,8 +114,10 @@ export function Process() {
   }
 
   async function showModalTask(item: Tasks) {
+    if(!modalTask){
+      setTask(item)
+    }
     setModalTask(!modalTask);
-    setTask(item)
   }
 
   return (
@@ -307,10 +310,10 @@ export function Process() {
           {modalTask && (
             <>
               <TaskModal id={task.id} title={task.title} members={undefined} description={task.description}
-                priority={task.priority} toggleModal={function (task: Tasks): void {
+                priority={task.priority} task={task} toggleModal={function (task: Tasks): void {
                   throw new Error("Function not implemented.");
                 }} closeModal={function (): void {
-                  throw new Error("Function not implemented.");
+                  showModalTask;
                 }} setReload={function (state: boolean): void {
                   throw new Error("Function not implemented.");
                 }} reload={false} />

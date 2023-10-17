@@ -13,10 +13,12 @@ export function Router() {
   return (
     <Routes>
       <Route element={<IsLogged />}>
-        <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<Login />} />
       </Route>
-      <Route path="/admin-register" element={<Register />} />
-      <Route element={<PrivateRoutes />}></Route>
+
+      <Route element={<PrivateRoutes />}>
+        <Route path="/admin-register" element={<Register />} />
+      </Route>
       <Route element={<LoginRoutes />}>
         <Route path="/criar-equipe/" element={<EditarEquipe />} />
         <Route path="/criar-processo" element={<CadastroProcessos />} />

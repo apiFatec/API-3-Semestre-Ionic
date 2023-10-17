@@ -41,6 +41,21 @@ export class UsersEntity {
 
   @Column({ nullable: false })
   password: string;
+  
+  @Column({ nullable: true })
+  profileImage: string;
+
+  @Column({ nullable: true })
+  adress: string;
+
+  @Column({ nullable: true })
+  gender: string;
+
+  @Column({ nullable: true })
+  phone: string;
+
+  @Column({ nullable: true })
+  birthdate: Date;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: string;

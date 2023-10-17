@@ -18,7 +18,7 @@ export function Router() {
       <Route path="/admin-register" element={<Register />} />
       <Route element={<PrivateRoutes />}></Route>
       <Route element={<LoginRoutes />}>
-        <Route path="/criar-equipe/:teams/:id" element={<EditarEquipe />} />
+        <Route path="/criar-equipe/" element={<EditarEquipe />} />
         <Route path="/criar-processo" element={<CadastroProcessos />} />
         <Route path="/processos" element={<Home />} />
         <Route path="/" element={<Home />} />

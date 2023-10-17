@@ -40,18 +40,15 @@ export function Register() {
   const { theme } = useTheme();
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<RegisterFormValues> = (data) => {
-    data.role = role;
-    userServices.CreateUser(data);
-    userServices
-      .CreateUser(data)
-      .then((response) => {
-        alert(`tudo certo!`);
-      })
-      .catch((error) => {})
-      .catch((error) => {
-        console.log(error);
-      });
+  const onSubmit: SubmitHandler<RegisterFormValues> = async (data) => {
+    try {
+      data.role = role;
+      await userServices.CreateUser(data);
+      alert("Tudo certo!");
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

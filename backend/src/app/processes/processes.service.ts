@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProcessesEntity, Status } from './entities/processes.entity';
-import { Repository } from 'typeorm'
-import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { SaveProcessDTO } from './dto/save-processes.dto';
 import { TasksService } from '../tasks/tasks.service';
 import { UsersProcessesEntity } from './entities/usersProcesses.entity';
@@ -38,12 +38,12 @@ export class ProcessesService {
         GROUP BY processes.id;
         `;
 
-        const result = await this.processesRepository.query(query);
-        return result;
-    }
+    const result = await this.processesRepository.query(query);
+    return result;
+  }
 
-    async findOne(id: string) {
-        const query = `
+  async findOne(id: string) {
+    const query = `
           SELECT 
             processes.*,
             JSON_AGG(tasks.*) AS tasks
@@ -53,64 +53,67 @@ export class ProcessesService {
           GROUP BY processes.id
         `;
 
-        const result = await this.processesRepository.query(query, [id]);
-        return result[0] || null;
-    }
-    async store(data: SaveProcessDTO): Promise<ProcessesEntity> {
-        const { tasks, ...result } = data;
+    const result = await this.processesRepository.query(query, [id]);
+    return result[0] || null;
+  }
+  async store(data: SaveProcessDTO): Promise<ProcessesEntity> {
+    const { tasks, ...result } = data;
 
-        const process = this.processesRepository.create(result);
+    const process = this.processesRepository.create(result);
 
-        await this.processesRepository.save(process);
+    await this.processesRepository.save(process);
 
-        if (tasks && tasks.length > 0) {
-            const taskEntities = await this.tasksService.storeMultiple(tasks);
-            console.log(tasks);
-            taskEntities.forEach((task) => {
-                task.processesId = process;
-            });
+    if (tasks && tasks.length > 0) {
+      const taskEntities = await this.tasksService.storeMultiple(tasks);
+      console.log(tasks);
+      taskEntities.forEach((task) => {
+        task.processesId = process;
+      });
 
-            await this.tasksService.saveMultiple(taskEntities);
-        }
-
-        return process;
+      await this.tasksService.saveMultiple(taskEntities);
     }
 
-    async update(id: string, data) {
-        const process = await this.processesRepository.findOneBy({ id: id });
+    return process;
+  }
 
-        this.processesRepository.merge(process, data);
-        return await this.processesRepository.save(process);
-    }
-    async deleteById(id: string) {
-        await this.processesRepository.findOneByOrFail({ id: id });
-        await this.processesRepository.softDelete(id);
-    }
+  async update(id: string, data) {
+    const process = await this.processesRepository.findOneBy({ id: id });
 
+    this.processesRepository.merge(process, data);
+    return await this.processesRepository.save(process);
+  }
+  async deleteById(id: string) {
+    await this.processesRepository.findOneByOrFail({ id: id });
+    await this.processesRepository.softDelete(id);
+  }
 
-    async createProcess(saveProcessDTO: SaveProcessDTO) {
-        const newProcess = new ProcessesEntity();
-        newProcess.name = saveProcessDTO.name;
-        newProcess.description = saveProcessDTO.description;
-        newProcess.deadline = saveProcessDTO.deadline;
-        newProcess.status = saveProcessDTO.status || Status.WAITING;
+  async createProcess(saveProcessDTO: SaveProcessDTO) {
+    const newProcess = new ProcessesEntity();
+    newProcess.name = saveProcessDTO.name;
+    newProcess.description = saveProcessDTO.description;
+    newProcess.deadline = saveProcessDTO.deadline;
+    newProcess.status = saveProcessDTO.status || Status.WAITING;
 
-        const createdProcess = await this.processesRepository.save(newProcess);
+    const createdProcess = await this.processesRepository.save(newProcess);
 
-        const teamAndLeader = [...saveProcessDTO.team, saveProcessDTO.leader];
+    const teamAndLeader = [...saveProcessDTO.team, saveProcessDTO.leader];
 
-        const usersProcesses = teamAndLeader.map(user => {
-            const userProcess = new UsersProcessesEntity();
-            userProcess.role = user.role;
-            userProcess.processesId = createdProcess;
-            userProcess.usersId = user;
-            return userProcess;
-        });
+    const usersProcesses = teamAndLeader.map((user) => {
+      const userProcess = new UsersProcessesEntity();
+      userProcess.role = user.role;
+      userProcess.processesId = createdProcess;
+      userProcess.usersId = user;
+      return userProcess;
+    });
 
-        const createdUsersProcesses = await this.usersProcessesRepository.save(usersProcesses);
+    const createdUsersProcesses =
+      await this.usersProcessesRepository.save(usersProcesses);
 
-        const tasks = await this.tasksService.store(saveProcessDTO.tasks, createdProcess);
+    const tasks = await this.tasksService.store(
+      saveProcessDTO.tasks,
+      createdProcess,
+    );
 
-        return { createdProcess, createdUsersProcesses, tasks };
-    }
+    return { createdProcess, createdUsersProcesses, tasks };
+  }
 }

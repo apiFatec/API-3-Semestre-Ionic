@@ -84,9 +84,8 @@ export function CadastroProcessos() {
       title: titleTask,
       priority: priority,
       description: descriptionTask,
-      id: "",
-      status: "",
-      deadline: undefined
+      status: "Aguardando",
+      deadline: "01/01/2025",
     };
     setTasks((prevState) => [...prevState, tarefa]);
   }
@@ -94,7 +93,7 @@ export function CadastroProcessos() {
   return (
     <main className="">
       <form
-        className="grid grid-cols-2 gap-40 ml-12 content-evenly"
+        className="grid grid-cols-2 gap-24 place-content-evenly ml-8"
         onSubmit={handleSubmit(createProcess)}
       >
         <section className="">
@@ -147,7 +146,7 @@ export function CadastroProcessos() {
                   id="lider"
                   setValue={setTeamLeader}
                   users={users}
-                  value={users[0]}
+                  value={users[-1]}
                 />
 
                 <Input
@@ -174,10 +173,12 @@ export function CadastroProcessos() {
                           </span>
                           <span
                             className={cn(
-                              "pl-2 pb-1 text-blue-600",
+                              "pl-2 pb-1",
                               task.priority === "Alta"
                                 ? "text-red-600"
-                                : "text-orange-500"
+                                : task.priority === "Média"
+                                ? "text-orange-500"
+                                : "text-blue-600"
                             )}
                           >
                             {task.priority}
@@ -194,9 +195,9 @@ export function CadastroProcessos() {
             </Card>
           </div>
         </section>
-        <section className="">
+        <section className="grid justify-items-end w-[25rem]">
           <div className="grid justify-items-center">
-            <Card className="grid justify-items-center w-[19rem] shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
+            <Card className="grid justify-items-center w-[19rem] mt-[3.25rem] shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
               <div className="p-5">
                 <label>Prioridade</label>
                 <Tabs id="priorityTask" defaultValue="Baixa" className="mt-2">

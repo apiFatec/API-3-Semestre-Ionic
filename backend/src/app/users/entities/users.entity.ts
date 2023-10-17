@@ -1,16 +1,30 @@
-import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  BeforeInsert,
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { hashSync } from 'bcrypt';
 import { UsersProcessesEntity } from "@/app/processes/entities/usersProcesses.entity";
 import { UsersTasksEntity } from "@/app/tasks/entities/usersTasks.entity";
 import { ProjectsEntity } from "@/app/projects/entities/projects.entity";
 import { File } from "@/app/files/entities/file.entity";
+import { TasksEntity } from '@/app/tasks/entities/tasks.entity';
+import { TeamsEntity } from '@/app/teams/entities/teams.entity';
 
 export enum Role {
-  CLEVEL = "C-Level",
-  MANAGER = "Gestor",
-  LEADER = "Lider",
-  DEVELOPER = "Desenvolvedor",
-  ADMIN = "Admin"
+  CLEVEL = 'C-Level',
+  MANAGER = 'Gestor',
+  LEADER = 'Lider',
+  DEVELOPER = 'Desenvolvedor',
+  ADMIN = 'Admin',
 }
 @Entity({ name: 'users' })
 export class UsersEntity {
@@ -55,13 +69,19 @@ export class UsersEntity {
 
   @BeforeInsert()
   hashPassword() {
-    this.password = hashSync(this.password, 10)
+    this.password = hashSync(this.password, 10);
   }
 
-  @OneToMany(() => UsersProcessesEntity, (usersProcessesEntity) => usersProcessesEntity.usersId)
+  @OneToMany(
+    () => UsersProcessesEntity,
+    (usersProcessesEntity) => usersProcessesEntity.usersId,
+  )
   usersProcesses: UsersProcessesEntity;
 
-  @OneToMany(() => UsersTasksEntity, (usersTasksEntity) => usersTasksEntity.usersId)
+  @OneToMany(
+    () => UsersTasksEntity,
+    (usersTasksEntity) => usersTasksEntity.usersId,
+  )
   usersTasks: UsersTasksEntity;
 
   @OneToMany(() => ProjectsEntity, (projectsEntity) => projectsEntity.usersId)
@@ -69,4 +89,9 @@ export class UsersEntity {
 
   @OneToMany(() => File, (file) => file.usersId)
   files: File;
+
+  @ManyToOne(() => TeamsEntity, (teamsEntity) => teamsEntity.users)
+  @JoinColumn({ name: 'teams_id' })
+  teamsId: TeamsEntity;
 }
+

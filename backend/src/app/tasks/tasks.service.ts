@@ -1,3 +1,4 @@
+import { IsEmail } from 'class-validator';
 import { Injectable } from '@nestjs/common';
 import { Status, TasksEntity } from './entities/tasks.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,6 +8,7 @@ import { ProcessesEntity } from '../processes/entities/processes.entity';
 import { UsersTasksEntity } from './entities/usersTasks.entity';
 import { UsersEntity } from '../users/entities/users.entity';
 import { UsuariosService } from '../users/users.service';
+import { use } from 'passport';
 
 @Injectable()
 export class TasksService {
@@ -70,6 +72,21 @@ export class TasksService {
       throw new Error(error);
     }
   }
+
+  async leaveTask(idTask: string, id: string) {
+    await this.usersTasksRepository.delete({ tasksId: { id: idTask }, usersId: { id: id } })
+  }
+
+  async getMembers(idTask: string) {
+    const query = `SELECT users.name, users.id
+    FROM users
+    JOIN users_tasks ON users.id = users_tasks.users_id
+    JOIN tasks ON users_tasks.tasks_id = tasks.id
+    WHERE tasks.id = $1;`
+
+    return await this.usersTasksRepository.query(query, [idTask])
+  }
+
   async getTaskByProcesses(id: string) {
     const query = `
     SELECT 
@@ -98,4 +115,14 @@ export class TasksService {
     const tasks = await this.tasksRepository.query(query, [id]);
     return tasks;
   }
+
+  async getUserTask(taskId: string, userId: string) {
+    const query = `SELECT 1
+    FROM public.users_tasks WHERE users_tasks.users_id = '${userId}'
+    AND users_tasks.tasks_id = '${taskId}' ;`;
+
+    const result = await this.usersTasksRepository.query(query);
+    return result;
+  }
+
 }

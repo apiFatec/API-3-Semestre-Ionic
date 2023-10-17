@@ -46,6 +46,14 @@ class UserServices {
   async finishTask(id: string | undefined) {
     return await api.put(`/tasks/finish-task/${id}`);
   }
+
+  async leaveTask(idTask: string | undefined, tokenUser: string | null) {
+    return await api.delete(`tasks/leave-task/${idTask}/user/${tokenUser}`);
+  }
+
+  async getOneUser(tokenUser : string | null){
+    return await api.get(`/users/${tokenUser}`)
+  }
 }
 
 export default new UserServices();

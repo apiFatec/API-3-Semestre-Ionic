@@ -84,6 +84,9 @@ export function CadastroProcessos() {
       title: titleTask,
       priority: priority,
       description: descriptionTask,
+      id: "",
+      status: "",
+      deadline: undefined
     };
     setTasks((prevState) => [...prevState, tarefa]);
   }

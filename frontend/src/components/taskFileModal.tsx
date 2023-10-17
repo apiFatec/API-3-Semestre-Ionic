@@ -8,23 +8,14 @@ interface Props {
     taskId: string | undefined
 }
 
-export interface UserLogged {
-    id: string | undefined;
-    name: string | undefined;
-}
-
 export function TaskFileModal({ taskId }: Props) {
     const [file, setFile] = useState<any>();
-    const [user, setUser] = useState<UserLogged>(
+    const [user, setUser] = useState<any>(
         {
             id: '',
             name: '',
         }
     )
-
-    useEffect(() => {
-        getUserLogged(localStorage.getItem('token'));
-    })
 
     async function getUserLogged(token: string | null) {
         userServices.getOneUser(token)
@@ -37,10 +28,11 @@ export function TaskFileModal({ taskId }: Props) {
 
 
     function handleFileChange(e: any) {
+        getUserLogged(localStorage.getItem('token'));
         setFile(e.target.files[0]);
     }
 
-    function handleSubmit(taskId: string | undefined, user: UserLogged) {
+    function handleSubmit(taskId: string | undefined, user: any) {
         console.log(file);
 
         const formData = new FormData();

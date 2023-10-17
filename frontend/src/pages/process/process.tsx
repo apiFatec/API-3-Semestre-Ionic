@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { TitleContext } from "@/contexts/TitleContext";
 import { Tasks } from "@/interfaces/tasks";
 import { Processes } from "@/interfaces/processes";
+import { TaskModal } from "@/components/taskModal";
 
 export function Process() {
   const { id } = useParams();
@@ -17,6 +18,15 @@ export function Process() {
     name: "",
     description: "",
   });
+  const [task, setTask] = useState<Tasks>({
+    id: '',
+    title: '',
+    description: '',
+    status: '',
+    priority: '',
+    deadline: undefined,
+  })
+  const [modalTask, setModalTask] = useState<any>(false);
 
   const deadline = new Date();
   const formattedDate = `${deadline.getDate()}/${
@@ -102,6 +112,11 @@ export function Process() {
     }
   }
 
+  async function showModalTask(item: Tasks) {
+    setModalTask(!modalTask);
+    setTask(item)
+  }
+
   return (
     <div className="flex flex-col items-center justify-center w-full px-12 gap-4">
       <section className="flex-row w-full ">
@@ -185,9 +200,9 @@ export function Process() {
                         <button
                           id={`taskCheck-${task.id}`}
                           className="text-sm"
-                          onClick={() => joinTask(task)}
+                          onClick={() => showModalTask(task)}
                         >
-                          Iniciar tarefa
+                          Detalhes da Tarefa
                         </button>
                       </div>
                     )}
@@ -199,9 +214,9 @@ export function Process() {
                         <button
                           id={`taskCheck-${task.id}`}
                           className="text-sm"
-                          onClick={() => joinTask(task)}
+                          onClick={() => showModalTask(task)}
                         >
-                          Iniciar tarefa
+                          Detalhes da Tarefa
                         </button>
                       </div>
                     )}
@@ -213,9 +228,9 @@ export function Process() {
                         <button
                           id={`taskCheck-${task.id}`}
                           className="text-sm"
-                          onClick={() => joinTask(task)}
+                          onClick={() => showModalTask(task)}
                         >
-                          Iniciar tarefa
+                          Detalhes da Tarefa
                         </button>
                       </div>
                     )}
@@ -244,6 +259,13 @@ export function Process() {
                         <p className="bg-green-200 text-sm max-w-9/12 break-words pl-6 pr-6 rounded text-green-600 text-center">
                           {task.priority}
                         </p>
+                        <button
+                          id={`taskCheck-${task.id}`}
+                          className="text-sm"
+                          onClick={() => showModalTask(task)}
+                        >
+                          Detalhes da Tarefa
+                        </button>
                         <div className="h-4"></div>
                       </div>
                     )}
@@ -252,6 +274,13 @@ export function Process() {
                         <p className="text-amber-500 text-sm max-w-9/12 pl-6 pr-6 break-words rounded bg-amber-100 text-center">
                           {task.priority}
                         </p>
+                        <button
+                          id={`taskCheck-${task.id}`}
+                          className="text-sm"
+                          onClick={() => showModalTask(task)}
+                        >
+                          Detalhes da Tarefa
+                        </button>
                         <div className="h-4"></div>
                       </div>
                     )}
@@ -260,6 +289,13 @@ export function Process() {
                         <p className="bg-red-200 text-sm max-w-9/12 pl-6 pr-6 break-words rounded text-amber-700 text-center">
                           {task.priority}
                         </p>
+                        <button
+                          id={`taskCheck-${task.id}`}
+                          className="text-sm"
+                          onClick={() => showModalTask(task)}
+                        >
+                          Detalhes da Tarefa
+                        </button>
                         <div className="h-4"></div>
                       </div>
                     )}
@@ -268,6 +304,19 @@ export function Process() {
               }
             })}
           </div>
+          {modalTask && (
+            <>
+              <TaskModal id={task.id} title={task.title} members={undefined} description={task.description}
+                priority={task.priority} toggleModal={function (task: Tasks): void {
+                  throw new Error("Function not implemented.");
+                }} closeModal={function (): void {
+                  throw new Error("Function not implemented.");
+                }} setReload={function (state: boolean): void {
+                  throw new Error("Function not implemented.");
+                }} reload={false} />
+            </>
+          )}
+
         </section>
       </section>
     </div>

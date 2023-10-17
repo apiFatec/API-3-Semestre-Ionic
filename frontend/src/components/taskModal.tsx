@@ -2,7 +2,7 @@ import { ArrowLeftFromLine, CheckSquare, ClipboardList, Text, User , Paperclip} 
 import photo from '../../public/lula.jpg';
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
-import { Task } from "@/pages/process/process";
+import { Tasks } from "@/interfaces/tasks";
 import userServices from "@/services/userServices";
 import { TaskFileModal } from "./taskFileModal";
 import { useEffect, useState } from "react";
@@ -13,8 +13,8 @@ interface Modal {
   members: string | undefined;
   description: string | undefined;
   priority: string | undefined;
-  task?: Task
-  toggleModal: (task: Task) => void;
+  task?: Tasks
+  toggleModal: (task: Tasks) => void;
   closeModal: () => void;
   setReload: (state: boolean) => void;
   reload: boolean;
@@ -127,7 +127,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
               Finalizar
             </Button>
 
-            <Button className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2">
+            <Button onClick={() => setModalFile(!modalFile)} className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2">
               <Paperclip size={18}/>
               Anexo
             </Button>
@@ -138,7 +138,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
             </Button>
 
             {modalFile && (
-              <TaskFileModal taskId={task?.id} />
+              <TaskFileModal taskId = {id} />
             )}
             
           </div>

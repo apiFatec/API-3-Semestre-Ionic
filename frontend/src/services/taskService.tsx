@@ -1,5 +1,4 @@
 import {api} from '@/api'
-import { UserLogged } from '@/components/taskFileModal';
 
 class TaskService {
     async postFile(taskId: string | undefined, userId : string | undefined, userName : string | undefined, data : FormData){

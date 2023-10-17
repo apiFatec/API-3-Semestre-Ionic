@@ -86,7 +86,7 @@ export class TasksService {
 
     return await this.usersTasksRepository.query(query, [idTask])
   }
-}
+
   async getTaskByProcesses(id: string) {
   const query = `
     SELECT 
@@ -115,4 +115,4 @@ export class TasksService {
   const tasks = await this.tasksRepository.query(query, [id]);
   return tasks;
 }
-
+}

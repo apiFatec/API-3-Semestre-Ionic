@@ -7,6 +7,7 @@ import { UsersEntity } from './entities/users.entity';
 import { SaveUserDto } from './dto/save-users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TokenService } from '../token/token.service';
+import { TokenEntity } from '../token/entities/token.entity';
 
 @Controller('users')
 export class UsuariosController {
@@ -59,14 +60,13 @@ export class UsuariosController {
   async getOne(@Param('token') idUser: string){
     const token = idUser;
     const decodedToken = await this.tokenService.decodeJwt(token);
+
     console.log(decodedToken)
-    const user = await this.usuariosService.findOne(decodedToken.email);
+    const user =await this.usuariosService.findOne(decodedToken.email);
 
-    const objUser = {
-      id : user.id,
-      name: user.name
+    return {
+      id: user.id,
+      name : user.name
     }
-
-    return objUser;
   }
 }

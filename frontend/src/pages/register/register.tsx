@@ -19,41 +19,6 @@ import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const createUserFormSchema = z.object({
-  name: z
-    .string()
-    .nonempty("o nome é obrigatório")
-    .refine((name) => /^[A-Za-z\s]+$/.test(name), {
-      message: "o nome deve conter apenas letras e espaços",
-    }),
-  password: z.string().nonempty("a senha é obrigatória"),
-  email: z
-    .string()
-    .nonempty("o email é obrigatório")
-    .email("formato de email inválido"),
-  gender: z
-    .string()
-    .nonempty("o gênero é obrigatório")
-    .refine((gender) => /^[A-Za-z\s]+$/.test(gender), {
-      message: "o gênero deve conter apenas letras",
-    }),
-  adress: z
-    .string()
-    .nonempty("o endereço é obrigatório")
-    .refine((adress) => /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+$/.test(adress), {
-      message: "o endereço deve conter apenas letras, números e espaços",
-    }),
-  phone: z
-    .string()
-    .nonempty("o telefone é obrigatório")
-    .refine((value) => /^[0-9]+$/.test(value), {
-      message: "Este campo deve conter apenas números.",
-    }),
-  birthdate: z.date(),
-});
-
-type createUserFormData = z.infer<typeof createUserFormSchema>;
-
 export interface RegisterFormValues {
   name: string;
   password: string;
@@ -70,25 +35,20 @@ export function Register() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterFormValues, createUserFormData>({
-    resolver: zodResolver(createUserFormSchema),
-  });
+  } = useForm<RegisterFormValues>({});
   const [role, setRole] = useState("");
   const { theme } = useTheme();
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<RegisterFormValues> = (data) => {
-    data.role = role;
-    userServices.CreateUser(data);
-    userServices
-      .CreateUser(data)
-      .then((response) => {
-        alert(`tudo certo!`);
-      })
-      .catch((error) => {})
-      .catch((error) => {
-        console.log(error);
-      });
+  const onSubmit: SubmitHandler<RegisterFormValues> = async (data) => {
+    try {
+      data.role = role;
+      await userServices.CreateUser(data);
+      alert("Tudo certo!");
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

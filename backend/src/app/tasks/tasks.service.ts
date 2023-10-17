@@ -74,10 +74,10 @@ export class TasksService {
   }
 
   async leaveTask(idTask: string, id: string) {
-    await this.usersTasksRepository.delete({tasksId: { id: idTask },usersId: { id: id }})
+    await this.usersTasksRepository.delete({ tasksId: { id: idTask }, usersId: { id: id } })
   }
 
-  async getMembers(idTask: string){
+  async getMembers(idTask: string) {
     const query = `SELECT users.name, users.id
     FROM users
     JOIN users_tasks ON users.id = users_tasks.users_id
@@ -88,7 +88,7 @@ export class TasksService {
   }
 
   async getTaskByProcesses(id: string) {
-  const query = `
+    const query = `
     SELECT 
     task.*,
     JSON_AGG(tasks.*) AS tasks
@@ -97,11 +97,11 @@ export class TasksService {
     WHERE task.id = $1
     GROUP BY task.id
     `
-  const result = await this.tasksRepository.query(query, [id]);
-  return result[0] || null;
-}
+    const result = await this.tasksRepository.query(query, [id]);
+    return result[0] || null;
+  }
   async getTask(id: string) {
-  const query = `
+    const query = `
     select tasks.*,
     JSON_AGG(users.name) AS users
     from tasks
@@ -112,7 +112,17 @@ export class TasksService {
     where tasks.processes_id = $1
     group by tasks.id
     `
-  const tasks = await this.tasksRepository.query(query, [id]);
-  return tasks;
-}
+    const tasks = await this.tasksRepository.query(query, [id]);
+    return tasks;
+  }
+
+  async getUserTask(taskId: string, userId: string) {
+    const query = `SELECT 1
+    FROM public.users_tasks WHERE users_tasks.users_id = '${userId}'
+    AND users_tasks.tasks_id = '${taskId}' ;`;
+
+    const result = await this.usersTasksRepository.query(query);
+    return result;
+  }
+
 }

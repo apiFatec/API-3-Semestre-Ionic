@@ -9,7 +9,7 @@ export class TasksController {
   constructor(
     private readonly tasksService: TasksService,
     private readonly tokenService: TokenService,
-    private readonly userService : UsuariosService
+    private readonly userService: UsuariosService
   ) { }
 
   @Post('/join-task')
@@ -27,7 +27,7 @@ export class TasksController {
 
   @Delete('/leave-task/:idTask/user/:idUser')
   @HttpCode(204)
-  async leaveTask(@Param('idTask') idTask: string, @Param ('idUser') idUser: string){
+  async leaveTask(@Param('idTask') idTask: string, @Param('idUser') idUser: string) {
     const token = idUser;
     const decodedToken = await this.tokenService.decodeJwt(token);
     console.log(decodedToken);
@@ -36,11 +36,21 @@ export class TasksController {
   }
 
   @Get('/members/:idTask')
-  async getMembers(@Param("idTask") idTask : string){
+  async getMembers(@Param("idTask") idTask: string) {
     return await this.tasksService.getMembers(idTask);
   }
   @Get('/:id')
-  async getTask(@Param('id') id: string){
+  async getTask(@Param('id') id: string) {
     return await this.tasksService.getTask(id);
+  }
+
+  @Get(':taskId/user/:token')
+  async getUserTask(
+    @Param('taskId', new ParseUUIDPipe()) taskId: string,
+    @Param('userId') userId: string ) 
+    {
+    const token = await  this.tokenService.decodeJwt(userId);
+    const user = await this.userService.findOne(token.email);
+    return await this.tasksService.getUserTask(taskId, user.id);
   }
 }

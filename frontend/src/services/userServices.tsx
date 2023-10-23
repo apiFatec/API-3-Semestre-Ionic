@@ -1,6 +1,5 @@
 import { api } from "@/api";
 import { TeamFormValues } from "@/interfaces/teamFormValues";
-import axios from "axios";
 
 class UserServices {
   async Login(data: { username: string; password: string }) {

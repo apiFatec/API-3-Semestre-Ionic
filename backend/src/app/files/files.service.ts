@@ -8,7 +8,7 @@ import { Request } from 'express';
 export class FilesService {
   constructor(
     @InjectRepository(File)
-    private fotoRepository: Repository<File>,
+    private fileRepository: Repository<File>,
   ) {}
   async salvarDados(userName:string, userId:string, tasksId: string,file: Express.Multer.File, req: Request) {
     const arquivo = new File();
@@ -19,6 +19,13 @@ export class FilesService {
     arquivo.usersId = userId
     arquivo.url = `${req.protocol}://${req.get('host')}/files/${userName}/${file.filename}`;
 
-    return await this.fotoRepository.save(arquivo);
+    return await this.fileRepository.save(arquivo);
+  }
+
+  async getFilesForTask(taskId: string): Promise<File[]> {
+    const query = `
+    SELECT "fileName", "contentLength", "contentType", url, id, "taskIdId", "usersIdId"
+	  FROM public.file WHERE "taskIdId" = '${taskId}' ;`;
+    return await this.fileRepository.query(query);
   }
 }

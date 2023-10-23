@@ -16,6 +16,10 @@ module.exports = {
       },
     },
     extend: {
+      spacing: {
+        'espacoPersonalizado': '50rem',
+        'linhaSideBar': '32rem'
+      },
       colors: {
         ionic: {
           normal: "#53C4CD",

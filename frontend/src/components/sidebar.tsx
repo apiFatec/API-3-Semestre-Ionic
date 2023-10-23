@@ -33,7 +33,7 @@ const routes = [
     label: "Settings",
     icon: Settings,
     href: "/settings",
-  }
+  },
 ];
 
 const routesForAdminGestor = [
@@ -104,7 +104,11 @@ export function Sidebar() {
           ))}
         </div>
 
-        <ModeToggle />
+        {/* <span className="w-44 h-0.5 bg-gray-300 ml-[2%] mb-[30%] absolute"></span> */}
+        <div className="pl-14">
+          <ModeToggle />
+        </div>
+
       </div>
     </div>
   );

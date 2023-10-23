@@ -13,6 +13,7 @@ import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { Sidebar } from "@/components/sidebar";
 import { toast } from "react-toastify";
 
 import { z } from "zod";
@@ -52,31 +53,28 @@ export function Register() {
   };
 
   return (
-    <div className="grid grid-cols-2 min-h-screen">
-      <div className="col-start-1 cold-end-2 bg-background-login ">
-        <div className="">
-          <img
-            src={theme === "light" ? "./Vector.svg" : "./Vector_dark.svg"}
-            className="mt-[15%] ml-[34%] pb-24 w-48 text-ionic-normal justify-center"
-          />
-          <img src="./ionichealth.svg" className="w-2/3 ml-[12%]" />
-        </div>
-      </div>
+    <div
+      className="grid grid-cols-2 min-h-screen"
+      style={{ gridTemplateColumns: "288px 1fr" }}
+    >
+      <Sidebar />
 
       <div>
         <div className="mb-20 flex"></div>
 
-        <div className="flex justify-around gap-44 relative">
-          <span className="w-4 h-4 bg-ionic-normal absolute z-[-1] left-[4rem] rounded"></span>
-          <p className="text-3xl pb-20 font-regular left-4">
+        <div className="flex gap-espacoPersonalizado relative">
+          <p className="text-3xl pb-10 px-20 font-regular relative">
+            <span className="w-4 h-4 bg-ionic-normal absolute z-[-1] left-[12%] top-[-2%] rounded"></span>
             Cadastrar novo colaborador
           </p>
-          <Button
-            onClick={() => navigate("/")}
-            className="rounded-3xl bg-background-secondary 'text-sidebar-text shadow-md hover:bg-background-secondary/10"
-          >
-            <ArrowLeft className="text-primary" />
-          </Button>
+          <div>
+            <Button
+              onClick={() => navigate("/")}
+              className="rounded-3xl bg-background-secondary text-sidebar-text shadow-md hover:bg-background-secondary/10 "
+            >
+              <ArrowLeft className="text-primary" />
+            </Button>
+          </div>
         </div>
 
         <form
@@ -208,9 +206,11 @@ export function Register() {
                 register={register}
               />
             </div>
-            <Button className="bg-ionic-normal active:bg-ionic-pressed hover:bg-ionic-normal h-12 font-medium text-1xl  w-[90%] text-white">
-              Cadastrar
-            </Button>
+            <div className="flex flex-col self-end items-end pr-20 pb-10 pt-10">
+              <Button className="bg-ionic-normal active:bg-ionic-pressed hover:bg-ionic-normal h-14 font-medium text-1xl w-[30%] text-white shadow-md">
+                Cadastrar
+              </Button>
+            </div>
           </section>
         </form>
       </div>

@@ -1,17 +1,22 @@
 //files.controller.ts
 import {
   Controller,
-  Post,
+  Post, Get,
   UseInterceptors,
   UploadedFile,
   Req,
   Param,
   ParseUUIDPipe,
+  Res,
+  StreamableFile
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import multerConfig from './multer-config';
-import { Request } from 'express';
+import e, { Request } from 'express';
+import { createReadStream } from 'fs';
+import * as fs from 'fs'
+import { join } from 'path';
 
 @Controller('files')
 export class FilesController {
@@ -27,5 +32,19 @@ export class FilesController {
     @Req() req: Request,
   ) {
     return this.filesService.salvarDados(userName, userId, taskId, file, req);
+  }
+
+  @Get('task/:taskId')
+  async getFilesByTask(@Param('taskId', new ParseUUIDPipe()) taskId: string) {
+    return await this.filesService.getFilesForTask(taskId);
+  }
+
+  @Get(':userName/:fileName')
+  getFile(
+    @Param('userName') userName: string,
+    @Param('fileName') fileName: string,
+  ): StreamableFile {
+    const file = fs.createReadStream(join(process.cwd(), `/upload/files/${userName}/${fileName}`));
+    return new StreamableFile(file);
   }
 }

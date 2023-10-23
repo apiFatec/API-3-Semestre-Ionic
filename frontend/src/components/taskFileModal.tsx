@@ -5,10 +5,11 @@ import { Button } from "./ui/button";
 import { InputFile } from "./InputFormFile";
 
 interface Props {
-    taskId: string | undefined
+    taskId: string | undefined;
+    func : any;
 }
 
-export function TaskFileModal({ taskId }: Props) {
+export function TaskFileModal({ taskId, func }: Props) {
     const [file, setFile] = useState<any>();
     const [user, setUser] = useState<any>(
         {
@@ -42,6 +43,7 @@ export function TaskFileModal({ taskId }: Props) {
             .then((response) => {
                 console.log(response)
                 alert('Arquivo enviado');
+                func();
             }).catch(error => console.log(error))
 
     }

@@ -114,7 +114,7 @@ export function Process() {
   }
 
   async function showModalTask(item: Tasks) {
-    if(!modalTask){
+    if (!modalTask) {
       setTask(item)
     }
     setModalTask(!modalTask);
@@ -129,9 +129,9 @@ export function Process() {
               Informações
             </a>
           </div>
-          <div>
+          {/* <div>
             <a href="#">Tarefas</a>
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -141,7 +141,7 @@ export function Process() {
           <p className="text-sm h-20 overflow-hidden whitespace-normal break-words text-ellipsis min-h-[20rem] mt-6 max-w-xl">
             {process.description}
           </p>
-          <p className="w-11/12 border-b ">Comentários</p>
+          {/* <p className="w-11/12 border-b ">Comentários</p>
 
           <div className="flex items-center gap-4 mt-4">
             <img src="./Roberta.svg" alt="img" className="w-10" />
@@ -150,7 +150,7 @@ export function Process() {
               placeholder="Adicionar comentário..."
               className="p-2 border-solid border w-9/12 rounded"
             />
-          </div>
+          </div> */}
         </div>
         <section>
           <div
@@ -189,6 +189,12 @@ export function Process() {
                     key={task.id}
                     className="flex gap-5 -center mt-6 items-center justify-between max-w-lg  "
                   >
+                                        <input
+                      type="checkbox"
+                      id={`taskCheck-${task.id}`}
+                      className="appearance-none w-12 h-12 border rounded-full focus:outline-none checked:bg-[#53C4CD]"
+                      onClick={() => completeTask(task.id)}
+                    />
                     <div className="max-w-sm ">
                       <h2 className="break-words">{task.title}</h2>
                       <p className="text-gray-500 text-xs max-w-9/12 break-words">
@@ -312,9 +318,9 @@ export function Process() {
               <TaskModal id={task.id} title={task.title} members={undefined} description={task.description}
                 priority={task.priority} task={task} toggleModal={function (task: Tasks): void {
                   throw new Error("Function not implemented.");
-                }} closeModal={function (): void {
-                  showModalTask;
-                }} setReload={function (state: boolean): void {
+                }} closeModal={
+                  showModalTask
+                } setReload={function (state: boolean): void {
                   throw new Error("Function not implemented.");
                 }} reload={false} />
             </>

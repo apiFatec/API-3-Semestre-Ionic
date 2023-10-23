@@ -28,7 +28,7 @@ require('dotenv').config();
     ProcessesModule,
     TasksModule,
     ProjectsModule,
-    FilesModule
+    FilesModule,
     TeamsModule,
   ],
   controllers: [],

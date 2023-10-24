@@ -52,7 +52,7 @@ const routesForAdminGestor = [
   {
     label: "Equipes",
     icon: Network,
-    href: "/image",
+    href: "/criar-equipe",
     color: "text-pink-700",
   },
   {

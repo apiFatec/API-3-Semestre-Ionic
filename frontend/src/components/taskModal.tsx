@@ -6,8 +6,18 @@ import { Tasks } from "@/interfaces/tasks";
 import userServices from "@/services/userServices";
 import { TaskFileModal } from "./taskFileModal";
 import { useEffect, useState } from "react";
-import test from "node:test";
 import taskService from "@/services/taskService";
+import FileList from "./fileList";
+
+export interface getFiles {
+  fileName: string;
+  contentLength: number;
+  contentType: string;
+  url: string;
+  id: string;
+  taskIdId: string  | undefined;
+  usersIdId: string | undefined;
+}
 
 interface Modal {
   id: string | undefined;
@@ -17,7 +27,7 @@ interface Modal {
   priority: string | undefined;
   task?: Tasks
   toggleModal: (task: Tasks) => void;
-  closeModal: () => void;
+  closeModal: any;
   setReload: (state: boolean) => void;
   reload: boolean;
 }
@@ -25,6 +35,8 @@ interface Modal {
 export function TaskModal({ task, id, title, members, description, priority, toggleModal, closeModal, setReload, reload }: Modal) {
   const [modalFile, setModalFile] = useState<boolean>(false);
   const [userInTask, setUserInTask] = useState<any>();
+  const [files, setFiles] = useState<getFiles[]>([]);
+
 
   const priorityColor = () => {
     if (priority === "Baixa") {
@@ -41,8 +53,10 @@ export function TaskModal({ task, id, title, members, description, priority, tog
   }, [])
 
   async function getUserTask(){
-    const result = await taskService.getUserTask(task?.id, localStorage.getItem('token'));
+    const files = await taskService.getFileTask(id);
+    const result = await taskService.getUserTask(id, localStorage.getItem('token'));
     setUserInTask(result.data);
+    setFiles(files.data);
   }
 
   async function joinTask() {
@@ -118,6 +132,8 @@ export function TaskModal({ task, id, title, members, description, priority, tog
                 {description}
               </p>
             </div>
+
+            <FileList files={files} />
           </div>
         </section>
 
@@ -161,7 +177,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
             )}
 
             {modalFile && (
-              <TaskFileModal taskId={id} />
+              <TaskFileModal func={getUserTask} taskId={id} />
             )}
 
           </div>

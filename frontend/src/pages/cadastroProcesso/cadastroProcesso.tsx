@@ -181,8 +181,8 @@ export function CadastroProcessos() {
                         className="p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]"
                       >
                         
-                        <div className="flex items-center justify-between px-1 pt-1">
-                          <span className="font-semibold line-clamp-2">
+                        <div className="flex justify-between px-1 pt-1">
+                          <span className="font-semibold line-clamp-2 break-all">
                             {task.title}
                           </span>
                           <div className="pl-5">

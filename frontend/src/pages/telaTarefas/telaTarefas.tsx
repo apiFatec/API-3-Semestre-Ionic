@@ -95,7 +95,7 @@ export function TelaTarefas() {
     }
   }
   function nav() {
-    navigate(`/processos/${encodeURIComponent(process.name)}/${process.id}`);
+    navigate(`/processos/${encodeURIComponent(process.name!)}/${process.id}`);
   }
 
   return (
@@ -121,7 +121,7 @@ export function TelaTarefas() {
             {orderedTasks?.map((task) => {
               if (task.status === "Aguardando") {
                 return (
-                  <div className="flex flex-col w-[23rem] p-3 mb-3 justify-items-start cursor-pointer border rounded">
+                  <div className="flex flex-col w-[23rem] p-3 mb-3 justify-items-start cursor-pointer border rounded" key={task.id}>
                     <div className="flex justify-between">
                       <p className="text-sm ">{task.title}</p>
                       <Popover>
@@ -168,7 +168,7 @@ export function TelaTarefas() {
             {orderedTasks?.map((task) => {
               if (task.status === "Em progresso") {
                 return (
-                  <div className="flex flex-col w-[23rem] p-3 mb-3 justify-items-start cursor-pointer border rounded">
+                  <div className="flex flex-col w-[23rem] p-3 mb-3 justify-items-start cursor-pointer border rounded" key={task.id}>
                     <div className="flex justify-between">
                       <p className="text-sm ">{task.title}</p>
                       <Popover>
@@ -215,7 +215,7 @@ export function TelaTarefas() {
             {orderedTasks?.map((task) => {
               if (task.status === "Finalizado") {
                 return (
-                  <div className="flex flex-col w-[23rem] p-3 mb-3 justify-items-start cursor-pointer border rounded">
+                  <div className="flex flex-col w-[23rem] p-3 mb-3 justify-items-start cursor-pointer border rounded" key={task.id}>
                     <div className="flex justify-between">
                       <p className="text-sm ">{task.title}</p>
                       <Popover>

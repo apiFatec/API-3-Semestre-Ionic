@@ -54,8 +54,8 @@ export class TasksController {
     return await this.tasksService.getMembers(idTask);
   }
   @Get('/:id')
-  async getTask(@Param('id') id: string) {
-    return await this.tasksService.getTask(id);
+  async getTasks(@Param('id') id: string) {
+    return await this.tasksService.getTasks(id);
   }
 
   @Get(':taskId/user/:token')

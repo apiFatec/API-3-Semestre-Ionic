@@ -98,7 +98,7 @@ export class TasksService {
     return await this.usersTasksRepository.query(query, [idTask]);
   }
 
-  async getTask(id: string) {
+  async getTasks(id: string) {
     const query = `
     SELECT tasks.*,
     JSON_AGG(users.name) AS users

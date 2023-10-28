@@ -98,30 +98,17 @@ export class TasksService {
     return await this.usersTasksRepository.query(query, [idTask]);
   }
 
-  async getTaskByProcesses(id: string) {
-    const query = `
-    SELECT 
-    task.*,
-    JSON_AGG(tasks.*) AS tasks
-    FROM task
-    INNER JOIN tasks ON task.id = tasks."task_id"
-    WHERE task.id = $1
-    GROUP BY task.id
-    `;
-    const result = await this.tasksRepository.query(query, [id]);
-    return result[0] || null;
-  }
   async getTask(id: string) {
     const query = `
-    select tasks.*,
+    SELECT tasks.*,
     JSON_AGG(users.name) AS users
-    from tasks
-    inner join users_tasks
-    on users_tasks.tasks_id = tasks.id
-    inner join users
-    on users_tasks.users_id = users.id
-    where tasks.processes_id = $1
-    group by tasks.id
+    FROM tasks
+    INNER JOIN users_tasks
+    ON users_tasks.tasks_id = tasks.id
+    INNER JOIN users
+    ON users_tasks.users_id = users.id
+    WHERE tasks.processes_id = $1 AND tasks.deleted_at IS NULL
+    GROUP BY tasks.id
     `;
     const tasks = await this.tasksRepository.query(query, [id]);
     return tasks;

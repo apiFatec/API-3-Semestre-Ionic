@@ -5,16 +5,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import useAuth from "@/hooks/useAuth";
 import { Processes } from "@/interfaces/processes";
 import { Tasks } from "@/interfaces/tasks";
 import processService from "@/services/processService";
 import { MoreHorizontal, Pencil, Trash } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export function TelaTarefas() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { role } = useAuth();
   const [process, setProcess] = useState<Processes>({
     id: "",
     deadline: "",
@@ -40,9 +42,8 @@ export function TelaTarefas() {
     "Dec",
   ];
 
-  const formattedDate = `${deadline.getDate()} ${
-    months[deadline.getMonth()]
-  } ${deadline.getFullYear()}`;
+  const formattedDate = `${deadline.getDate()} ${months[deadline.getMonth()]
+    } ${deadline.getFullYear()}`;
 
   async function getProcess(id: string | undefined) {
     if (id) {

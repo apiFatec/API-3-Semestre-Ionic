@@ -70,7 +70,7 @@ export function ProcessCard(process: Process) {
       {process.processStatus == "Em progresso" && (
         <div className="w-[17.3rem]">
           
-          <p className="flex justify-end text-xs text-[#949494]">{finishedTasks}/{totalTasks} etapas</p>
+          <p className="flex justify-end text-xs text-[#949494]">{finishedTasks}/{totalTasks} tarefas</p>
           <Progress className="h-2 bg-gray-200" value={percentage} />
         </div>
       ) }

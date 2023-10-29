@@ -31,7 +31,7 @@ export class UsuariosController {
     @UploadedFile() file: Express.Multer.File,
     @Req() req: ReqImage
   ): Promise<void> {
-    const pathName: string = `${req.protocol}://${req.get('host')}/${username}/${file.filename}`;
+    const pathName: string = `${req.protocol}://${req.get('host')}/users/profile/${username}/${file.filename}`;
     return await this.usuariosService.saveProfileImage(pathName, id);
   }
 

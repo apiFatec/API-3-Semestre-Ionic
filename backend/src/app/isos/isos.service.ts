@@ -3,6 +3,8 @@ import { Repository, UpdateResult } from 'typeorm';
 import { IsosEntity } from './entities/isos.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SaveIsoDto } from './dto/save-iso.dto';
+import { Request } from 'express';
+import { title } from 'process';
 
 @Injectable()
 export class IsosService {
@@ -11,18 +13,22 @@ export class IsosService {
     private readonly isosRepository: Repository<IsosEntity>
   ) { }
 
-  async create(isoDto: SaveIsoDto): Promise<IsosEntity> {
-    const iso = this.isosRepository.create(isoDto);
-    try {
-      await this.isosRepository.insert(iso);
-    } catch (err) {
-      throw new BadRequestException('Erro ao salvar ISO');
-    }
-    return iso;
+  async saveData(file: Express.Multer.File, req: Request, isoDto : SaveIsoDto){
+    const iso = new IsosEntity();
+    iso.title = isoDto.title;
+    iso.description = isoDto.description;
+    iso.url = `${req.protocol}://${req.get('host')}/isos/${iso.title}/${file.filename}`;
+
+    return await this.isosRepository.save(iso);
   }
 
-  async findAll(): Promise<IsosEntity[] | undefined> {
-    return await this.isosRepository.find();
+  async getIso(nameIso : string){
+    const query = `
+    SELECT id, title, description, url
+    FROM public.isos WHERE title = '${nameIso}';
+    `;
+
+    return this.isosRepository.query(query);
   }
 
   async findOneById(id: string): Promise<IsosEntity | NotFoundException> {

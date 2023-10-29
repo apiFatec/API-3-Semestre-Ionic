@@ -8,12 +8,13 @@ import IsLogged from "./IsLogged";
 import { CadastroProcessos } from "@/pages/cadastroProcesso/cadastroProcesso";
 import { Process } from "@/pages/process/process";
 import { EditarEquipe } from "@/pages/editarEquipe/editarEquipe";
+import { Team } from "@/pages/team/team";
 
 export function Router() {
   return (
     <Routes>
       <Route element={<IsLogged />}>
-      <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
       </Route>
 
       <Route element={<PrivateRoutes />}>
@@ -25,6 +26,7 @@ export function Router() {
         <Route path="/processos" element={<Home />} />
         <Route path="/" element={<Home />} />
         <Route path="/processos/:process/:id" element={<Process />} />
+        <Route path="/equipe/:id" element={<Team />} />
       </Route>
     </Routes>
   );

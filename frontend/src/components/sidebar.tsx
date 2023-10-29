@@ -26,7 +26,7 @@ const routes = [
   {
     label: "Equipes",
     icon: Network,
-    href: "/image",
+    href: "/equipe/sdsadsad",
     color: "text-pink-700",
   },
   {

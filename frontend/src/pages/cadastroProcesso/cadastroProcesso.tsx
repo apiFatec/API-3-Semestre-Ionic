@@ -15,6 +15,25 @@ import { ProcessFormValues } from "@/interfaces/processFormValues";
 import { Users } from "@/interfaces/users";
 import { Tasks } from "@/interfaces/tasks";
 import { Badge } from "@/components/ui/badge";
+import { Check } from "lucide-react"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "cmdk"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@radix-ui/react-popover"
+
+interface Isos{
+  id: string;
+  title: string;
+}
+
 
 export function CadastroProcessos() {
   const { register, handleSubmit, watch } = useForm<ProcessFormValues>();
@@ -29,6 +48,8 @@ export function CadastroProcessos() {
   const [deadline, setDeadline] = useState(new Date());
   const [teamLeader, setTeamLeader] = useState("");
   const [team, setTeam] = useState<Users[]>([]);
+  const [open, setOpen] = useState(false)
+  const [isos, setIsos] = useState<Isos[]>([]);
   const [process, setProcesss] = useState<ProcessFormValues[]>([]);
   const navigate = useNavigate();
   useEffect(() => {
@@ -124,7 +145,7 @@ export function CadastroProcessos() {
                   <label>Atribuir uma equipe</label>
                   <ScrollArea
                     id="teamList"
-                    className="mt-2 p-4 h-[14.5rem] w-[16.875rem] rounded-md border"
+                    className="mt-2 p-4 h-[7rem] w-[16.875rem] rounded-md border"
                   >
                     {users.map((user) => {
                       if (user.id !== teamLeader)
@@ -146,6 +167,51 @@ export function CadastroProcessos() {
                         );
                     })}
                   </ScrollArea>
+                </div>
+                <div className="center-normal py-2">
+                    
+                    <label>Requisitos regulamentares</label>
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={open}
+                          className="w-[16.875rem] h-[40px] my-2 text-[#C0C0C0] justify-between"
+                        >
+                            + Adicionar Requisito
+                          </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[16.875rem] border rounded-md mt-1">
+                        <Command>
+                          <CommandInput className="p-2 focus:outline-none" placeholder="Procurar iso"/>
+                          <CommandEmpty>Nenhum requisito encontrado</CommandEmpty>
+                          <CommandGroup className="">
+                            {isos.map((iso : any) => (
+                              <CommandItem
+                                key={iso.id}
+                                value={iso.title}
+                                onSelect={() => 
+                                  setOpen(false)
+                                }
+
+                              >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  isos === iso.title ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                                {iso.title}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <ScrollArea className="mt-2 p-4 h-[7rem] w-[16.875rem] rounded-md border">
+
+                    </ScrollArea>
                 </div>
               </div>
               <div className="ml-2">

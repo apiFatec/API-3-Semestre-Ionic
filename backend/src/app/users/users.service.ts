@@ -1,16 +1,19 @@
 import { TokenController } from './../token/token.controller';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { UsersEntity } from './entities/users.entity';
 import { SaveUserDto } from './dto/save-users.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { TeamsService } from '../teams/teams.service';
 
 @Injectable()
 export class UsuariosService {
   constructor(
     @InjectRepository(UsersEntity)
     private readonly usuariosRepository: Repository<UsersEntity>,
-  ) {}
+    private readonly teamsServices: TeamsService,
+  ) { }
 
   async store(data: SaveUserDto): Promise<UsersEntity> {
     const usuario = this.usuariosRepository.create(data);
@@ -34,4 +37,22 @@ export class UsuariosService {
   async findAll(): Promise<UsersEntity[] | undefined> {
     return await this.usuariosRepository.find();
   }
+
+  async update(idUser: string, idTeam: string): Promise<UpdateResult> {
+    const user = await this.usuariosRepository.findOneBy({ id: idUser });
+    console.log(user);
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+    const team = await this.teamsServices.findOne(idTeam);
+    console.log(team);
+    if (!team) {
+      throw new NotFoundException('Time não encontrado');
+    }
+
+    user.teams = team;
+
+    return await this.usuariosRepository.update(idUser, user);
+  }
+
 }

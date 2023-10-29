@@ -1,3 +1,4 @@
+import { TeamsEntity } from "@/app/teams/entities/teams.entity";
 import { IsEmail, IsNotEmpty } from "class-validator";
 
 export enum Role {
@@ -33,4 +34,6 @@ export class SaveUserDto {
 
   @IsNotEmpty()
   birthdate: Date;
+
+  teams: TeamsEntity;
 }

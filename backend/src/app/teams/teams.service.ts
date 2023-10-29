@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, EntityManager } from 'typeorm';
 import { TeamsEntity } from './entities/teams.entity';
@@ -11,8 +11,9 @@ export class TeamsService {
   constructor(
     @InjectRepository(TeamsEntity)
     private readonly teamsRepository: Repository<TeamsEntity>,
+    @Inject(forwardRef(() => UsuariosService))
     private readonly usuariosService: UsuariosService,
-  ) {}
+  ) { }
 
   async findAll(): Promise<TeamsEntity[]> {
     const result = await this.teamsRepository.find({
@@ -22,41 +23,23 @@ export class TeamsService {
   }
 
   async findOne(id: string): Promise<TeamsEntity | null> {
-    const query = `
-    SELECT 
-      teams.*,
-      JSON_AGG(users.*) AS users
-    FROM teams
-    INNER JOIN users ON teams.id = users."teams_id"
-    WHERE teams.id = $1
-    GROUP BY teams.id
-  `;
-    const result = await this.teamsRepository.query(query, [id]);
-    return result[0] || null;
+    return await this.teamsRepository.findOne({
+      where: { id },
+      relations: {
+        users: true
+      }
+    })
   }
 
   async store(data: SaveTeamDTO): Promise<TeamsEntity> {
-    const { users, leader, ...result } = data;
-
+    const { users, ...result } = data;
     const team = this.teamsRepository.create(result);
-
-    if (leader) {
-      team.leader = leader;
-    }
+    await this.teamsRepository.insert(team);
 
     if (users && users.length > 0) {
-      const userEntities: UsersEntity[] = users.map((userData) => {
-        const user = new UsersEntity();
-        user.name = userData.name;
-        user.role = userData.role;
-        return user;
-      });
-
-      userEntities.forEach((user) => {
-        user.teamsId = team;
-      });
-
-      await this.teamsRepository.save(team);
+      for (const userData of users) {
+        await this.usuariosService.update(userData.id, team.id);
+      }
     }
 
     return team;

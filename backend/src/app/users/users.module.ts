@@ -7,12 +7,14 @@ import { AuthModule } from '../auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { multerConfig } from '../helpers/multer.config';
 import { TokenModule } from '../token/token.module';
+import { TeamsModule } from '../teams/teams.module';
 
 
 @Module({
   imports: [
     TokenModule,
     AuthModule,
+    TeamsModule,
     TypeOrmModule.forFeature([UsersEntity]),
     MulterModule.register(multerConfig),
   ],

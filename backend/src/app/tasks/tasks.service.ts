@@ -21,17 +21,12 @@ export class TasksService {
   ) { }
 
   async store(data: SaveTaskDTO[], process: ProcessesEntity): Promise<TasksEntity[]> {
-    const tasks = data.map(taskDTO => {
-      const task = new TasksEntity();
-      task.title = taskDTO.title;
-      task.description = taskDTO.description;
-      task.status = Status.WAITING;
-      task.priority = taskDTO.priority
-      task.processesId = process;
-      return task;
+    const tasks = data.map((taskDTO) => {
+      return this.tasksRepository.create({ ...taskDTO })
     });
 
-    return await this.tasksRepository.save(tasks);
+    await this.tasksRepository.insert(tasks);
+    return tasks;
   }
 
   async storeMultiple(data: SaveTaskDTO[]): Promise<TasksEntity[]> {

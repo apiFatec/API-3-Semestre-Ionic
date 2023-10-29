@@ -42,7 +42,7 @@ export class UsersEntity {
 
   @Column({ nullable: false })
   password: string;
-  
+
   @Column({ nullable: true })
   profileImage: string;
 
@@ -72,26 +72,20 @@ export class UsersEntity {
     this.password = hashSync(this.password, 10);
   }
 
-  @OneToMany(
-    () => UsersProcessesEntity,
-    (usersProcessesEntity) => usersProcessesEntity.usersId,
-  )
-  usersProcesses: UsersProcessesEntity;
+  @OneToMany(() => UsersProcessesEntity, (usersProcessesEntity) => usersProcessesEntity.usersId)
+  usersProcesses: UsersProcessesEntity[];
 
-  @OneToMany(
-    () => UsersTasksEntity,
-    (usersTasksEntity) => usersTasksEntity.usersId,
-  )
-  usersTasks: UsersTasksEntity;
+  @OneToMany(() => UsersTasksEntity, (usersTasksEntity) => usersTasksEntity.usersId)
+  usersTasks: UsersTasksEntity[];
 
   @OneToMany(() => ProjectsEntity, (projectsEntity) => projectsEntity.usersId)
-  projects: ProjectsEntity;
+  projects: ProjectsEntity[];
 
   @OneToMany(() => File, (file) => file.usersId)
-  files: File;
+  files: File[];
 
   @ManyToOne(() => TeamsEntity, (teamsEntity) => teamsEntity.users)
   @JoinColumn({ name: 'teams_id' })
-  teamsId: TeamsEntity;
+  teams: TeamsEntity;
 }
 

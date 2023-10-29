@@ -32,6 +32,6 @@ export class TeamsEntity {
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: string;
 
-  @OneToMany(() => UsersEntity, (usersEntity) => usersEntity.teamsId)
+  @OneToMany(() => UsersEntity, (usersEntity) => usersEntity.teams)
   users: UsersEntity[];
 }

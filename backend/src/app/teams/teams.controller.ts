@@ -13,7 +13,7 @@ import { SaveTeamDTO } from './dto/save-team.dto';
 
 @Controller('teams')
 export class TeamsController {
-  constructor(private readonly teamsService: TeamsService) {}
+  constructor(private readonly teamsService: TeamsService) { }
 
   @Get()
   async index() {
@@ -22,7 +22,7 @@ export class TeamsController {
 
   @Post()
   async createteam(@Body() body: SaveTeamDTO) {
-    return await this.teamsService.createTeam(body);
+    return await this.teamsService.store(body);
   }
 
   @Get(':id')

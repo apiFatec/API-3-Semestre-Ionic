@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { ProcessFormValues } from "@/interfaces/processFormValues";
 import { Users } from "@/interfaces/users";
 import { Tasks } from "@/interfaces/tasks";
+import { Badge } from "@/components/ui/badge";
 
 export function CadastroProcessos() {
   const { register, handleSubmit, watch } = useForm<ProcessFormValues>();
@@ -90,6 +91,13 @@ export function CadastroProcessos() {
     setTasks((prevState) => [...prevState, tarefa]);
   }
 
+  function removeTask(deletedTask : string) {
+    const filteredTasks = tasks.filter(
+      (task) => task.title !== deletedTask)
+    setTasks(filteredTasks);
+  }
+
+
   return (
     <main className="">
       <form
@@ -162,18 +170,28 @@ export function CadastroProcessos() {
                     id="listTasks"
                     className="mt-2 p-4 h-[17rem] w-[16.875rem] rounded-md border"
                   >
+                    {tasks.length === 0 && 
+                    <div className="grid justify-items-center">
+                      <label className="w-36 text-center text-[#777777]">Nenhuma tarefa adicionada</label>
+                    </div>
+                    }
                     {tasks.map((task, index) => (
                       <section
                         key={index}
                         className="p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]"
                       >
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold p-1">
+                        
+                        <div className="flex justify-between px-1 pt-1">
+                          <span className="font-semibold line-clamp-2 break-all">
                             {task.title}
                           </span>
-                          <span
+                          <div className="pl-5">
+                          <button type="button" onClick={() => removeTask(task.title)}>X</button>
+                        </div>
+                        </div>
+                        <Badge
                             className={cn(
-                              "pl-2 pb-1",
+                              "bg-secondary my-3 hover:bg-secondary",
                               task.priority === "Alta"
                                 ? "text-red-600"
                                 : task.priority === "Média"
@@ -182,9 +200,9 @@ export function CadastroProcessos() {
                             )}
                           >
                             {task.priority}
-                          </span>
-                        </div>
-                        <span className="pl-2 text-[#777777]">
+                          </Badge>
+
+                        <span className="pl-2 text-[#777777] line-clamp-3">
                           {task.description}
                         </span>
                       </section>

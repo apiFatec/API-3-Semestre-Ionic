@@ -19,6 +19,17 @@ export interface getFiles {
   usersIdId: string | undefined;
 }
 
+interface userLog{
+  id: string;
+  name : string;
+}
+
+interface usersTask {
+  id: string;
+  users_id: string;
+  tasks_id: string;
+}
+
 interface Modal {
   id: string | undefined;
   title: string | undefined;
@@ -34,9 +45,9 @@ interface Modal {
 
 export function TaskModal({ task, id, title, members, description, priority, toggleModal, closeModal, setReload, reload }: Modal) {
   const [modalFile, setModalFile] = useState<boolean>(false);
-  const [userInTask, setUserInTask] = useState<any>();
+  const [userInTask, setUserInTask] = useState<usersTask[]>();
   const [files, setFiles] = useState<getFiles[]>([]);
-
+  const [userLog, setUserLog] = useState<userLog>();
 
   const priorityColor = () => {
     if (priority === "Baixa") {
@@ -53,8 +64,12 @@ export function TaskModal({ task, id, title, members, description, priority, tog
   }, [])
 
   async function getUserTask(){
+    const user = await userServices.getOneUser(localStorage.getItem('token'));
     const files = await taskService.getFileTask(id);
     const result = await taskService.getUserTask(id, localStorage.getItem('token'));
+    console.log(result.data)
+    console.log(user.data);
+    setUserLog(user.data)
     setUserInTask(result.data);
     setFiles(files.data);
   }
@@ -65,9 +80,8 @@ export function TaskModal({ task, id, title, members, description, priority, tog
       user: localStorage.getItem('token')
     })
       .then((response) => {
-        console.log(response);
-        setUserInTask(!userInTask);
-        setReload(!reload);
+        console.log('join task: '+response.data);
+        getUserTask();
       }).catch((error) => {
         console.log(error);
       });
@@ -76,8 +90,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
   async function finishTask(id: string | undefined) {
     userServices.finishTask(id)
       .then((response) => {
-        console.log('finalizado', response);
-        setReload(!reload);
+        console.log('finalizado', response.data);
       }).catch((error) => {
         console.log(error);
       });
@@ -86,9 +99,8 @@ export function TaskModal({ task, id, title, members, description, priority, tog
   async function leaveTask(idTask: string | undefined, tokenUser: string | null) {
     userServices.leaveTask(idTask, tokenUser)
       .then((response) => {
-        console.log(response);
-        setUserInTask(!userInTask);
-        setReload(!reload);
+        console.log('leave task: '+response.data);
+        getUserTask();
       }).catch((error) => {
         console.log(error);
       })
@@ -143,7 +155,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
           </div>
 
           <div>
-            {!userInTask && (
+            {!userInTask?.find(obj => obj.users_id == userLog?.id) && (
               <>
                 <p>Entrar</p>
                 <Button
@@ -155,8 +167,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
               </>
             )}
 
-
-            {userInTask && (
+            {userInTask?.find(obj => obj.users_id == userLog?.id) &&(
               <>
                 <p>Ações</p>
                 <Button onClick={() => finishTask(id)} className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2">

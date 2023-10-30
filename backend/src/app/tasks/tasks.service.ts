@@ -115,14 +115,16 @@ export class TasksService {
   }
 
   async getUserTask(taskId: string, userId: string) {
-    const query = `SELECT 1
+    const query = `SELECT *
     FROM public.users_tasks WHERE users_tasks.users_id = '${userId}'
     AND users_tasks.tasks_id = '${taskId}' ;`;
 
     const result = await this.usersTasksRepository.query(query);
     return result;
   }
+
   async deleteTask(id: string) {
     await this.tasksRepository.softRemove({ id: id });
   }
 }
+

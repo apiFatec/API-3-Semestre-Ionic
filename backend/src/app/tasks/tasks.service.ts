@@ -122,6 +122,7 @@ export class TasksService {
     const result = await this.usersTasksRepository.query(query);
     return result;
   }
+
   async deleteTask(id: string) {
     await this.tasksRepository.softRemove({ id: id });
   }

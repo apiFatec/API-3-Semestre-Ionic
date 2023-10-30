@@ -1,6 +1,5 @@
 import { api } from "@/api";
-import { ProcessFormValues } from "@/pages/cadastroProcesso/cadastroProcesso";
-import { Process } from "@/pages/home/home";
+import { ProcessFormValues } from "@/interfaces/processFormValues";
 
 class ProcessServices {
 
@@ -9,6 +8,7 @@ class ProcessServices {
   }
 
   async createProcess(data: ProcessFormValues) {
+    console.log(data);
     return await api.post('/processes', data, {
       headers: {
         "Content-Type": "application/json"
@@ -18,6 +18,14 @@ class ProcessServices {
 
   async getOne(id: string) {
     return await api.get(`/processes/${id}`)
+  }
+
+  async getAllToTeam(id: string) {
+    return await api.get(`/processes/team/${id}`, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
   }
 }
 

@@ -1,12 +1,14 @@
 import { title } from 'process';
-import { Body, Controller, Delete, Get, MaxFileSizeValidator, NotFoundException, Param, ParseFilePipe, ParseUUIDPipe, Patch, Post, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, MaxFileSizeValidator, NotFoundException, Param, ParseFilePipe, ParseUUIDPipe, Patch, Post, Req, StreamableFile, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { IsosService } from './isos.service';
 import { SaveIsoDto } from './dto/save-iso.dto';
 import { IsosEntity } from './entities/isos.entity';
 import { UpdateResult } from 'typeorm';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
-import MulterConfigIso from './multer-config-iso'; { }
+import MulterConfigIso from './multer-config-iso';
+import * as fs from "fs"
+import { join } from 'path';
 
 @Controller('isos')
 export class IsosController {
@@ -45,4 +47,12 @@ export class IsosController {
   uploadFile(@UploadedFile() file : Express.Multer.File, @Body() body : SaveIsoDto, @Req() req: Request){
     return this.isosService.saveData(file, req, body)
   }
+
+  @Get(':isoName/:isoFileName')
+  getIso(
+    @Param('isoName') isoName : string,
+    @Param('isoFileName') isoFileName : string,) : StreamableFile {
+      const file = fs.createReadStream(join(process.cwd(), `/upload/ISOs/${isoName}/${isoFileName}`))
+      return new StreamableFile(file);
+    }
 }

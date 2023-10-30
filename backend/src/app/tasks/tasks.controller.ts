@@ -27,7 +27,6 @@ export class TasksController {
   async joinTask(@Body() body: JoinTaskDto) {
     const token = body.user;
     const decodedToken = await this.tokenService.decodeJwt(token);
-    console.log(decodedToken);
     return await this.tasksService.joinTask(body.task, decodedToken.email);
   }
 
@@ -44,7 +43,6 @@ export class TasksController {
   ) {
     const token = idUser;
     const decodedToken = await this.tokenService.decodeJwt(token);
-    console.log(decodedToken);
     const user = await this.userService.findOne(decodedToken.email);
     return await this.tasksService.leaveTask(idTask, user.id);
   }

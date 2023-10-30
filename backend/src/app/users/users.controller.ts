@@ -61,7 +61,6 @@ export class UsuariosController {
     const token = idUser;
     const decodedToken = await this.tokenService.decodeJwt(token);
 
-    console.log(decodedToken)
     const user =await this.usuariosService.findOne(decodedToken.email);
 
     return {

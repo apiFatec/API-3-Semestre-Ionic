@@ -66,7 +66,6 @@ export class ProcessesService {
 
     if (tasks && tasks.length > 0) {
       const taskEntities = await this.tasksService.storeMultiple(tasks);
-      console.log(tasks);
       taskEntities.forEach((task) => {
         task.processesId = process;
       });
@@ -110,7 +109,6 @@ export class ProcessesService {
 
     const createdUsersProcesses =
       await this.usersProcessesRepository.save(usersProcesses);
-    console.log(saveProcessDTO.tasks, createdProcess);
 
     const tasks = await this.tasksService.store(
       saveProcessDTO.tasks,
@@ -121,7 +119,6 @@ export class ProcessesService {
   }
 
   async getTeamProcesses(id: string): Promise<ProcessesEntity[]> {
-    console.log(id);
     return await this.processesRepository.find({
       where: { team: { id: id } },
       relations: {

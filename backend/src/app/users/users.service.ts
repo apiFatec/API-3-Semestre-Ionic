@@ -42,12 +42,10 @@ export class UsuariosService {
 
   async update(idUser: string, idTeam: string): Promise<UpdateResult> {
     const user = await this.usuariosRepository.findOneBy({ id: idUser });
-    console.log(user);
     if (!user) {
       throw new NotFoundException('Usuário não encontrado');
     }
     const team = await this.teamsServices.findOne(idTeam);
-    console.log(team);
     if (!team) {
       throw new NotFoundException('Time não encontrado');
     }

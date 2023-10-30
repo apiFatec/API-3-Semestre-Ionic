@@ -6,6 +6,7 @@ import { TeamFormValues } from "@/interfaces/teamFormValues";
 import userServices from "@/services/userServices";
 import { Users } from "@/interfaces/users";
 import { TitleContext } from "@/contexts/TitleContext";
+import teamsService from "@/services/teamsService";
 
 export function EditarEquipe() {
   const { handleSubmit } = useForm<TeamFormValues>();
@@ -48,8 +49,7 @@ export function EditarEquipe() {
       users: selectedMembers,
       leader: teamLeader,
     };
-    userServices
-      .createTeam(team)
+    teamsService.createTeam(team)
       .then((response) => {
         console.log(response);
       })
@@ -86,11 +86,14 @@ export function EditarEquipe() {
               onChange={(e) => setTeamLeader(e.target.value)}
             >
               <option value="">Gestor da Equipe</option>
-              {users.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name}
-                </option>
-              ))}
+              {users.map((user) => {
+                if (['Gestor', 'Lider'].includes(user.role))
+                  return (
+                    <option key={user.id} value={user.id}>
+                      {user.name}
+                    </option>
+                  )
+              })}
             </select>
           </div>
           <div className="flex gap-4 items-center">
@@ -99,7 +102,7 @@ export function EditarEquipe() {
         </div>
         <div className="flex flex-wrap gap-6 justify-start">
           {users.map((member, index) => (
-            <div
+            <label
               key={index}
               className="flex gap-4 p-4 border rounded-sm w-80 justify-between"
             >
@@ -120,7 +123,7 @@ export function EditarEquipe() {
                   <p className="text-xs text-gray-500">{member.role}</p>
                 </div>
               </div>
-            </div>
+            </label>
           ))}
         </div>
         <div className="w-full flex justify-end">

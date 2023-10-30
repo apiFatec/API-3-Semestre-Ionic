@@ -189,7 +189,7 @@ export function Process() {
                     key={task.id}
                     className="flex gap-5 -center mt-6 items-center justify-between max-w-lg  "
                   >
-                                        <input
+                    <input
                       type="checkbox"
                       id={`taskCheck-${task.id}`}
                       className="appearance-none w-12 h-12 border rounded-full focus:outline-none checked:bg-[#53C4CD]"
@@ -315,14 +315,22 @@ export function Process() {
           </div>
           {modalTask && (
             <>
-              <TaskModal id={task.id} title={task.title} members={undefined} description={task.description}
-                priority={task.priority} task={task} toggleModal={function (task: Tasks): void {
+              <TaskModal
+                id={task.id}
+                title={task.title}
+                members={undefined}
+                description={task.description}
+                priority={task.priority}
+                task={task}
+                toggleModal={function (task: Tasks): void {
                   throw new Error("Function not implemented.");
-                }} closeModal={
-                  showModalTask
-                } setReload={function (state: boolean): void {
+                }}
+                closeModal={showModalTask}
+                setReload={function (state: boolean): void {
                   throw new Error("Function not implemented.");
-                }} reload={false} />
+                }}
+                reload={false}
+              />
             </>
           )}
 

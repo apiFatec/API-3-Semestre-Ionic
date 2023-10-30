@@ -8,7 +8,7 @@ import IsLogged from "./IsLogged";
 import { CadastroProcessos } from "@/pages/cadastroProcesso/cadastroProcesso";
 import { Process } from "@/pages/process/process";
 import { EditarEquipe } from "@/pages/editarEquipe/editarEquipe";
-import { Team } from "@/pages/team/team";
+import { TeamView } from "@/pages/team/teamView";
 
 export function Router() {
   return (
@@ -26,7 +26,7 @@ export function Router() {
         <Route path="/processos" element={<Home />} />
         <Route path="/" element={<Home />} />
         <Route path="/processos/:process/:id" element={<Process />} />
-        <Route path="/equipe/:id" element={<Team />} />
+        <Route path="/equipe/:id" element={<TeamView />} />
       </Route>
     </Routes>
   );

@@ -1,5 +1,4 @@
 import { Input } from "@/components/InputForm";
-import { SelectForm } from "@/components/select";
 import { TextArea } from "@/components/textArea";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -7,7 +6,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
-import userServices from "@/services/userServices";
 import { cn } from "@/lib/utils";
 import processService from "@/services/processService";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +13,8 @@ import { ProcessFormValues } from "@/interfaces/processFormValues";
 import { Users } from "@/interfaces/users";
 import { Tasks } from "@/interfaces/tasks";
 import { Badge } from "@/components/ui/badge";
+import teamsService from "@/services/teamsService";
+import { Teams } from "@/interfaces/teams";
 
 export function CadastroProcessos() {
   const { register, handleSubmit, watch } = useForm<ProcessFormValues>();
@@ -22,24 +22,23 @@ export function CadastroProcessos() {
   const [titleTask, setTitleTask] = useState("");
   const [descriptionTask, setDescriptionTask] = useState("");
   const [tasks, setTasks] = useState<Tasks[]>([]);
-  const [users, setUsers] = useState<Users[]>([]);
+  const [teams, setTeams] = useState<Teams[]>([]);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState(new Date());
   const [teamLeader, setTeamLeader] = useState("");
-  const [team, setTeam] = useState<Users[]>([]);
-  const [process, setProcesss] = useState<ProcessFormValues[]>([]);
+  const [team, setTeam] = useState<Teams | undefined>();
   const navigate = useNavigate();
   useEffect(() => {
     getUsers();
   }, []);
 
   async function getUsers() {
-    userServices
-      .getUser()
+    teamsService
+      .getAll()
       .then((response) => {
-        setUsers(response.data);
+        setTeams(response.data);
         setTeamLeader(response.data[0]);
       })
       .catch((error) => {
@@ -53,11 +52,9 @@ export function CadastroProcessos() {
     const parsedValue = JSON.parse(value);
 
     if (checked) {
-      setTeam((pre) => [...pre, parsedValue]);
+      setTeam(parsedValue);
     } else {
-      setTeam((pre) => {
-        return [...pre.filter((skill) => skill !== parsedValue)];
-      });
+      setTeam(undefined);
     }
   }
 
@@ -67,9 +64,9 @@ export function CadastroProcessos() {
       description: description,
       deadline: deadline,
       tasks: tasks,
-      team: team,
-      leader: teamLeader,
-    };
+      team: team!,
+      leader: team!.leader,
+    };  
     processService
       .createProcess(processo)
       .then((response) => {
@@ -91,7 +88,7 @@ export function CadastroProcessos() {
     setTasks((prevState) => [...prevState, tarefa]);
   }
 
-  function removeTask(deletedTask : string) {
+  function removeTask(deletedTask: string) {
     const filteredTasks = tasks.filter(
       (task) => task.title !== deletedTask)
     setTasks(filteredTasks);
@@ -126,22 +123,22 @@ export function CadastroProcessos() {
                     id="teamList"
                     className="mt-2 p-4 h-[14.5rem] w-[16.875rem] rounded-md border"
                   >
-                    {users.map((user) => {
-                      if (user.id !== teamLeader)
+                    {teams.map((teams) => {
+                      if (teams.id !== teamLeader)
                         return (
                           <label
-                            key={user.id}
-                            htmlFor={user.id}
+                            key={teams.id}
+                            htmlFor={teams.id}
                             className="flex p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]"
                           >
                             <input
-                              id={user.id}
+                              id={teams.id}
                               type="checkbox"
-                              value={JSON.stringify(user)}
+                              value={JSON.stringify(teams)}
                               onChange={handleChange}
                               className="mr-2"
                             />
-                            {user.name}
+                            {teams.name}
                           </label>
                         );
                     })}
@@ -149,13 +146,19 @@ export function CadastroProcessos() {
                 </div>
               </div>
               <div className="ml-2">
-                <SelectForm
-                  label="Líder responsável do processo"
-                  id="lider"
-                  setValue={setTeamLeader}
-                  users={users}
-                  value={users[-1]}
-                />
+                {/* <Select>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Theme" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {teams?.users.map((user) => {
+                      if (["Gestor", "Lider", "Admin"].includes(user.role))
+                        return (
+                          <SelectItem value="system">System</SelectItem>
+                        )
+                    })}
+                  </SelectContent>
+                </Select> */}
 
                 <Input
                   label="Tempo de duração"
@@ -170,37 +173,37 @@ export function CadastroProcessos() {
                     id="listTasks"
                     className="mt-2 p-4 h-[17rem] w-[16.875rem] rounded-md border"
                   >
-                    {tasks.length === 0 && 
-                    <div className="grid justify-items-center">
-                      <label className="w-36 text-center text-[#777777]">Nenhuma tarefa adicionada</label>
-                    </div>
+                    {tasks.length === 0 &&
+                      <div className="grid justify-items-center">
+                        <label className="w-36 text-center text-[#777777]">Nenhuma tarefa adicionada</label>
+                      </div>
                     }
                     {tasks.map((task, index) => (
                       <section
                         key={index}
                         className="p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]"
                       >
-                        
+
                         <div className="flex justify-between px-1 pt-1">
                           <span className="font-semibold line-clamp-2 break-all">
                             {task.title}
                           </span>
                           <div className="pl-5">
-                          <button type="button" onClick={() => removeTask(task.title)}>X</button>
-                        </div>
+                            <button type="button" onClick={() => removeTask(task.title)}>X</button>
+                          </div>
                         </div>
                         <Badge
-                            className={cn(
-                              "bg-secondary my-3 hover:bg-secondary",
-                              task.priority === "Alta"
-                                ? "text-red-600"
-                                : task.priority === "Média"
+                          className={cn(
+                            "bg-secondary my-3 hover:bg-secondary",
+                            task.priority === "Alta"
+                              ? "text-red-600"
+                              : task.priority === "Média"
                                 ? "text-orange-500"
                                 : "text-blue-600"
-                            )}
-                          >
-                            {task.priority}
-                          </Badge>
+                          )}
+                        >
+                          {task.priority}
+                        </Badge>
 
                         <span className="pl-2 text-[#777777] line-clamp-3">
                           {task.description}
@@ -276,3 +279,4 @@ export function CadastroProcessos() {
     </main>
   );
 }
+

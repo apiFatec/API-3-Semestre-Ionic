@@ -43,7 +43,7 @@ interface Modal {
   reload: boolean;
 }
 
-export function TaskModal({ task, id, title, members, description, priority, toggleModal, closeModal, setReload, reload }: Modal) {
+export function TaskModal({ task, id, title, members, description, priority, toggleModal, closeModal }: Modal) {
   const [modalFile, setModalFile] = useState<boolean>(false);
   const [userInTask, setUserInTask] = useState<usersTask[]>();
   const [files, setFiles] = useState<getFiles[]>([]);

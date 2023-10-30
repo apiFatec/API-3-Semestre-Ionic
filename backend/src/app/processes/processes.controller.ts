@@ -31,4 +31,9 @@ export class ProcessesController {
     async deleteProcess(@Param('id', new ParseUUIDPipe()) id: string) {
         await this.processesService.deleteById(id);
     }
+
+    @Get('/team/:id')
+    async getTeamProcesses(@Param('id', new ParseUUIDPipe()) id: string): Promise<ProcessesEntity[]> {
+        return await this.processesService.getTeamProcesses(id);
+    }
 }

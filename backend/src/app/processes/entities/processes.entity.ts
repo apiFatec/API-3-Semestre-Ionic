@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { UsersProcessesEntity } from "./usersProcesses.entity";
 import { TasksEntity } from "@/app/tasks/entities/tasks.entity";
+import { TeamsEntity } from "@/app/teams/entities/teams.entity";
 
 export enum Status {
   WAITING = "Aguardando",
@@ -39,4 +40,7 @@ export class ProcessesEntity {
 
   @OneToMany(() => TasksEntity, (tasksEntity) => tasksEntity.processesId)
   tasks: TasksEntity[];
+
+  @ManyToOne(() => TeamsEntity, (teamsEntity) => teamsEntity.processes)
+  team: TeamsEntity;
 }

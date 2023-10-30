@@ -35,7 +35,9 @@ export class UsuariosService {
   }
 
   async findAll(): Promise<UsersEntity[] | undefined> {
-    return await this.usuariosRepository.find();
+    return await this.usuariosRepository.find({
+      relations: { teams: true }
+    });
   }
 
   async update(idUser: string, idTeam: string): Promise<UpdateResult> {

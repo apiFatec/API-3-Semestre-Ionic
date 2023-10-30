@@ -17,7 +17,10 @@ export class TeamsService {
 
   async findAll(): Promise<TeamsEntity[]> {
     const result = await this.teamsRepository.find({
-      relations: { users: true },
+      relations: {
+        users: true,
+        leader: true
+      }
     });
     return result;
   }
@@ -26,7 +29,8 @@ export class TeamsService {
     return await this.teamsRepository.findOne({
       where: { id },
       relations: {
-        users: true
+        users: true,
+        leader: true
       }
     })
   }

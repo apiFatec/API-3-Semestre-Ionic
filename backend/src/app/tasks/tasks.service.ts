@@ -22,7 +22,7 @@ export class TasksService {
 
   async store(data: SaveTaskDTO[], process: ProcessesEntity): Promise<TasksEntity[]> {
     const tasks = data.map((taskDTO) => {
-      return this.tasksRepository.create({ ...taskDTO })
+      return this.tasksRepository.create({ ...taskDTO, processesId: process });
     });
 
     await this.tasksRepository.insert(tasks);

@@ -6,6 +6,8 @@ import { Progress } from "@/components/ui/progress";
 import { TitleContext } from "@/contexts/TitleContext";
 import { Tasks } from "@/interfaces/tasks";
 import { Processes } from "@/interfaces/processes";
+import { TaskModal } from "@/components/taskModal";
+import userServices from "@/services/userServices";
 
 export function Process() {
   const { id } = useParams();
@@ -17,11 +19,20 @@ export function Process() {
     name: "",
     description: "",
   });
+  const [task, setTask] = useState<Tasks>({
+    id: '',
+    title: '',
+    description: '',
+    status: '',
+    priority: '',
+    deadline: undefined,
+  })
+  const [modalTask, setModalTask] = useState<any>(false);
+  const [user, setUser] = useState<any>();
 
   const deadline = new Date();
-  const formattedDate = `${deadline.getDate()}/${
-    deadline.getMonth() + 1
-  }/${deadline.getFullYear()}`;
+  const formattedDate = `${deadline.getDate()}/${deadline.getMonth() + 1
+    }/${deadline.getFullYear()}`;
   const formattedTime = `${String(deadline.getHours()).padStart(
     2,
     "0"
@@ -102,6 +113,13 @@ export function Process() {
     }
   }
 
+  async function showModalTask(item: Tasks) {
+    if (!modalTask) {
+      setTask(item)
+    }
+    setModalTask(!modalTask);
+  }
+
   return (
     <div className="flex flex-col items-center justify-center w-full px-12 gap-4">
       <section className="flex-row w-full ">
@@ -111,9 +129,9 @@ export function Process() {
               Informações
             </a>
           </div>
-          <div>
+          {/* <div>
             <a href="#">Tarefas</a>
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -123,7 +141,7 @@ export function Process() {
           <p className="text-sm h-20 overflow-hidden whitespace-normal break-words text-ellipsis min-h-[20rem] mt-6 max-w-xl">
             {process.description}
           </p>
-          <p className="w-11/12 border-b ">Comentários</p>
+          {/* <p className="w-11/12 border-b ">Comentários</p>
 
           <div className="flex items-center gap-4 mt-4">
             <img src="./Roberta.svg" alt="img" className="w-10" />
@@ -132,7 +150,7 @@ export function Process() {
               placeholder="Adicionar comentário..."
               className="p-2 border-solid border w-9/12 rounded"
             />
-          </div>
+          </div> */}
         </div>
         <section>
           <div
@@ -171,6 +189,12 @@ export function Process() {
                     key={task.id}
                     className="flex gap-5 -center mt-6 items-center justify-between max-w-lg  "
                   >
+                                        <input
+                      type="checkbox"
+                      id={`taskCheck-${task.id}`}
+                      className="appearance-none w-12 h-12 border rounded-full focus:outline-none checked:bg-[#53C4CD]"
+                      onClick={() => completeTask(task.id)}
+                    />
                     <div className="max-w-sm ">
                       <h2 className="break-words">{task.title}</h2>
                       <p className="text-gray-500 text-xs max-w-9/12 break-words">
@@ -185,9 +209,9 @@ export function Process() {
                         <button
                           id={`taskCheck-${task.id}`}
                           className="text-sm"
-                          onClick={() => joinTask(task)}
+                          onClick={() => showModalTask(task)}
                         >
-                          Iniciar tarefa
+                          Detalhes da Tarefa
                         </button>
                       </div>
                     )}
@@ -199,9 +223,9 @@ export function Process() {
                         <button
                           id={`taskCheck-${task.id}`}
                           className="text-sm"
-                          onClick={() => joinTask(task)}
+                          onClick={() => showModalTask(task)}
                         >
-                          Iniciar tarefa
+                          Detalhes da Tarefa
                         </button>
                       </div>
                     )}
@@ -213,9 +237,9 @@ export function Process() {
                         <button
                           id={`taskCheck-${task.id}`}
                           className="text-sm"
-                          onClick={() => joinTask(task)}
+                          onClick={() => showModalTask(task)}
                         >
-                          Iniciar tarefa
+                          Detalhes da Tarefa
                         </button>
                       </div>
                     )}
@@ -244,6 +268,13 @@ export function Process() {
                         <p className="bg-green-200 text-sm max-w-9/12 break-words pl-6 pr-6 rounded text-green-600 text-center">
                           {task.priority}
                         </p>
+                        <button
+                          id={`taskCheck-${task.id}`}
+                          className="text-sm"
+                          onClick={() => showModalTask(task)}
+                        >
+                          Detalhes da Tarefa
+                        </button>
                         <div className="h-4"></div>
                       </div>
                     )}
@@ -252,6 +283,13 @@ export function Process() {
                         <p className="text-amber-500 text-sm max-w-9/12 pl-6 pr-6 break-words rounded bg-amber-100 text-center">
                           {task.priority}
                         </p>
+                        <button
+                          id={`taskCheck-${task.id}`}
+                          className="text-sm"
+                          onClick={() => showModalTask(task)}
+                        >
+                          Detalhes da Tarefa
+                        </button>
                         <div className="h-4"></div>
                       </div>
                     )}
@@ -260,6 +298,13 @@ export function Process() {
                         <p className="bg-red-200 text-sm max-w-9/12 pl-6 pr-6 break-words rounded text-amber-700 text-center">
                           {task.priority}
                         </p>
+                        <button
+                          id={`taskCheck-${task.id}`}
+                          className="text-sm"
+                          onClick={() => showModalTask(task)}
+                        >
+                          Detalhes da Tarefa
+                        </button>
                         <div className="h-4"></div>
                       </div>
                     )}
@@ -268,6 +313,19 @@ export function Process() {
               }
             })}
           </div>
+          {modalTask && (
+            <>
+              <TaskModal id={task.id} title={task.title} members={undefined} description={task.description}
+                priority={task.priority} task={task} toggleModal={function (task: Tasks): void {
+                  throw new Error("Function not implemented.");
+                }} closeModal={
+                  showModalTask
+                } setReload={function (state: boolean): void {
+                  throw new Error("Function not implemented.");
+                }} reload={false} />
+            </>
+          )}
+
         </section>
       </section>
     </div>

@@ -1,3 +1,4 @@
+import { TokenController } from './../token/token.controller';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -8,8 +9,8 @@ import { SaveUserDto } from './dto/save-users.dto';
 export class UsuariosService {
   constructor(
     @InjectRepository(UsersEntity)
-    private readonly usuariosRepository: Repository<UsersEntity>
-  ) { }
+    private readonly usuariosRepository: Repository<UsersEntity>,
+  ) {}
 
   async store(data: SaveUserDto): Promise<UsersEntity> {
     const usuario = this.usuariosRepository.create(data);
@@ -24,6 +25,10 @@ export class UsuariosService {
 
   async findOne(email: string): Promise<UsersEntity | undefined> {
     return await this.usuariosRepository.findOne({ where: { email: email } });
+  }
+
+  async findOneById(id: string): Promise<UsersEntity | undefined> {
+    return await this.usuariosRepository.findOne({ where: { id: id } });
   }
 
   async findAll(): Promise<UsersEntity[] | undefined> {

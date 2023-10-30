@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { UsersTasksEntity } from './usersTasks.entity';
+import { File } from '@/app/files/entities/file.entity';
 
 export enum Status {
   WAITING = 'Aguardando',
@@ -57,4 +58,7 @@ export class TasksEntity {
 
   @OneToMany(() => UsersTasksEntity, (usersTasksEntity) => usersTasksEntity.tasksId)
   usersTasks: UsersTasksEntity;
+
+  @OneToMany(() => File, (file) => file )
+  files: File[];
 }

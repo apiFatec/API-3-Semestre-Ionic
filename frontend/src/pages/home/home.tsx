@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ProcessCard } from "@/components/processCard";
 import { useTheme } from "@/components/theme.provider";
 import { Button } from "@/components/ui/button";
@@ -7,11 +7,15 @@ import processService from "@/services/processService";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router";
 import { Process } from "@/interfaces/process";
+import { TitleContext } from "@/contexts/TitleContext";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function Home() {
   const { theme } = useTheme();
-  const [processes, setProcesses] = useState<Process[]>([]);
   const navigate = useNavigate();
+  const {handleTitle} = useContext(TitleContext);
+  const [processes, setProcesses] = useState<Process[]>([]);
+
   useEffect(() => {
     getProcesses();
   }, []);
@@ -20,8 +24,11 @@ export function Home() {
     processService
       .getAll()
       .then((response) => {
+        console.log(response.data);
         setProcesses(response.data);
-        console.log(processes);
+        handleTitle("Acompanhamento de Processos");
+      }).catch((error) => {
+        console.log(error);
       })
       .catch((error) => {
         console.log(error);
@@ -37,7 +44,7 @@ export function Home() {
             className="w-1/2"
             alt="logo contendo nome da marca ionichealth"
           />
-          <h1 className="text-theme-smooth">Acompanhamento de processos</h1>
+          
         </div>
 
         <div className="flex w-1/2 items-center justify-end gap-4">
@@ -70,53 +77,82 @@ export function Home() {
           Nenhum Processo Criado
         </p>
       )}
-      <div className="flex w-full justify-between gap-10">
-        <div className="flex flex-col w-full gap-3 max-h-[580px] overflow-auto">
-          {processes.map((process) => {
-            if (process.process_status === "Aguardando") {
-              return (
-                <ProcessCard
-                  key={process.process_id}
-                  process_id={process.process_id}
-                  process_description={process.process_description}
-                  process_name={process.process_name}
-                  users={process.users}
-                />
-              );
-            }
-          })}
+      <div className="grid grid-cols-3 w-full justify-between gap-10">
+        {processes.map((process) => {
+          const totalTasks = process.tasks ? process.tasks.length : 0;
+          const tasksInProgress = process.tasks ? process.tasks.filter((task) => task.status === "Em progresso").length : 0;
+          const finishedTasks = process.tasks ? process.tasks.filter((task) => task.status === "Finalizado").length : 0;
+          if (totalTasks == finishedTasks){
+            process.process_status = "Finalizado"
+          }
+          else if (finishedTasks == 0 && tasksInProgress == 0){
+            process.process_status = "Aguardando"
+          } else {
+            process.process_status = "Em progresso"
+          }
+          return null
+        })}
+        <div className="flex flex-col w-full gap-3 max-h-[580px]">
+          <p>Backlog</p>
+          <ScrollArea className="h-full w-[20rem]">
+            {processes.map((process) => {
+              if (process.process_status === "Aguardando") {
+                return (
+                  <ProcessCard
+                    key={process.process_id}
+                    processId={process.process_id}
+                    processDescription={process.process_description}
+                    processName={process.process_name}
+                    users={process.users}
+                    processDeadline={process.process_deadline}
+                    processStatus={process.process_status}
+                    tasks={process.tasks} />
+                );
+              }
+            })}
+          </ScrollArea>
         </div>
 
-        <div className="flex flex-col w-full gap-3 max-h-[580px]  overflow-auto">
-          {processes.map((process) => {
-            if (process.process_status === "Em progresso") {
-              return (
-                <ProcessCard
-                  key={process.process_id}
-                  process_id={process.process_id}
-                  process_description={process.process_description}
-                  process_name={process.process_name}
-                  users={process.users}
-                />
-              );
-            }
-          })}
+        <div className="flex flex-col w-full gap-3 max-h-[580px]">
+          <p>Em progresso</p>
+          <ScrollArea className="h-full w-[20rem]">
+            {processes.map((process) => {
+              if (process.process_status === "Em progresso") {
+                return (
+                  <ProcessCard
+                    key={process.process_id}
+                    processId={process.process_id}
+                    processDescription={process.process_description}
+                    processName={process.process_name}
+                    users={process.users}
+                    processDeadline={process.process_deadline}
+                    processStatus={process.process_status}
+                    tasks={process.tasks} />
+                );
+              }
+            })}
+          </ScrollArea>
         </div>
 
-        <div className="flex flex-col w-full gap-3 max-h-[580px]  overflow-auto">
-          {processes.map((process) => {
-            if (process.process_status === "Finalizado") {
-              return (
-                <ProcessCard
-                  key={process.process_id}
-                  process_id={process.process_id}
-                  process_description={process.process_description}
-                  process_name={process.process_name}
-                  users={process.users}
-                />
-              );
-            }
-          })}
+        <div className="flex flex-col w-full gap-3 max-h-[580px]">
+          <p>Finalizado</p>
+          <ScrollArea className="h-full w-[20rem]">
+            {processes.map((process) => {
+              if (process.process_status === "Finalizado") {
+                return (
+                  <ProcessCard
+                    key={process.process_id}
+                    processId={process.process_id}
+                    processDescription={process.process_description}
+                    processName={process.process_name}
+                    users={process.users}
+                    processDeadline={process.process_deadline}
+                    processStatus={process.process_status}
+                    tasks={process.tasks} />
+                );
+              }
+            })}
+          </ScrollArea>
         </div>
       </div>
     </div>

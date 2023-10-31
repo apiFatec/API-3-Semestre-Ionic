@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import bodyEmails from '../helpers/body-emails';
 import { resend } from '../helpers/mail';
+import { AttachmentDto } from './dto/email-attachment.dto';
 
 
 @Injectable()
 export class MailService {
   constructor() { }
 
-  async requestAttachment(data: any): Promise<void> {
+  async requestAttachment(data: AttachmentDto): Promise<void> {
     try {
       const emailContent = await bodyEmails.getBodyEmail(data, 'attachment.html');
 

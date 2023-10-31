@@ -7,7 +7,8 @@ import { TitleContext } from "@/contexts/TitleContext";
 import { Tasks } from "@/interfaces/tasks";
 import { Processes } from "@/interfaces/processes";
 import { TaskModal } from "@/components/taskModal";
-import userServices from "@/services/userServices";
+import { Link } from "react-router-dom";
+import { Teams } from '@/interfaces/teams';
 
 export function Process() {
   const { id } = useParams();
@@ -17,7 +18,7 @@ export function Process() {
     deadline: "",
     tasks: [],
     name: "",
-    description: "",
+    description: ""
   });
   const [task, setTask] = useState<Tasks>({
     id: '',
@@ -124,14 +125,12 @@ export function Process() {
     <div className="flex flex-col items-center justify-center w-full px-12 gap-4">
       <section className="flex-row w-full ">
         <div className="flex gap-12 ">
-          <div>
-            <a href="#" className="border-b-4  border-[#53C4CD]">
-              Informações
-            </a>
-          </div>
-          {/* <div>
-            <a href="#">Tarefas</a>
-          </div> */}
+          <a href="#" className="border-b-4  border-[#53C4CD]">
+            Informações
+          </a>
+          <Link to={`/telaTarefas/${process.name}/${process.id}`}>
+            Tarefas
+          </Link>
         </div>
       </section>
 

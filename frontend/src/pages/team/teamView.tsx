@@ -3,6 +3,7 @@ import { Process, TeamModal } from "@/components/teamModal";
 import { Button } from "@/components/ui/button";
 import { Processes } from "@/interfaces/processes";
 import { Teams } from "@/interfaces/teams";
+import { Users } from "@/interfaces/users";
 import processService from "@/services/processService";
 import teamsService from "@/services/teamsService";
 import { useEffect, useState } from "react";
@@ -14,6 +15,7 @@ export function TeamView() {
   const [team, setTeam] = useState<Teams>();
   const [processes, setProcesses] = useState<Process[]>();
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<Users>()
 
   useEffect(() => {
     getTeam(id);
@@ -47,8 +49,9 @@ export function TeamView() {
     }
   }
 
-  async function showModalTeam() {
+  async function showModalTeam(user: any) {
     setShowModal(!showModal);
+    setSelectedUser(user);
   }
 
   return (
@@ -68,11 +71,14 @@ export function TeamView() {
       </div>
       <div className="w-full flex flex-col px-11 gap-6 max-h-[600px] overflow-auto">
         {team?.users.map((user) => (
-          <CardTeamView toggleModal={showModalTeam} fallbackName={fallbackName(user.name)} {...user} key={user.id} />
+          <CardTeamView toggleModal={() => showModalTeam(user)} fallbackName={fallbackName(user.name)} {...user} key={user.id} />
         ))}
       </div>
       {showModal &&
         <TeamModal
+          username={selectedUser?.name}
+          role={selectedUser?.role}
+          email={selectedUser?.email}
           closeModal={showModalTeam}
           processes={processes!}
         />

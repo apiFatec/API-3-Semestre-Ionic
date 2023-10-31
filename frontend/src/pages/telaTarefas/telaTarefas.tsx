@@ -11,19 +11,13 @@ import { Tasks } from "@/interfaces/tasks";
 import processService from "@/services/processService";
 import { MoreHorizontal, Pencil, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export function TelaTarefas() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { role } = useAuth();
-  const [process, setProcess] = useState<Processes>({
-    id: "",
-    deadline: "",
-    tasks: [],
-    name: "",
-    description: "",
-  });
+  const [process, setProcess] = useState<Processes>();
 
   const deadline = new Date();
 
@@ -58,13 +52,13 @@ export function TelaTarefas() {
         });
     }
   }
-  const altaPrioridadeTasks = process.tasks?.filter(
+  const altaPrioridadeTasks = process?.tasks?.filter(
     (task) => task.priority === "Alta"
   );
-  const mediaPrioridadeTasks = process.tasks?.filter(
+  const mediaPrioridadeTasks = process?.tasks?.filter(
     (task) => task.priority === "Média"
   );
-  const baixaPrioridadeTasks = process.tasks?.filter(
+  const baixaPrioridadeTasks = process?.tasks?.filter(
     (task) => task.priority === "Baixa"
   );
 
@@ -83,7 +77,7 @@ export function TelaTarefas() {
     try {
       await processService.deleteTask(id);
       setProcess((prevProcess) => {
-        if (prevProcess.tasks) {
+        if (prevProcess?.tasks) {
           return {
             ...prevProcess,
             tasks: prevProcess.tasks.filter((task) => task.id !== id),
@@ -95,23 +89,20 @@ export function TelaTarefas() {
       console.log(error);
     }
   }
-  function nav() {
-    navigate(`/processos/${encodeURIComponent(process.name!)}/${process.id}`);
-  }
 
   return (
     <div className="px-12">
       <section className="flex-row w-full mb-6">
         <div className="flex gap-12 ">
           <div>
-            <a href="#" onClick={() => nav()}>
+            <Link to={`/processos/${encodeURIComponent(process?.name!)}/${process?.id}`}>
               Informações
-            </a>
+            </Link>
           </div>
           <div>
-            <a href="#" className="border-b-4  border-[#53C4CD]">
+            <Link to="#" className="border-b-4  border-[#53C4CD]">
               Tarefas
-            </a>
+            </Link>
           </div>
         </div>
       </section>

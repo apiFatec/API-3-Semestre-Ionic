@@ -13,7 +13,7 @@ import { Users } from "@/interfaces/users";
 
 export interface UserTeam extends Users {
   fallbackName: string;
-  toggleModal: any
+  toggleModal: any;
 }
 
 export function CardTeamView(

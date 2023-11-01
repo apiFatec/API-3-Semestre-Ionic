@@ -10,7 +10,7 @@ export class UsuariosService {
   constructor(
     @InjectRepository(UsersEntity)
     private readonly usuariosRepository: Repository<UsersEntity>,
-  ) {}
+  ) { }
 
   async store(data: SaveUserDto): Promise<UsersEntity> {
     const usuario = this.usuariosRepository.create(data);
@@ -24,7 +24,7 @@ export class UsuariosService {
   }
 
   async findOne(email: string): Promise<UsersEntity | undefined> {
-    return await this.usuariosRepository.findOne({ where: { email: email } });
+    return await this.usuariosRepository.findOne({where : {email:email}})
   }
 
   async findOneById(id: string): Promise<UsersEntity | undefined> {
@@ -34,4 +34,5 @@ export class UsuariosService {
   async findAll(): Promise<UsersEntity[] | undefined> {
     return await this.usuariosRepository.find();
   }
+
 }

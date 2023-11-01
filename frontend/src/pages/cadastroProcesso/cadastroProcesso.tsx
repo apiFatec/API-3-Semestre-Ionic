@@ -50,6 +50,7 @@ export function CadastroProcessos() {
   const [team, setTeam] = useState<Users[]>([]);
   const [open, setOpen] = useState(false)
   const [isos, setIsos] = useState<Isos[]>([]);
+  const [selectedIso, setSelectedIso] = useState("");
   const [process, setProcesss] = useState<ProcessFormValues[]>([]);
   const navigate = useNavigate();
   useEffect(() => {
@@ -62,6 +63,7 @@ export function CadastroProcessos() {
       .then((response) => {
         setUsers(response.data);
         setTeamLeader(response.data[0]);
+        setIsos(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -141,11 +143,75 @@ export function CadastroProcessos() {
                   id="description"
                   setValue={setDescription}
                 />
+                <Input
+                  label="Tempo de duração"
+                  id="deadline"
+                  type="date"
+                  setValue={setDeadline}
+                />
+                
+                <div className="center-normal py-2">    
+                    <label>Requisitos regulamentares</label>
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={open}
+                          className="w-[16.875rem] h-[40px] my-2 text-[#C0C0C0] justify-between"
+                        >
+                          {selectedIso 
+                            ? isos.find((iso) => iso.id === selectedIso)?.title 
+                            : "+ Adicionar Requisito"
+                          }
+                          </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[16.875rem] border rounded-md mt-1">
+                        <Command>
+                          <CommandInput className="p-2 focus:outline-none" placeholder="Procurar iso"/>
+                          <CommandEmpty>Nenhum requisito encontrado</CommandEmpty>
+                          <CommandGroup className="">
+                            {isos.map((iso) => (
+                              <CommandItem
+                                key={iso.id}
+                                value={iso.title}
+                                onSelect={(currentValue) =>  {
+                                  setSelectedIso(currentValue === iso.title ? "" : currentValue)
+                                  setOpen(false)
+                                }
+                              }
+                              >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  selectedIso === iso.title ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                                {iso.title}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <ScrollArea className="mt-2 p-4 h-[8.5rem] w-[16.875rem] rounded-md border">
+
+                    </ScrollArea>
+                </div>
+              </div>
+              <div className="ml-2">
+                <SelectForm
+                  label="Líder responsável do processo"
+                  id="lider"
+                  setValue={setTeamLeader}
+                  users={users}
+                  value={users[-1]}
+                />
                 <div className="center-normal py-2">
                   <label>Atribuir uma equipe</label>
                   <ScrollArea
                     id="teamList"
-                    className="mt-2 p-4 h-[7rem] w-[16.875rem] rounded-md border"
+                    className="mt-2 p-4 h-[10rem] w-[16.875rem] rounded-md border"
                   >
                     {users.map((user) => {
                       if (user.id !== teamLeader)
@@ -168,73 +234,11 @@ export function CadastroProcessos() {
                     })}
                   </ScrollArea>
                 </div>
-                <div className="center-normal py-2">
-                    
-                    <label>Requisitos regulamentares</label>
-                    <Popover open={open} onOpenChange={setOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          aria-expanded={open}
-                          className="w-[16.875rem] h-[40px] my-2 text-[#C0C0C0] justify-between"
-                        >
-                            + Adicionar Requisito
-                          </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[16.875rem] border rounded-md mt-1">
-                        <Command>
-                          <CommandInput className="p-2 focus:outline-none" placeholder="Procurar iso"/>
-                          <CommandEmpty>Nenhum requisito encontrado</CommandEmpty>
-                          <CommandGroup className="">
-                            {isos.map((iso : any) => (
-                              <CommandItem
-                                key={iso.id}
-                                value={iso.title}
-                                onSelect={() => 
-                                  setOpen(false)
-                                }
-
-                              >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  isos === iso.title ? "opacity-100" : "opacity-0"
-                                )}
-                              />
-                                {iso.title}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <ScrollArea className="mt-2 p-4 h-[7rem] w-[16.875rem] rounded-md border">
-
-                    </ScrollArea>
-                </div>
-              </div>
-              <div className="ml-2">
-                <SelectForm
-                  label="Líder responsável do processo"
-                  id="lider"
-                  setValue={setTeamLeader}
-                  users={users}
-                  value={users[-1]}
-                />
-
-                <Input
-                  label="Tempo de duração"
-                  id="deadline"
-                  type="date"
-                  setValue={setDeadline}
-                />
-
-                <div className="center-normal py-2">
+                <div className="center-normal py-2 mt-2">
                   <label>Tarefas</label>
                   <ScrollArea
                     id="listTasks"
-                    className="mt-2 p-4 h-[17rem] w-[16.875rem] rounded-md border"
+                    className="mt-2 p-4 h-[13rem] w-[16.875rem] rounded-md border"
                   >
                     {tasks.length === 0 && 
                     <div className="grid justify-items-center">

@@ -8,6 +8,7 @@ import IsLogged from "./IsLogged";
 import { CadastroProcessos } from "@/pages/cadastroProcesso/cadastroProcesso";
 import { Process } from "@/pages/process/process";
 import { EditarEquipe } from "@/pages/editarEquipe/editarEquipe";
+import { PerfilUsuario } from "@/pages/perfilUsuario/perfilUsuario";
 
 export function Router() {
   return (
@@ -15,7 +16,7 @@ export function Router() {
       <Route element={<IsLogged />}>
       <Route path="/login" element={<Login />} />
       </Route>
-
+      <Route path="/perfil-usuario" element ={<PerfilUsuario/>} />
       <Route element={<PrivateRoutes />}>
         <Route path="/admin-register" element={<Register />} />
       </Route>

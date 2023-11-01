@@ -1,0 +1,49 @@
+.titulo {
+    font-size: 40px;
+    line-height: 3;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.centralizar {
+    display: flex;
+}
+
+.container-profile {
+    margin-right: 50px;
+    margin-left: 50px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-size: 20px;
+    line-height: 3;
+}
+
+.foto-redonda {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
+
+}
+
+.info-perfil{
+    margin-top: -30px;
+
+}
+
+.info-usuario {
+    display: flex;
+    font-size: 20px;
+    line-height: 2.2;
+}
+
+.row-user li {
+    font-weight: bold;
+    margin-right: 50px;
+}

@@ -8,6 +8,14 @@ class TaskService {
     async getUserTask(taskId: string | undefined, userId : string | null){
         return await api.get(`tasks/${taskId}/user/${userId}`)
     }
+
+    async getFileTask(taskId : string | undefined){
+        return await api.get(`files/task/${taskId}`);
+    }
+
+    async getMembers(taskId : string | undefined){
+        return await api.get(`tasks/members/${taskId}`)
+    }
 }
 
 export default new TaskService();

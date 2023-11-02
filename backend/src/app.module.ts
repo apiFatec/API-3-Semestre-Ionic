@@ -9,6 +9,7 @@ import { TasksModule } from './app/tasks/tasks.module';
 import { ProjectsModule } from './app/projects/projects.module';
 import { FilesModule } from './app/files/files.module';
 import { TeamsModule } from './app/teams/teams.module';
+import { IsosModule } from './app/isos/isos.module';
 require('dotenv').config();
 
 @Module({
@@ -30,6 +31,7 @@ require('dotenv').config();
     ProjectsModule,
     FilesModule,
     TeamsModule,
+    IsosModule,
   ],
   controllers: [],
   providers: [],

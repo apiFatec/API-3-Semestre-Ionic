@@ -8,7 +8,9 @@ import IsLogged from "./IsLogged";
 import { CadastroProcessos } from "@/pages/cadastroProcesso/cadastroProcesso";
 import { Process } from "@/pages/process/process";
 import { EditarEquipe } from "@/pages/editarEquipe/editarEquipe";
+import { CadastroIso } from "@/pages/cadastroIso/cadastroIso";
 import { TelaTarefas } from "@/pages/telaTarefas/telaTarefas";
+
 
 export function Router() {
   return (
@@ -27,6 +29,7 @@ export function Router() {
         <Route path="/telaTarefas/:process/:id" element={<TelaTarefas />} />
         <Route path="/" element={<Home />} />
         <Route path="/processos/:process/:id" element={<Process />} />
+        <Route path="/isos" element={<CadastroIso />} />
       </Route>
     </Routes>
   );

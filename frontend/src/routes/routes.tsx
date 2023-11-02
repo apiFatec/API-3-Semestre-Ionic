@@ -8,7 +8,6 @@ import IsLogged from "./IsLogged";
 import { CadastroProcessos } from "@/pages/cadastroProcesso/cadastroProcesso";
 import { Process } from "@/pages/process/process";
 import { EditarEquipe } from "@/pages/editarEquipe/editarEquipe";
-import { VisualizarEquipe } from "@/pages/visualizarEquipe/VisualizarEquipe";
 import { CadastroIso } from "@/pages/cadastroIso/cadastroIso";
 
 export function Router() {
@@ -27,7 +26,6 @@ export function Router() {
         <Route path="/processos" element={<Home />} />
         <Route path="/" element={<Home />} />
         <Route path="/processos/:process/:id" element={<Process />} />
-        <Route path="/equipe" element={<VisualizarEquipe />} />
         <Route path="/isos" element={<CadastroIso />} />
       </Route>
     </Routes>

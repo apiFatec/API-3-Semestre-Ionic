@@ -9,19 +9,20 @@ import { CadastroProcessos } from "@/pages/cadastroProcesso/cadastroProcesso";
 import { Process } from "@/pages/process/process";
 import { EditarEquipe } from "@/pages/editarEquipe/editarEquipe";
 import { TelaTarefas } from "@/pages/telaTarefas/telaTarefas";
+import { CriarEquipe } from "@/pages/criarEquipe/criarEquipe";
 
 export function Router() {
   return (
     <Routes>
+      <Route path="/" element={<Register />} />
       <Route element={<IsLogged />}>
         <Route path="/login" element={<Login />} />
       </Route>
 
-      <Route element={<PrivateRoutes />}>
-        <Route path="/admin-register" element={<Register />} />
-      </Route>
+      <Route element={<PrivateRoutes />}></Route>
       <Route element={<LoginRoutes />}>
-        <Route path="/criar-equipe/" element={<EditarEquipe />} />
+        <Route path="/editar-equipe/:id" element={<EditarEquipe />} />
+        <Route path="/criarEquipe/" element={<CriarEquipe />} />
         <Route path="/criar-processo" element={<CadastroProcessos />} />
         <Route path="/processos" element={<Home />} />
         <Route path="/telaTarefas/:process/:id" element={<TelaTarefas />} />

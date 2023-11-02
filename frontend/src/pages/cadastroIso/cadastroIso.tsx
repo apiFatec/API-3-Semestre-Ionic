@@ -58,7 +58,7 @@ export function CadastroIso() {
                 <div className="rounded-md mt-8 justify-items-center ml-[-10rem] w-[19rem] p-[1.25rem] shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
                     <label>Requisitos Regulamentares</label>
                     <ScrollArea className="mt-2 p-4 h-[21rem] w-[16.875rem] rounded-md border">
-
+                        
                     </ScrollArea>
                 </div>
             

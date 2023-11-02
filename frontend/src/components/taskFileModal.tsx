@@ -43,7 +43,6 @@ export function TaskFileModal({ taskId }: Props) {
                 console.log(response)
                 alert('Arquivo enviado');
             }).catch(error => console.log(error))
-
     }
 
     return (

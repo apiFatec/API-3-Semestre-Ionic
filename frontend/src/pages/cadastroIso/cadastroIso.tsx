@@ -2,9 +2,33 @@ import { Input } from "@/components/InputForm";
 import { InputFile } from "@/components/InputFormFile";
 import { TextArea } from "@/components/textArea";
 import { Button } from "@/components/ui/button";
+import isoService from "@/services/isoService";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { useState } from "react";
 
 export function CadastroIso() {
+    const [titleIso, setTitleIso] = useState<string>('');
+    const [descIso, setDescIso] = useState<string>('');
+    const [isoFile, setIsoFile] = useState<any>();
+
+    function handleIsoFile(e : any){
+        const file = e.target.file[0]
+        setIsoFile(file);
+        console.log(file);
+    }
+
+    function cadastrarIso(){
+        const formData = new FormData();
+        formData.append('file', isoFile);
+        formData.append('title', titleIso);
+        formData.append('description', descIso);
+
+        isoService.postIso(formData)
+        .then((response) => {
+            console.log(response.data)
+            alert("ISO cadastrada!")
+        })
+    }
 
     return(
         <main className=" ml-8 mt-4">
@@ -15,18 +39,18 @@ export function CadastroIso() {
                 <Input
                     label="Nome do processo"
                     id="name"
-                    type="text" setValue={undefined}                  
+                    type="text" setValue={setTitleIso}                  
                 />
                 
                 <TextArea
                   label="Descrição"
                   id="description"
-                  setValue={undefined}
+                  setValue={setDescIso}
                 />
 
                 <div>
-                    <InputFile onChange={null} label={"Anexar ISO"} id={"InputFile"} type={"file"} />
-                    <Button>Enviar</Button>
+                    <InputFile onChange={handleIsoFile} label={"Anexar ISO"} id={"InputFile"} type={"file"} />
+                    <Button onClick={cadastrarIso}>Enviar</Button>
                 </div>
                 
                 </div>

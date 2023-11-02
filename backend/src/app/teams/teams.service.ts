@@ -25,7 +25,7 @@ export class TeamsService {
     return result;
   }
 
-  async findOne(id: string): Promise<TeamsEntity | null> {
+  async findOne(id: string): Promise<TeamsEntity | undefined> {
     return await this.teamsRepository.findOne({
       where: { id },
       relations: {

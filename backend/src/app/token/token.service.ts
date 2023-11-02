@@ -43,7 +43,7 @@ export class TokenService {
     }
   }
 
-  decodeJwt(token: string): Promise<{ email: string }> {
+  decodeJwt(token: string): Promise<{ username: string }> {
     let decoded;
     try {
       decoded = this.jwtService.verify(token);

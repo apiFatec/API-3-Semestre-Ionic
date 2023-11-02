@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Post, Request, Get, Body, Param, UseInterceptors, UploadedFile, Res, ParseUUIDPipe, Req } from '@nestjs/common';
+import { Controller, UseGuards, Post, Request, Get, Body, Param, UseInterceptors, UploadedFile, Res, ParseUUIDPipe, Req, Delete } from '@nestjs/common';
 import { Express, Request as ReqImage, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { UsuariosService } from './users.service';
@@ -14,7 +14,7 @@ export class UsuariosController {
   constructor(
     private readonly usuariosService: UsuariosService,
     private readonly authService: AuthService,
-    private readonly tokenService : TokenService,
+    private readonly tokenService: TokenService,
   ) { }
 
   @UseGuards(AuthGuard('local'))
@@ -56,16 +56,13 @@ export class UsuariosController {
     return await this.usuariosService.findAll();
   }
 
-  @Get(':token')
-  async getOne(@Param('token') idUser: string){
-    const token = idUser;
-    const decodedToken = await this.tokenService.decodeJwt(token);
+  @Get('/:id')
+  async getOneById(@Param('id', new ParseUUIDPipe()) id: string) {
+    return await this.usuariosService.findOneById(id);
+  }
 
-    const user =await this.usuariosService.findOne(decodedToken.email);
-
-    return {
-      id: user.id,
-      name : user.name
-    }
+  @Delete('/remove-team/:id')
+  async removeFromTeam(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
+    return await this.usuariosService.removeTeam(id);
   }
 }

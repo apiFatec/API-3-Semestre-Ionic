@@ -1,5 +1,5 @@
 import { TokenController } from './../token/token.controller';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { UsersEntity } from './entities/users.entity';
@@ -27,16 +27,59 @@ export class UsuariosService {
   }
 
   async findOne(email: string): Promise<UsersEntity | undefined> {
-    return await this.usuariosRepository.findOne({ where: { email: email } });
+    if (email) {
+      return await this.usuariosRepository.findOneByOrFail({ email: email });
+    } else {
+      throw new UnauthorizedException("Token Invalido")
+    }
+
   }
 
   async findOneById(id: string): Promise<UsersEntity | undefined> {
-    return await this.usuariosRepository.findOne({ where: { id: id } });
+    return await this.usuariosRepository.findOne({
+      where: { id: id },
+      relations: {
+        teams: true,
+      },
+      select: {
+        adress: true,
+        name: true,
+        email: true,
+        role: true,
+        profileImage: true,
+        birthdate: true,
+        deletedAt: true,
+        createdAt: true,
+        gender: true,
+        id: true,
+        files: true,
+        phone: true,
+        updatedAt: true,
+      }
+    });
   }
 
   async findAll(): Promise<UsersEntity[] | undefined> {
     return await this.usuariosRepository.find({
-      relations: { teams: true }
+      relations: {
+        teams: true,
+      },
+      select: {
+        adress: true,
+        name: true,
+        email: true,
+        role: true,
+        profileImage: true,
+        birthdate: true,
+        deletedAt: true,
+        createdAt: true,
+        gender: true,
+        id: true,
+        files: true,
+        phone: true,
+        updatedAt: true,
+
+      }
     });
   }
 
@@ -53,6 +96,14 @@ export class UsuariosService {
     user.teams = team;
 
     return await this.usuariosRepository.update(idUser, user);
+  }
+
+  async removeTeam(id: string): Promise<void> {
+    const user = await this.usuariosRepository.findOneBy({ id: id });
+    if (!user) {
+      throw new NotFoundException(`Usuário não encontrado`);
+    }
+    await this.usuariosRepository.update(id, { teams: null });
   }
 
 }

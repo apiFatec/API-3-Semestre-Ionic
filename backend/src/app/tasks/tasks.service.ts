@@ -18,7 +18,7 @@ export class TasksService {
     @InjectRepository(UsersTasksEntity)
     private readonly usersTasksRepository: Repository<UsersTasksEntity>,
     private readonly usersServices: UsuariosService,
-  ) {}
+  ) { }
 
   async store(data: SaveTaskDTO[], process: ProcessesEntity): Promise<TasksEntity[]> {
     const tasks = data.map((taskDTO) => {
@@ -45,8 +45,9 @@ export class TasksService {
     return savedTasks;
   }
 
-  async joinTask(task: TasksEntity, email: string): Promise<void> {
-    const user = await this.usersServices.findOne(email);
+  async joinTask(task: TasksEntity, id: string): Promise<void> {
+    const user = await this.usersServices.findOneById(id);
+    console.log(user)
     try {
       const userTask = new UsersTasksEntity();
       userTask.tasksId = task;
@@ -103,6 +104,7 @@ export class TasksService {
     `;
     const tasks = await this.tasksRepository.query(query, [id]);
     return tasks;
+
   }
 
   async getUserTask(taskId: string, userId: string) {

@@ -21,13 +21,12 @@ export class TasksController {
     private readonly tasksService: TasksService,
     private readonly tokenService: TokenService,
     private readonly userService: UsuariosService,
-  ) {}
+  ) { }
 
   @Post('/join-task')
   async joinTask(@Body() body: JoinTaskDto) {
-    const token = body.user;
-    const decodedToken = await this.tokenService.decodeJwt(token);
-    return await this.tasksService.joinTask(body.task, decodedToken.email);
+    console.log('AAAAAAAAAAAAA')
+    return await this.tasksService.joinTask(body.task, body.user);
   }
 
   @Put('/finish-task/:id')
@@ -38,13 +37,10 @@ export class TasksController {
   @Delete('/leave-task/:idTask/user/:idUser')
   @HttpCode(204)
   async leaveTask(
-    @Param('idTask') idTask: string,
-    @Param('idUser') idUser: string,
+    @Param('idTask', new ParseUUIDPipe()) idTask: string,
+    @Param('idUser', new ParseUUIDPipe()) idUser: string,
   ) {
-    const token = idUser;
-    const decodedToken = await this.tokenService.decodeJwt(token);
-    const user = await this.userService.findOne(decodedToken.email);
-    return await this.tasksService.leaveTask(idTask, user.id);
+    return await this.tasksService.leaveTask(idTask, idUser);
   }
 
   @Get('/members/:idTask')
@@ -56,15 +52,14 @@ export class TasksController {
     return await this.tasksService.getTasks(id);
   }
 
-  @Get(':taskId/user/:token')
+  @Get(':taskId/user/:userId')
   async getUserTask(
     @Param('taskId', new ParseUUIDPipe()) taskId: string,
     @Param('userId') userId: string,
   ) {
-    const token = await this.tokenService.decodeJwt(userId);
-    const user = await this.userService.findOne(token.email);
-    return await this.tasksService.getUserTask(taskId, user.id);
+    return await this.tasksService.getUserTask(taskId, userId);
   }
+
   @Delete('/:id')
   @HttpCode(204)
   async deleteTask(@Param('id') id: string) {

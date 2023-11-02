@@ -33,12 +33,16 @@ class UserServices {
     return await api.put(`/tasks/finish-task/${id}`);
   }
 
-  async leaveTask(idTask: string | undefined, tokenUser: string | null) {
-    return await api.delete(`tasks/leave-task/${idTask}/user/${tokenUser}`);
+  async leaveTask(idTask: string | undefined, id: string | null) {
+    return await api.delete(`tasks/leave-task/${idTask}/user/${id}`);
   }
 
-  async getOneUser(tokenUser : string | null){
-    return await api.get(`/users/${tokenUser}`)
+  async getOneUser(id: string) {
+    return await api.get(`/users/${id}`)
+  }
+
+  async removeFromTeam(id: string) {
+    return await api.delete(`users/remove-team/${id}`);
   }
 }
 

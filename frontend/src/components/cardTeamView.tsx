@@ -14,10 +14,11 @@ import { Users } from "@/interfaces/users";
 export interface UserTeam extends Users {
   fallbackName: string;
   toggleModal: any;
+  removeFromTeam: () => void
 }
 
 export function CardTeamView(
-  { fallbackName, profileImage, name, role, email, phone, toggleModal }: UserTeam
+  { fallbackName, profileImage, name, role, email, phone, toggleModal, removeFromTeam }: UserTeam
 ) {
   return (
     // <Card className="px-3 py-3 cursor-pointer shadow-md flex gap-5 items-center">
@@ -45,7 +46,7 @@ export function CardTeamView(
         <DropdownMenuLabel>{name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={toggleModal} className="cursor-pointer">Solicitar documento</DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer">Remover da equipe</DropdownMenuItem>
+        <DropdownMenuItem onClick={removeFromTeam} className="cursor-pointer">Remover da equipe</DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer">Chat</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -45,7 +45,7 @@ export function TelaTarefas() {
         .getOne(id)
         .then((response) => {
           const data = response.data;
-          setProcess(data);
+                    setProcess(data);
         })
         .catch((error) => {
           console.log(error);
@@ -145,7 +145,9 @@ export function TelaTarefas() {
                       <p className="p-0.5 text-sm bg-[#F2F2F2] rounded-xl w-28 text-center ">
                         {formattedDate}
                       </p>
-                      <PhotoProfile />
+                      <PhotoProfile
+                        url={"asd"}
+                      />
                     </div>
                   </div>
                 );
@@ -192,7 +194,9 @@ export function TelaTarefas() {
                       <p className="p-0.5 text-sm bg-[#F2F2F2] rounded-xl w-28 text-center ">
                         {formattedDate}
                       </p>
-                      <PhotoProfile />
+                      <PhotoProfile
+                        url={"asd"}
+                      />
                     </div>
                   </div>
                 );
@@ -239,7 +243,9 @@ export function TelaTarefas() {
                       <p className="p-0.5 text-sm bg-[#F2F2F2] rounded-xl w-28 text-center ">
                         {formattedDate}
                       </p>
-                      <PhotoProfile />
+                      <PhotoProfile
+                        url={"asd"}
+                      />
                     </div>
                   </div>
                 );

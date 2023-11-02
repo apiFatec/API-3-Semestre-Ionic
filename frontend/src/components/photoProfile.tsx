@@ -1,9 +1,11 @@
 import photo from '../../public/lula.jpg';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
-export function PhotoProfile() {
+export function PhotoProfile({ url }: { url: string }) {
   return (
-    <div className="flex w-8 h-8 rounded-full overflow-hidden">
-      <img src={photo} alt="caralho" />
-    </div>
+    <Avatar className="h-11 w-11">
+      <AvatarImage src={url} />
+      <AvatarFallback>{'A'}</AvatarFallback>
+    </Avatar>
   )
 }

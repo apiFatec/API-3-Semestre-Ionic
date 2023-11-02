@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import processService from "@/services/processService";
 import { useNavigate } from "react-router-dom";
@@ -15,8 +15,11 @@ import { Tasks } from "@/interfaces/tasks";
 import { Badge } from "@/components/ui/badge";
 import teamsService from "@/services/teamsService";
 import { Teams } from "@/interfaces/teams";
+import { TitleContext } from "@/contexts/TitleContext";
 
 export function CadastroProcessos() {
+  const { handleTitle } = useContext(TitleContext);
+  handleTitle("Criar Processo")
   const { register, handleSubmit, watch } = useForm<ProcessFormValues>();
   const [priority, setPriority] = useState("Baixa");
   const [titleTask, setTitleTask] = useState("");
@@ -66,11 +69,10 @@ export function CadastroProcessos() {
       tasks: tasks,
       team: team!,
       leader: team!.leader,
-    };  
+    };
     processService
       .createProcess(processo)
       .then((response) => {
-        console.log(response);
         navigate("/processos");
       })
       .catch((error) => {

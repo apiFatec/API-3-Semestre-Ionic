@@ -9,10 +9,10 @@ import {
 import { Button } from "./ui/button";
 import { Teams } from "@/interfaces/teams";
 import { Tasks } from "@/interfaces/tasks";
-import { Value } from "@radix-ui/react-select";
 import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import emailService from "@/services/emailService";
+import { useToast } from "./ui/use-toast";
 
 export interface Process {
   id: string;
@@ -43,35 +43,44 @@ interface FormValues {
 export function TeamModal({ closeModal, processes, username, role, email }: TeamModal) {
   const [processSelected, setProcessSelected] = useState<number>();
   const [disabled, setDisabled] = useState<boolean>(true);
-  const [task, setTask] = useState<string>()
+  const [task, setTask] = useState<Tasks>()
   const [process, setProcess] = useState<Process>()
   const { handleSubmit, register } = useForm<FormValues>();
-  const processRef = useRef(null);
-  const taskRef = useRef(null);
+  const { toast } = useToast();
 
   function handleProcesSelect(value: string) {
     const { process, index } = JSON.parse(value);
-    console.log(process);
     setDisabled(false);
     setProcessSelected(index);
     setProcess(process);
   }
 
   function handleTaskSelect(value: string) {
-    setTask(value)
+    const task = JSON.parse(value);
+    setTask(task)
   }
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     data.processId = process!.id;
     data.process = process!.name;
-    data.task = task!;
+    data.task = task!.id!;
     data.email = email!;
 
     emailService.attachmentRequest(data)
       .then((response) => {
-        console.log(response);
+        toast({
+          title: "Email Enviado com Sucesso",
+          description: `O seu email de solicitação  de anexo de arquivo para a tarefa "${task!.title}" foi enviado com sucesso. Obrigado por sua colaboração!`,
+          variant: "default"
+        });
+        closeModal();
       }).catch((err) => {
         console.log(err);
+        toast({
+          title: "Erro ao enviar o Email",
+          description: `ERRO: ${err.message}`,
+          variant: "destructive"
+        })
       })
   }
 
@@ -122,7 +131,7 @@ export function TeamModal({ closeModal, processes, username, role, email }: Team
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Selecione um processo" />
                 </SelectTrigger>
-                <SelectContent ref={processRef}>
+                <SelectContent>
                   {processes.map((process, index) => (
                     <SelectItem
                       key={process.id}
@@ -143,9 +152,9 @@ export function TeamModal({ closeModal, processes, username, role, email }: Team
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Theme" />
                 </SelectTrigger>
-                <SelectContent ref={taskRef}>
+                <SelectContent>
                   {processes[processSelected ? processSelected : 0].tasks.map((task) => (
-                    <SelectItem key={task.id} value={task.id}>{task.title}</SelectItem>
+                    <SelectItem key={task.id} value={JSON.stringify(task)}>{task.title}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>

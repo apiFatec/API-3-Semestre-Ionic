@@ -3,10 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import UserServices from "@/services/userServices";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { TeamFormValues } from "@/interfaces/teamFormValues";
-import userServices from "@/services/userServices";
 import { Users } from "@/interfaces/users";
 import { TitleContext } from "@/contexts/TitleContext";
 import teamsService from "@/services/teamsService";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 export function EditarEquipe() {
   const { handleSubmit } = useForm<TeamFormValues>();
@@ -36,7 +36,6 @@ export function EditarEquipe() {
     try {
       const response = await UserServices.getUser();
       setUsers(response.data);
-      console.log(response);
       handleTitle("Criar equipe");
     } catch (error) {
       console.error("Erro ao buscar os membros do time:", error);
@@ -51,7 +50,6 @@ export function EditarEquipe() {
     };
     teamsService.createTeam(team)
       .then((response) => {
-        console.log(response);
       })
       .catch((error) => {
         console.log(error);
@@ -101,30 +99,33 @@ export function EditarEquipe() {
           </div>{" "}
         </div>
         <div className="flex flex-wrap gap-6 justify-start">
-          {users.map((member, index) => (
-            <label
-              key={index}
-              className="flex gap-4 p-4 border rounded-sm w-80 justify-between"
-            >
-              <div className="flex gap-4 ">
-                <input
-                  type="checkbox"
-                  name="check"
-                  id="check"
-                  onChange={() => handleUsers(member)}
-                />
-                <img
-                  src={member.imageUrl || "./user-solid.svg"}
-                  alt={member.name}
-                  className="rounded-full w-6 cyan-400"
-                />
-                <div>
-                  <p>{member.name}</p>
-                  <p className="text-xs text-gray-500">{member.role}</p>
+          {users.map((member, index) => {
+            if (!member.teams)
+            return (
+              <label
+                key={index}
+                className="flex gap-4 p-4 border rounded-sm w-80 justify-between"
+              >
+                <div className="flex gap-4 ">
+                  <input
+                    type="checkbox"
+                    name="check"
+                    id="check"
+                    onChange={() => handleUsers(member)}
+                  />
+                  <Avatar className="h-11 w-11">
+                    <AvatarImage src={member.profileImage || "./user-solid.svg"} />
+                    {/* <AvatarFallback>{fallbackName}</AvatarFallback> */}
+                  </Avatar>
+                  
+                  <div>
+                    <p>{member.name}</p>
+                    <p className="text-xs text-gray-500">{member.role}</p>
+                  </div>
                 </div>
-              </div>
-            </label>
-          ))}
+              </label>
+            )
+          })}
         </div>
         <div className="w-full flex justify-end">
           <Button

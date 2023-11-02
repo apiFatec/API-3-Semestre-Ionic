@@ -1,13 +1,18 @@
+import { Teams } from "./teams";
+
 export interface Users {
-  imageUrl: string;
-  id: string;
-  name: string;
-  role: string;
-  email: string;
-  profileImage: string;
-  phone: string;
-  password: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  adress: string,
+  name: string,
+  email: string,
+  role: string,
+  profileImage: string,
+  birthdate: string,
+  deletedAt: string,
+  createdAt: string,
+  gender: string,
+  id: string,
+  files: string,
+  phone: string,
+  updatedAt: string,
+  teams: Teams;
 }

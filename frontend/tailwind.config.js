@@ -16,10 +16,6 @@ module.exports = {
       },
     },
     extend: {
-      spacing: {
-        'espacoPersonalizado': '50rem',
-        'linhaSideBar': '32rem'
-      },
       colors: {
         ionic: {
           normal: "#53C4CD",
@@ -63,7 +59,7 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        theme: { 
+        theme: {
           DEFAULT: "hsl(var(--sidebar-text))",
           smooth: "hsl(var(--sidebar-text-smooth))"
         },

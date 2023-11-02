@@ -15,13 +15,13 @@ export interface getFiles {
   contentType: string;
   url: string;
   id: string;
-  taskIdId: string  | undefined;
+  taskIdId: string | undefined;
   usersIdId: string | undefined;
 }
 
-interface userLog{
+interface userLog {
   id: string;
-  name : string;
+  name: string;
 }
 
 interface usersTask {
@@ -63,12 +63,10 @@ export function TaskModal({ task, id, title, members, description, priority, tog
     getUserTask();
   }, [])
 
-  async function getUserTask(){
-    const user = await userServices.getOneUser(localStorage.getItem('token'));
+  async function getUserTask() {
+    const user = await userServices.getOneUser(localStorage.getItem('id')!);
     const files = await taskService.getFileTask(id);
-    const result = await taskService.getUserTask(id, localStorage.getItem('token'));
-    console.log(result.data)
-    console.log(user.data);
+    const result = await taskService.getUserTask(id, localStorage.getItem('id'));
     setUserLog(user.data)
     setUserInTask(result.data);
     setFiles(files.data);
@@ -77,10 +75,9 @@ export function TaskModal({ task, id, title, members, description, priority, tog
   async function joinTask() {
     userServices.joinTask({
       task: task,
-      user: localStorage.getItem('token')
+      user: localStorage.getItem('id')
     })
       .then((response) => {
-        console.log('join task: '+response.data);
         getUserTask();
       }).catch((error) => {
         console.log(error);
@@ -90,7 +87,6 @@ export function TaskModal({ task, id, title, members, description, priority, tog
   async function finishTask(id: string | undefined) {
     userServices.finishTask(id)
       .then((response) => {
-        console.log('finalizado', response.data);
       }).catch((error) => {
         console.log(error);
       });
@@ -99,7 +95,6 @@ export function TaskModal({ task, id, title, members, description, priority, tog
   async function leaveTask(idTask: string | undefined, tokenUser: string | null) {
     userServices.leaveTask(idTask, tokenUser)
       .then((response) => {
-        console.log('leave task: '+response.data);
         getUserTask();
       }).catch((error) => {
         console.log(error);
@@ -167,7 +162,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
               </>
             )}
 
-            {userInTask?.find(obj => obj.users_id == userLog?.id) &&(
+            {userInTask?.find(obj => obj.users_id == userLog?.id) && (
               <>
                 <p>Ações</p>
                 <Button onClick={() => finishTask(id)} className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2">
@@ -180,7 +175,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
                   Anexo
                 </Button>
 
-                <Button onClick={() => leaveTask(task?.id, localStorage.getItem('token'))} className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2">
+                <Button onClick={() => leaveTask(task?.id, localStorage.getItem('id'))} className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2">
                   <ArrowLeftFromLine size={18} />
                   Sair
                 </Button>

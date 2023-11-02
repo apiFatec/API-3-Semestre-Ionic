@@ -24,7 +24,6 @@ export function Home() {
     processService
       .getAll()
       .then((response) => {
-        console.log(response.data);
         setProcesses(response.data);
         handleTitle("Acompanhamento de Processos");
       }).catch((error) => {

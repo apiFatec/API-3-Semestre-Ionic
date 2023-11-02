@@ -18,8 +18,8 @@ export function TaskFileModal({ taskId, func }: Props) {
         }
     )
 
-    async function getUserLogged(token: string | null) {
-        userServices.getOneUser(token)
+    async function getUserLogged(id: string | null) {
+        userServices.getOneUser(id!)
             .then((response) => {
                 setUser(response.data);
             }).catch((error) => {
@@ -27,21 +27,18 @@ export function TaskFileModal({ taskId, func }: Props) {
             })
     }
 
-
     function handleFileChange(e: any) {
-        getUserLogged(localStorage.getItem('token'));
+        getUserLogged(localStorage.getItem('id'));
         setFile(e.target.files[0]);
     }
 
     function handleSubmit(taskId: string | undefined, user: any) {
-        console.log(file);
 
         const formData = new FormData();
         formData.append('arquivo', file);
 
         taskService.postFile(taskId, user.id, user.name, formData)
             .then((response) => {
-                console.log(response)
                 alert('Arquivo enviado');
                 func();
             }).catch(error => console.log(error))

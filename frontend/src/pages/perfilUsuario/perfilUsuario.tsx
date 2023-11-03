@@ -1,6 +1,7 @@
 import "@/styles/visaoDetalhada/estiloPagina/perfilUsuario.css"
 import { useEffect, useState } from "react"
 import userServices from "@/services/userServices"
+import { EditPicture } from "@/components/ModalEditPicture"
 
 interface Users{
     id: string,
@@ -18,6 +19,7 @@ interface Users{
 
 
 export function PerfilUsuario() {
+    const [modal, setModal] = useState<boolean>(false)
     const [userL, setUser] = useState<Users>(
         {
             id: "",
@@ -34,9 +36,7 @@ export function PerfilUsuario() {
         }
     );
     
-
-
-    useEffect(getUser,[])
+    useEffect(getUser,[modal])
 
     function getUser (){
         userServices.getOneUser(localStorage.getItem('token'))
@@ -52,7 +52,12 @@ export function PerfilUsuario() {
         <div className="centralizar">
             <div className="container-profile">
                 <img className="foto-redonda" src = {userL.profileImage}  alt="Foto" />
-                <button>Editar Foto</button>
+                <button onClick={() => setModal(true)}> Editar Foto </button>
+                {modal && (
+                    <EditPicture userName={userL.name} id={userL.id} closeModal={setModal}  />
+
+                )}
+
             </div>
             <div className="info-perfil">
                 <h1 className="titulo">Meu Perfil</h1>

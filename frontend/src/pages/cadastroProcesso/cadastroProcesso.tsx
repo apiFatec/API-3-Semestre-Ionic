@@ -28,11 +28,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@radix-ui/react-popover"
+import isoService from "@/services/isoService";
 
 interface Isos{
   title: string;
 }
-
 
 export function CadastroProcessos() {
   const { register, handleSubmit, watch } = useForm<ProcessFormValues>();
@@ -48,12 +48,13 @@ export function CadastroProcessos() {
   const [teamLeader, setTeamLeader] = useState("");
   const [team, setTeam] = useState<Users[]>([]);
   const [open, setOpen] = useState(false)
-  // const [isos, setIsos] = useState<Isos[]>([]);
+  const [isos, setIsos] = useState<Isos[]>([]);
   const [selectedIsos, setSelectedIsos] = useState<Isos[]>([]);
   const [process, setProcesss] = useState<ProcessFormValues[]>([]);
   const navigate = useNavigate();
   useEffect(() => {
     getUsers();
+    getIsos();
   }, []);
 
   async function getUsers() {
@@ -68,39 +69,16 @@ export function CadastroProcessos() {
       });
   }
 
-  // async function getIsos() {
-  //   isosServices
-  //     .getIso()
-  //     .then((response) => {
-  //       setIsos(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     })
-  // }
-
-  const isosTeste = [
-    {
-      id : 1,
-      title: "iso 1"
-    }, 
-    {
-      id: 2,
-      title: "iso 2"
-    },
-    {
-      id:3,
-      title: "iso 3"
-    },
-    {
-      id:4,
-      title: "iso 4"
-    },
-    {
-      id: 5,
-      title: "iso 5"
-    }
-  ]
+  async function getIsos() {
+    isoService
+      .getIso()
+      .then((response) => {
+        setIsos(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
 
   function handleChange(event: any) {
     const { value, checked } = event.target;
@@ -152,8 +130,10 @@ export function CadastroProcessos() {
     setTasks(filteredTasks);
   }
 
-  function addIso(title:any) {
-    const selectedIso: Isos = {title: title}
+  function addIso(title: string) {
+    const selectedIso: Isos = {
+      title: title
+    }
     setSelectedIsos((prevState)=>[...prevState, selectedIso]);
   }
 
@@ -205,28 +185,21 @@ export function CadastroProcessos() {
                           + Adicionar Requisito
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-[16.875rem] border rounded-md mt-1 bg-white dark:bg-secondary p-4 cursor-pointer">
+                      <PopoverContent className="z-10 w-[16.875rem] border rounded-md mt-1 bg-white dark:bg-secondary p-4 cursor-pointer">
                         <Command>
                           <CommandInput className="p-2 focus:outline-none dark:text-black" placeholder="Procurar iso"/>
                           <CommandEmpty>Nenhum requisito encontrado</CommandEmpty>
                           <CommandGroup className="">
-                            {isosTeste.map((iso) => (
+                            {isos.map((iso) => (
                               <CommandItem
                                 className="flex"
-                                key={iso.id}
                                 value={iso.title}
-                                onSelect={(currentValue) =>  {
+                                onSelect={(currentValue: string) =>  {
                                   addIso(currentValue)
                                   setOpen(false)
                                 }
                               }
                               >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4 opacity-0",
-                                  selectedIsos.map((selected) => selected.title === iso.title ? "opacity-100" : "") 
-                                )}
-                              />
                                 {iso.title}
                               </CommandItem>
                             ))}
@@ -234,7 +207,7 @@ export function CadastroProcessos() {
                         </Command>
                       </PopoverContent>
                     </Popover>
-                    <ScrollArea className="mt-2 h-[8.5rem] w-[16.875rem]">
+                    <ScrollArea className="z-0 mt-2 h-[8.5rem] w-[16.875rem]">
                       {selectedIsos.length === 0 && 
                         <div className="grid justify-items-center">
                           <label className="w-36 text-center text-[#777777]">Nenhum requisito adicionado</label>
@@ -242,8 +215,8 @@ export function CadastroProcessos() {
                       }
                       {selectedIsos.map((isoSel, index) => (
                         <section key={index} className="flex justify-between p-[4px] mt-1 mb-2 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
-                          <span className="px-1">{isoSel.title}</span>
-                          <button type="button" className="px-1" onClick={() => removeIso(isoSel.title)}>X</button>
+                          <span className="px-2">{isoSel.title}</span>
+                          <button type="button" className="px-2 text-sm" onClick={() => removeIso(isoSel.title)}>X</button>
                         </section>
                       ))} 
 

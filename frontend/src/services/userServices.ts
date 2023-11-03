@@ -38,12 +38,21 @@ class UserServices {
   }
 
   async getOneUser(id: string) {
-    return await api.get(`/users/${id}`)
+    return await api.get(`/users/one/${id}`)
   }
 
   async removeFromTeam(id: string) {
     return await api.delete(`users/remove-team/${id}`);
   }
+
+  async getUserToTeam() {
+    return await api.get("/users/users-team", {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+  }
+
 }
 
 export default new UserServices();

@@ -4,7 +4,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 interface AuthContextType {
   isAuthenticated: boolean;
   role: string | null;
-  login: ({ access_token, name, role }: { access_token: string, name: string, role: string }) => void;
+  login: ({ access_token, name, role, id, team }: { access_token: string, name: string, role: string, id: string, team: string }) => void;
   logout: () => void;
 }
 

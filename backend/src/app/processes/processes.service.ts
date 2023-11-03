@@ -16,29 +16,30 @@ export class ProcessesService {
     private readonly tasksService: TasksService,
   ) { }
 
-  async findAll(): Promise<ProcessesEntity[]> {
+  async findAllByUser(id: string): Promise<ProcessesEntity[] | undefined> {
     const query = `
-        SELECT 
-            processes.name AS process_name,
-            processes.description AS process_description,
-            processes.deadline AS process_deadline,
-            processes.status AS process_status,
-            processes.id AS process_id,
-            
-            (SELECT JSON_AGG(json_build_object('name', users.name))
-            FROM users
-            INNER JOIN users_processes ON users.id = users_processes.users_id
-            WHERE users_processes.processes_id = processes.id) AS users,
-            
-            (SELECT JSON_AGG(json_build_object('status', tasks.status))
-            FROM tasks
-            WHERE tasks.processes_id = processes.id) AS tasks
+    SELECT 
+      processes.name AS process_name,
+      processes.description AS process_description,
+      processes.deadline AS process_deadline,
+      processes.status AS process_status,
+      processes.id AS process_id,
+      
+      (SELECT JSON_AGG(json_build_object('name', users.name, 'profileImage', users."profileImage"))
+      FROM users
+      INNER JOIN users_processes ON users.id = users_processes.users_id
+      WHERE users_processes.processes_id = processes.id) AS users,
+      
+      (SELECT JSON_AGG(json_build_object('status', tasks.status))
+      FROM tasks
+      WHERE tasks.processes_id = processes.id) AS tasks
 
-        FROM processes
-        GROUP BY processes.id;
-        `;
+    FROM processes
+    WHERE processes."teamId" = $1
+    GROUP BY processes.id;
+    `;
 
-    const result = await this.processesRepository.query(query);
+    const result = await this.processesRepository.query(query, [id]);
     return result;
   }
 

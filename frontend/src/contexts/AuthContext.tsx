@@ -8,11 +8,12 @@ interface Login {
   role: string;
   id: string;
   email: string;
+  team: string;
 }
 interface AuthContextType {
   isAuthenticated: boolean;
   role: string | null;
-  login: ({ access_token, name, role }: Login) => void;
+  login: ({ access_token, name, role, team, id }: Login) => void;
   logout: () => void;
 }
 
@@ -30,12 +31,14 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   })
   const navigate = useNavigate();
 
-  const login = useCallback(({ access_token, name, role, id, email }: Login) => {
+  const login = useCallback(({ access_token, name, role, id, team }: Login) => {
     localStorage.setItem('token', access_token);
     localStorage.setItem('name', name);
     localStorage.setItem('role', role);
     // localStorage.setItem('email', email);
     localStorage.setItem('id', id);
+    localStorage.setItem('team', team);
+    console.log(team)
     setId(id);
     setIsAuthenticated(true);
     setRole(role);

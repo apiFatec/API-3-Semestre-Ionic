@@ -1,3 +1,4 @@
+import { Teams } from "@/interfaces/teams";
 import { Users } from "@/interfaces/users";
 import userServices from "@/services/userServices";
 import { createContext, useEffect, useState } from "react";
@@ -16,7 +17,7 @@ interface UserInterfaceContext {
   files: string,
   phone: string,
   updatedAt: string,
-  teams: string;
+  teams?: Teams;
 }
 
 const defaultUserValue: UserInterfaceContext = {
@@ -33,7 +34,7 @@ const defaultUserValue: UserInterfaceContext = {
   files: "",
   phone: "",
   updatedAt: "",
-  teams: ""
+  teams: undefined
 }
 
 interface Context {
@@ -65,7 +66,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     files: "",
     phone: "",
     updatedAt: "",
-    teams: ""
+    teams: undefined
   });
   const [id, setId] = useState<string>(localStorage.getItem('id')!);
 
@@ -74,10 +75,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   }, [id]);
 
   async function getUser(id: string) {
-    userServices.getOneUser(id)
+    await userServices.getOneUser(id)
       .then((response) => {
         const data = response.data;
-        setUser({ ...data, teams: data.teams?.id });
+        setUser({ ...data, teams: data.teams });
       }).catch((err) => {
         console.log(err);
       })

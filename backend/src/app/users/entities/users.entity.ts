@@ -47,7 +47,7 @@ export class UsersEntity {
   profileImage: string;
 
   @Column({ nullable: true })
-  adress: string;
+  address: string;
 
   @Column({ nullable: true })
   gender: string;

@@ -1,7 +1,7 @@
 import { TokenController } from './../token/token.controller';
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { IsNull, Repository, UpdateResult } from 'typeorm';
 import { UsersEntity } from './entities/users.entity';
 import { SaveUserDto } from './dto/save-users.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -28,11 +28,40 @@ export class UsuariosService {
 
   async findOne(email: string): Promise<UsersEntity | undefined> {
     if (email) {
-      return await this.usuariosRepository.findOneByOrFail({ email: email });
+      return await this.usuariosRepository.findOneOrFail({
+        where: { email: email },
+        relations: {
+          teams: true
+        }
+      });
     } else {
       throw new UnauthorizedException("Token Invalido")
     }
 
+  }
+
+  async userWithoutTeam(): Promise<UsersEntity[] | undefined> {
+    return await this.usuariosRepository.find({
+      where: { teams: IsNull() },
+      relations: {
+        teams: true,
+      },
+      select: {
+        address: true,
+        name: true,
+        email: true,
+        role: true,
+        profileImage: true,
+        birthdate: true,
+        deletedAt: true,
+        createdAt: true,
+        gender: true,
+        id: true,
+        files: true,
+        phone: true,
+        updatedAt: true,
+      }
+    });
   }
 
   async findOneById(id: string): Promise<UsersEntity | undefined> {
@@ -42,7 +71,7 @@ export class UsuariosService {
         teams: true,
       },
       select: {
-        adress: true,
+        address: true,
         name: true,
         email: true,
         role: true,
@@ -65,7 +94,7 @@ export class UsuariosService {
         teams: true,
       },
       select: {
-        adress: true,
+        address: true,
         name: true,
         email: true,
         role: true,

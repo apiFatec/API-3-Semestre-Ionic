@@ -29,7 +29,7 @@ export function Router() {
         <Route path="/telaTarefas/:process/:id" element={<TelaTarefas />} />
         <Route path="/" element={<Home />} />
         <Route path="/processos/:process/:id" element={<Process />} />
-        <Route path="/equipe/:id" element={<TeamView />} />
+        <Route path="/equipe/:id?" element={<TeamView />} />
       </Route>
     </Routes>
   );

@@ -9,7 +9,7 @@ import {
 import { Button } from "./ui/button";
 import { Teams } from "@/interfaces/teams";
 import { Tasks } from "@/interfaces/tasks";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import emailService from "@/services/emailService";
 import { useToast } from "./ui/use-toast";
@@ -153,7 +153,7 @@ export function TeamModal({ closeModal, processes, username, role, email }: Team
                   <SelectValue placeholder="Theme" />
                 </SelectTrigger>
                 <SelectContent>
-                  {processes[processSelected ? processSelected : 0].tasks.map((task) => (
+                  {processes[processSelected ? processSelected : 0]?.tasks.map((task) => (
                     <SelectItem key={task.id} value={JSON.stringify(task)}>{task.title}</SelectItem>
                   ))}
                 </SelectContent>

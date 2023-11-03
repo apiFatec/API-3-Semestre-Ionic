@@ -25,7 +25,6 @@ export class TasksController {
 
   @Post('/join-task')
   async joinTask(@Body() body: JoinTaskDto) {
-    console.log('AAAAAAAAAAAAA')
     return await this.tasksService.joinTask(body.task, body.user);
   }
 

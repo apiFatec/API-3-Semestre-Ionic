@@ -17,7 +17,7 @@ export function NavBar() {
   const { theme } = useTheme();
   const { logout } = useAuth();
   const { title } = useContext(TitleContext);
-
+  const name = localStorage.getItem('name');
   return (
     <div className="p-6 flex w-full justify-between ">
       <h1 className="font-thin text-4xl pl-6 text">{title}</h1>
@@ -30,7 +30,7 @@ export function NavBar() {
           Open
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
+          <DropdownMenuLabel>{name}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => logout()} className="flex justify-between cursor-pointer">
             Sair

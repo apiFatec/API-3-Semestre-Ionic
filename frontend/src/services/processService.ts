@@ -2,8 +2,12 @@ import { api } from "@/api";
 import { ProcessFormValues } from "@/interfaces/processFormValues";
 
 class ProcessServices {
-  async getAll() {
-    return await api.get("/processes");
+  async getAll(id: string | undefined) {
+    return await api.get(`/processes/user/team/${id}`, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
   }
 
   async createProcess(data: ProcessFormValues) {
@@ -21,7 +25,7 @@ class ProcessServices {
     return await api.delete(`/tasks/${id}`);
   }
 
-  async getAllToTeam(id: string) {
+  async getAllToTeam(id: string | undefined) {
     return await api.get(`/processes/team/${id}`, {
       headers: {
         'Accept': 'application/json'

@@ -20,6 +20,7 @@ export function EditarEquipe() {
 
   useEffect(() => {
     getTeam();
+    handleTitle("Criar equipe");
   }, []);
 
   function handleUsers(nUser: Users) {
@@ -34,9 +35,9 @@ export function EditarEquipe() {
 
   async function getTeam() {
     try {
-      const response = await UserServices.getUser();
+      const response = await UserServices.getUserToTeam();
       setUsers(response.data);
-      handleTitle("Criar equipe");
+      console.log(response.data)
     } catch (error) {
       console.error("Erro ao buscar os membros do time:", error);
     }
@@ -99,33 +100,31 @@ export function EditarEquipe() {
           </div>{" "}
         </div>
         <div className="flex flex-wrap gap-6 justify-start">
-          {users.map((member, index) => {
-            if (!member.teams)
-            return (
-              <label
-                key={index}
-                className="flex gap-4 p-4 border rounded-sm w-80 justify-between"
-              >
-                <div className="flex gap-4 ">
-                  <input
-                    type="checkbox"
-                    name="check"
-                    id="check"
-                    onChange={() => handleUsers(member)}
-                  />
-                  <Avatar className="h-11 w-11">
-                    <AvatarImage src={member.profileImage || "./user-solid.svg"} />
-                    {/* <AvatarFallback>{fallbackName}</AvatarFallback> */}
-                  </Avatar>
-                  
-                  <div>
-                    <p>{member.name}</p>
-                    <p className="text-xs text-gray-500">{member.role}</p>
-                  </div>
+          {users.map((user, index) => (
+            <label
+              key={index}
+              className="flex gap-4 p-4 border rounded-sm w-80 justify-between"
+            >
+              <div className="flex gap-4 ">
+                <input
+                  type="checkbox"
+                  name="check"
+                  id="check"
+                  onChange={() => handleUsers(user)}
+                />
+                <Avatar className="h-11 w-11">
+                  <AvatarImage src={user.profileImage || "./user-solid.svg"} />
+                  {/* <AvatarFallback>{fallbackName}</AvatarFallback> */}
+                </Avatar>
+
+                <div>
+                  <p>{user.name}</p>
+                  <p className="text-xs text-gray-500">{user.role}</p>
                 </div>
-              </label>
-            )
-          })}
+              </div>
+            </label>
+          )
+          )}
         </div>
         <div className="w-full flex justify-end">
           <Button

@@ -24,7 +24,7 @@ export class SaveUserDto {
   password: string;
 
   @IsNotEmpty()
-  adress: string;
+  address: string;
 
   @IsNotEmpty()
   gender: string;

@@ -7,9 +7,9 @@ import { ProcessesEntity } from './entities/processes.entity';
 export class ProcessesController {
     constructor(private readonly processesService: ProcessesService) { }
 
-    @Get()
-    async index() {
-        return await this.processesService.findAll();
+    @Get('/user/team/:id')
+    async index(@Param('id', new ParseUUIDPipe) id: string): Promise<ProcessesEntity[] | undefined> {
+        return await this.processesService.findAllByUser(id);
     }
 
     @Post()

@@ -73,16 +73,17 @@ export function Process() {
 
   async function getProcess(id: string | undefined) {
     if (id) {
-      processService
-        .getOne(id)
+      processService.getOne(id)
         .then((response) => {
           const data = response.data;
           setProcess(data);
           handleTitle(data.name);
+          console.log(data)
         })
         .catch((error) => {
           console.log(error);
         });
+
     }
   }
 

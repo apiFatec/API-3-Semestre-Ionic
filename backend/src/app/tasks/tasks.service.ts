@@ -47,7 +47,6 @@ export class TasksService {
 
   async joinTask(task: TasksEntity, id: string): Promise<void> {
     const user = await this.usersServices.findOneById(id);
-    console.log(user)
     try {
       const userTask = new UsersTasksEntity();
       userTask.tasksId = task;

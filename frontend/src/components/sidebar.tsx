@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   Settings,
   UserPlus2,
+  Users2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "./mode-toggle";
@@ -15,14 +16,8 @@ import Logo from '@/../public/logo.svg';
 
 export function Sidebar() {
   const { user } = useContext(UserContext);
-  const teamId = user.teams ? user.teams : "";
+  const teamId = user.teams ? user.teams.id : "";
   const routes = [
-    {
-      label: "Criar Processo",
-      icon: LayoutDashboard,
-      href: "/criar-processo",
-      color: "text-sky-500",
-    },
     {
       label: "Processos",
       icon: LayoutList,
@@ -42,7 +37,7 @@ export function Sidebar() {
     },
   ];
 
-  const routesForAdminGestor = [
+  const routesForAdminGestorLider = [
     {
       label: "Criar Processo",
       icon: LayoutDashboard,
@@ -62,6 +57,11 @@ export function Sidebar() {
       color: "text-pink-700",
     },
     {
+      label: "Criar equipe",
+      icon: Users2,
+      href: "/criar-equipe",
+    },
+    {
       label: "cadastrar colaborador",
       icon: UserPlus2,
       href: "/admin-register",
@@ -76,13 +76,13 @@ export function Sidebar() {
   const { isAuthenticated, role } = useAuth();
   const selectedRoutes =
     isAuthenticated && (role === "Lider" || role === "Gestor" || role === "Admin")
-      ? routesForAdminGestor
+      ? routesForAdminGestorLider
       : routes;
 
   return (
     <div className="space-y-4 py-4 flex flex-col h-full text-primary bg-background-secondary">
       <div className="px-3 py-2 flex-1">
-        <Link to={"/dashboard"} className="flex items-center pl-3 mb-14">
+        <Link to={"/"} className="flex items-center pl-3 mb-14">
           <div className="relative w-8 h-8 mr-4">
             <img src={Logo} />
           </div>

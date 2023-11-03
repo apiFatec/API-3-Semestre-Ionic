@@ -56,7 +56,7 @@ export class UsuariosController {
     return await this.usuariosService.findAll();
   }
 
-  @Get('/:id')
+  @Get('/one/:id')
   async getOneById(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.usuariosService.findOneById(id);
   }
@@ -64,5 +64,10 @@ export class UsuariosController {
   @Delete('/remove-team/:id')
   async removeFromTeam(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
     return await this.usuariosService.removeTeam(id);
+  }
+
+  @Get('/users-team')
+  async userWithoutTeam(): Promise<UsersEntity[] | undefined> {
+    return await this.usuariosService.userWithoutTeam();
   }
 }

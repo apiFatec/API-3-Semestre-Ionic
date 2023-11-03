@@ -42,7 +42,7 @@ export class IsosController {
     return await this.isosService.softRemove(id);
   }
 
-  @Post(`/upload`)
+  @Post('/upload')
   @UseInterceptors(FileInterceptor('file', MulterConfigIso))
   uploadFile(@UploadedFile() file : Express.Multer.File, @Body() body : SaveIsoDto, @Req() req: Request){
     return this.isosService.saveData(file, req, body)
@@ -54,5 +54,10 @@ export class IsosController {
     @Param('isoFileName') isoFileName : string,) : StreamableFile {
       const file = fs.createReadStream(join(process.cwd(), `/upload/ISOs/${isoName}/${isoFileName}`))
       return new StreamableFile(file);
-    }
+  }
+
+  @Get()
+  async getAll(){
+    return await this.isosService.getAll();
+  }
 }

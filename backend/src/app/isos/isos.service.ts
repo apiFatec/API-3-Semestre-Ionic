@@ -18,7 +18,6 @@ export class IsosService {
     iso.title = isoDto.title;
     iso.description = isoDto.description;
     iso.url = `${req.protocol}://${req.get('host')}/isos/${iso.title}/${file.filename}`;
-
     return await this.isosRepository.save(iso);
   }
 
@@ -59,5 +58,13 @@ export class IsosService {
     } catch (err) {
       throw new NotFoundException('Iso não encontrada');
     }
+  }
+
+  async getAll(){
+    const query = `
+    SELECT id, title, description, url
+    FROM public.isos;
+    `;
+    return await this.isosRepository.query(query);
   }
 }

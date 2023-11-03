@@ -25,7 +25,7 @@ export class ProcessesService {
       processes.status AS process_status,
       processes.id AS process_id,
       
-      (SELECT JSON_AGG(json_build_object('name', users.name, 'profileImage', users."profileImage"))
+      (SELECT JSON_AGG(json_build_object('name', users.name, 'profileImage', users."profileImage") ORDER BY users.name DESC)
       FROM users
       INNER JOIN users_processes ON users.id = users_processes.users_id
       WHERE users_processes.processes_id = processes.id) AS users,

@@ -1,8 +1,17 @@
 import { api } from "@/api";
 
 class IsoService {
-    async postIso(data : FormData) {
-        return await api.post(`isos/upload`, data);
+    async postIso(data : FormData, title : string, description : string) {
+        return await api.post(`isos/upload`, data, {
+            headers :{
+                'title' : title,
+                'description' : description
+            }
+        });
+    }
+
+    async getIsos(){
+        return await api.get('isos')
     }
 }
 

@@ -1,6 +1,7 @@
 import { api } from "@/api";
-import { ProcessFormValues } from "@/pages/cadastroProcesso/cadastroProcesso";
-import { Process } from "@/pages/home/home";
+import { ProcessFormValues } from "@/interfaces/processFormValues";
+import { Process } from "@/interfaces/process";
+
 
 class ProcessServices {
   async getAll() {

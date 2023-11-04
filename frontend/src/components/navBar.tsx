@@ -12,6 +12,7 @@ import { LogOut } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import { useContext } from "react";
 import { TitleContext } from "@/contexts/TitleContext";
+import { Link } from "react-router-dom";
 
 export function NavBar() {
   const { theme } = useTheme();
@@ -30,7 +31,9 @@ export function NavBar() {
           Open
         </DropdownMenuTrigger>
         <DropdownMenuContent>
+        <Link to={'perfil-usuario'}>
           <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
+        </Link>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => logout()} className="flex justify-between cursor-pointer">
             Sair

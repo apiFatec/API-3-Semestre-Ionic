@@ -18,15 +18,18 @@ export class TasksService {
     @InjectRepository(UsersTasksEntity)
     private readonly usersTasksRepository: Repository<UsersTasksEntity>,
     private readonly usersServices: UsuariosService,
-  ) { }
+  ) {}
 
-  async store(data: SaveTaskDTO[], process: ProcessesEntity): Promise<TasksEntity[]> {
-    const tasks = data.map(taskDTO => {
+  async store(
+    data: SaveTaskDTO[],
+    process: ProcessesEntity,
+  ): Promise<TasksEntity[]> {
+    const tasks = data.map((taskDTO) => {
       const task = new TasksEntity();
       task.title = taskDTO.title;
       task.description = taskDTO.description;
       task.status = Status.WAITING;
-      task.priority = taskDTO.priority
+      task.priority = taskDTO.priority;
       task.processesId = process;
       return task;
     });
@@ -52,29 +55,37 @@ export class TasksService {
 
   async joinTask(task: TasksEntity, email: string): Promise<void> {
     const user = await this.usersServices.findOne(email);
-    console.log(user)
+    console.log(user);
     try {
       const userTask = new UsersTasksEntity();
-      userTask.tasksId = task
-      userTask.usersId = user
+      userTask.tasksId = task;
+      userTask.usersId = user;
       await this.usersTasksRepository.insert(userTask);
-      await this.tasksRepository.update({ id: task.id }, { status: Status.INPROGRESS });
+      await this.tasksRepository.update(
+        { id: task.id },
+        { status: Status.INPROGRESS },
+      );
     } catch {
       throw new Error('Usuário não encontrado');
     }
-
   }
 
   async finishTask(id: string) {
     try {
-      await this.tasksRepository.update({ id: id }, { status: Status.FINISHED });
+      await this.tasksRepository.update(
+        { id: id },
+        { status: Status.FINISHED },
+      );
     } catch (error) {
       throw new Error(error);
     }
   }
 
   async leaveTask(idTask: string, id: string) {
-    await this.usersTasksRepository.delete({ tasksId: { id: idTask }, usersId: { id: id } })
+    await this.usersTasksRepository.delete({
+      tasksId: { id: idTask },
+      usersId: { id: id },
+    });
   }
 
   async getMembers(idTask: string) {
@@ -82,42 +93,29 @@ export class TasksService {
     FROM users
     JOIN users_tasks ON users.id = users_tasks.users_id
     JOIN tasks ON users_tasks.tasks_id = tasks.id
-    WHERE tasks.id = $1;`
+    WHERE tasks.id = $1;`;
 
-    return await this.usersTasksRepository.query(query, [idTask])
+    return await this.usersTasksRepository.query(query, [idTask]);
   }
 
-  async getTaskByProcesses(id: string) {
+  async getTasks(id: string) {
     const query = `
-    SELECT 
-    task.*,
-    JSON_AGG(tasks.*) AS tasks
-    FROM task
-    INNER JOIN tasks ON task.id = tasks."task_id"
-    WHERE task.id = $1
-    GROUP BY task.id
-    `
-    const result = await this.tasksRepository.query(query, [id]);
-    return result[0] || null;
-  }
-  async getTask(id: string) {
-    const query = `
-    select tasks.*,
+    SELECT tasks.*,
     JSON_AGG(users.name) AS users
-    from tasks
-    inner join users_tasks
-    on users_tasks.tasks_id = tasks.id
-    inner join users
-    on users_tasks.users_id = users.id
-    where tasks.processes_id = $1
-    group by tasks.id
-    `
+    FROM tasks
+    INNER JOIN users_tasks
+    ON users_tasks.tasks_id = tasks.id
+    INNER JOIN users
+    ON users_tasks.users_id = users.id
+    WHERE tasks.processes_id = $1 AND tasks.deleted_at IS NULL
+    GROUP BY tasks.id
+    `;
     const tasks = await this.tasksRepository.query(query, [id]);
     return tasks;
   }
 
   async getUserTask(taskId: string, userId: string) {
-    const query = `SELECT 1
+    const query = `SELECT *
     FROM public.users_tasks WHERE users_tasks.users_id = '${userId}'
     AND users_tasks.tasks_id = '${taskId}' ;`;
 
@@ -125,4 +123,7 @@ export class TasksService {
     return result;
   }
 
+  async deleteTask(id: string) {
+    await this.tasksRepository.softRemove({ id: id });
+  }
 }

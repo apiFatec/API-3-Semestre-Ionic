@@ -14,6 +14,25 @@ import { useNavigate } from "react-router-dom";
 import { ProcessFormValues } from "@/interfaces/processFormValues";
 import { Users } from "@/interfaces/users";
 import { Tasks } from "@/interfaces/tasks";
+import { Badge } from "@/components/ui/badge";
+import { Check } from "lucide-react"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "cmdk"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@radix-ui/react-popover"
+import isoService from "@/services/isoService";
+
+interface Isos{
+  title: string;
+}
 
 export function CadastroProcessos() {
   const { register, handleSubmit, watch } = useForm<ProcessFormValues>();
@@ -28,10 +47,14 @@ export function CadastroProcessos() {
   const [deadline, setDeadline] = useState(new Date());
   const [teamLeader, setTeamLeader] = useState("");
   const [team, setTeam] = useState<Users[]>([]);
+  const [open, setOpen] = useState(false)
+  const [isos, setIsos] = useState<Isos[]>([]);
+  const [selectedIsos, setSelectedIsos] = useState<Isos[]>([]);
   const [process, setProcesss] = useState<ProcessFormValues[]>([]);
   const navigate = useNavigate();
   useEffect(() => {
     getUsers();
+    getIsos();
   }, []);
 
   async function getUsers() {
@@ -44,6 +67,17 @@ export function CadastroProcessos() {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  async function getIsos() {
+    isoService
+      .getIso()
+      .then((response) => {
+        setIsos(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   function handleChange(event: any) {
@@ -90,6 +124,25 @@ export function CadastroProcessos() {
     setTasks((prevState) => [...prevState, tarefa]);
   }
 
+  function removeTask(deletedTask : string) {
+    const filteredTasks = tasks.filter(
+      (task) => task.title !== deletedTask)
+    setTasks(filteredTasks);
+  }
+
+  function addIso(title: string) {
+    const selectedIso: Isos = {
+      title: title
+    }
+    setSelectedIsos((prevState)=>[...prevState, selectedIso]);
+  }
+
+  function removeIso(deletedIso : string) {
+    const filteredIso = selectedIsos.filter(
+      (iso) => iso.title !== deletedIso)
+    setSelectedIsos(filteredIso)
+  }
+
   return (
     <main className="">
       <form
@@ -112,11 +165,77 @@ export function CadastroProcessos() {
                   id="description"
                   setValue={setDescription}
                 />
+                <Input
+                  label="Tempo de duração"
+                  id="deadline"
+                  type="date"
+                  setValue={setDeadline}
+                />
+                
+                <div className="center-normal py-2">    
+                    <label>Requisitos regulamentares</label>
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={open}
+                          className="w-[16.875rem] h-[40px] my-2 text-[#C0C0C0] justify-between"
+                        >
+                          + Adicionar Requisito
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="z-10 w-[16.875rem] border rounded-md mt-1 bg-white dark:bg-secondary p-4 cursor-pointer">
+                        <Command>
+                          <CommandInput className="p-2 focus:outline-none dark:text-black" placeholder="Procurar iso"/>
+                          <CommandEmpty>Nenhum requisito encontrado</CommandEmpty>
+                          <CommandGroup className="">
+                            {isos.map((iso) => (
+                              <CommandItem
+                                className="flex"
+                                value={iso.title}
+                                onSelect={(currentValue: string) =>  {
+                                  addIso(currentValue)
+                                  setOpen(false)
+                                }
+                              }
+                              >
+                                {iso.title}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <ScrollArea className="z-0 mt-2 h-[8.5rem] w-[16.875rem]">
+                      {selectedIsos.length === 0 && 
+                        <div className="grid justify-items-center">
+                          <label className="w-36 text-center text-[#777777]">Nenhum requisito adicionado</label>
+                        </div>
+                      }
+                      {selectedIsos.map((isoSel, index) => (
+                        <section key={index} className="flex justify-between p-[4px] mt-1 mb-2 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]">
+                          <span className="px-2">{isoSel.title}</span>
+                          <button type="button" className="px-2 text-sm" onClick={() => removeIso(isoSel.title)}>X</button>
+                        </section>
+                      ))} 
+
+                    </ScrollArea>
+                </div>
+              </div>
+              <div className="ml-2">
+                <SelectForm
+                  label="Líder responsável do processo"
+                  id="lider"
+                  setValue={setTeamLeader}
+                  users={users}
+                  value={users[-1]}
+                />
                 <div className="center-normal py-2">
                   <label>Atribuir uma equipe</label>
                   <ScrollArea
                     id="teamList"
-                    className="mt-2 p-4 h-[14.5rem] w-[16.875rem] rounded-md border"
+                    className="mt-2 p-4 h-[10rem] w-[16.875rem] rounded-md border"
                   >
                     {users.map((user) => {
                       if (user.id !== teamLeader)
@@ -139,41 +258,34 @@ export function CadastroProcessos() {
                     })}
                   </ScrollArea>
                 </div>
-              </div>
-              <div className="ml-2">
-                <SelectForm
-                  label="Líder responsável do processo"
-                  id="lider"
-                  setValue={setTeamLeader}
-                  users={users}
-                  value={users[-1]}
-                />
-
-                <Input
-                  label="Tempo de duração"
-                  id="deadline"
-                  type="date"
-                  setValue={setDeadline}
-                />
-
-                <div className="center-normal py-2">
+                <div className="center-normal py-2 mt-2">
                   <label>Tarefas</label>
                   <ScrollArea
                     id="listTasks"
-                    className="mt-2 p-4 h-[17rem] w-[16.875rem] rounded-md border"
+                    className="mt-2 p-4 h-[13rem] w-[16.875rem] rounded-md border"
                   >
+                    {tasks.length === 0 && 
+                    <div className="grid justify-items-center">
+                      <label className="w-36 text-center text-[#777777]">Nenhuma tarefa adicionada</label>
+                    </div>
+                    }
                     {tasks.map((task, index) => (
                       <section
                         key={index}
                         className="p-2 mt-1 mb-4 mx-1 border rounded-md shadow-[0px_0px_5px_0px_rgba(0,0,0,0.25)]"
                       >
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold p-1">
+                        
+                        <div className="flex justify-between px-1 pt-1">
+                          <span className="font-semibold line-clamp-2 break-all">
                             {task.title}
                           </span>
-                          <span
+                          <div className="pl-5">
+                          <button type="button" onClick={() => removeTask(task.title)}>X</button>
+                        </div>
+                        </div>
+                        <Badge
                             className={cn(
-                              "pl-2 pb-1",
+                              "bg-secondary my-3 hover:bg-secondary",
                               task.priority === "Alta"
                                 ? "text-red-600"
                                 : task.priority === "Média"
@@ -182,9 +294,9 @@ export function CadastroProcessos() {
                             )}
                           >
                             {task.priority}
-                          </span>
-                        </div>
-                        <span className="pl-2 text-[#777777]">
+                          </Badge>
+
+                        <span className="pl-2 text-[#777777] line-clamp-3">
                           {task.description}
                         </span>
                       </section>

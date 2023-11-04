@@ -1,3 +1,4 @@
+import { ProcessesEntity } from '@/app/processes/entities/processes.entity';
 import { UsersEntity } from '@/app/users/entities/users.entity';
 import {
   Column,
@@ -32,6 +33,9 @@ export class TeamsEntity {
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: string;
 
-  @OneToMany(() => UsersEntity, (usersEntity) => usersEntity.teamsId)
+  @OneToMany(() => UsersEntity, (usersEntity) => usersEntity.teams)
   users: UsersEntity[];
+
+  @OneToMany(() => ProcessesEntity, (processesEntity) => processesEntity.team)
+  processes: ProcessesEntity[];
 }

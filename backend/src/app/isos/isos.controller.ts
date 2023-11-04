@@ -1,8 +1,14 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
+import { title } from 'process';
+import { Body, Controller, Delete, Get, MaxFileSizeValidator, NotFoundException, Param, ParseFilePipe, ParseUUIDPipe, Patch, Post, Req, StreamableFile, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { IsosService } from './isos.service';
 import { SaveIsoDto } from './dto/save-iso.dto';
 import { IsosEntity } from './entities/isos.entity';
 import { UpdateResult } from 'typeorm';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Request } from 'express';
+import MulterConfigIso from './multer-config-iso';
+import * as fs from "fs"
+import { join } from 'path';
 
 @Controller('isos')
 export class IsosController {
@@ -10,15 +16,10 @@ export class IsosController {
     private readonly isosService: IsosService
   ) { }
 
-  @Post()
-  async store(@Body() body: SaveIsoDto): Promise<IsosEntity> {
-    return await this.isosService.create(body);
-  }
-
-  @Get()
-  async index(): Promise<IsosEntity[]> {
-    return await this.isosService.findAll();
-  }
+  // @Get()
+  // async index(): Promise<IsosEntity[]> {
+  //   return await this.isosService.findAll();
+  // }
 
   @Get('/:id')
   async getOne(
@@ -32,7 +33,7 @@ export class IsosController {
   async update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() body: any
-    ): Promise< IsosEntity | UpdateResult | NotFoundException>{
+  ): Promise<IsosEntity | UpdateResult | NotFoundException> {
     return await this.isosService.updateById(id, body);
   }
 
@@ -41,4 +42,22 @@ export class IsosController {
     return await this.isosService.softRemove(id);
   }
 
+  @Post('/upload')
+  @UseInterceptors(FileInterceptor('file', MulterConfigIso))
+  uploadFile(@UploadedFile() file : Express.Multer.File, @Body() body : SaveIsoDto, @Req() req: Request){
+    return this.isosService.saveData(file, req, body)
+  }
+
+  @Get(':isoName/:isoFileName')
+  getIso(
+    @Param('isoName') isoName : string,
+    @Param('isoFileName') isoFileName : string,) : StreamableFile {
+      const file = fs.createReadStream(join(process.cwd(), `/upload/ISOs/${isoName}/${isoFileName}`))
+      return new StreamableFile(file);
+  }
+
+  @Get()
+  async getAll(){
+    return await this.isosService.getAll();
+  }
 }

@@ -11,6 +11,9 @@ export class IsosEntity {
   @Column()
   description: string;
 
+  @Column()
+  url: string;
+
   @CreateDateColumn()
   createdAt: string;
 

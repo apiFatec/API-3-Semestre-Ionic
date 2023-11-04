@@ -1,5 +1,4 @@
 import { api } from "@/api";
-import { TeamFormValues } from "@/interfaces/teamFormValues";
 
 class UserServices {
   async Login(data: { username: string; password: string }) {
@@ -30,18 +29,6 @@ class UserServices {
     });
   }
 
-  async getTeamMembers(id: string) {
-    return await api.get(`/teams/${id}`);
-  }
-
-  async createTeam(data: TeamFormValues) {
-    return await api.post("/teams", data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
-
   async finishTask(id: string | undefined) {
     return await api.put(`/tasks/finish-task/${id}`);
   }
@@ -50,8 +37,12 @@ class UserServices {
     return await api.delete(`tasks/leave-task/${idTask}/user/${tokenUser}`);
   }
 
-  async getOneUser(tokenUser : string | null){
-    return await api.get(`/users/${tokenUser}`)
+  async getOneUser(tokenUser: string | null) {
+    return await api.get(`/users/${tokenUser}`);
+  }
+
+  async removeTeamUser(id: string) {
+    return await api.patch(`/remove-team/${id}`);
   }
 }
 

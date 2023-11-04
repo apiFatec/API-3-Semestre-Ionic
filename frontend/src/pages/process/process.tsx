@@ -6,12 +6,13 @@ import { Progress } from "@/components/ui/progress";
 import { TitleContext } from "@/contexts/TitleContext";
 import { Tasks } from "@/interfaces/tasks";
 import { Processes } from "@/interfaces/processes";
-import { TaskModal } from "@/components/taskModal";
 import userServices from "@/services/userServices";
+import { useNavigate } from "react-router-dom";
 
 export function Process() {
   const { id } = useParams();
   const { handleTitle } = useContext(TitleContext);
+  const navigate = useNavigate();
   const [process, setProcess] = useState<Processes>({
     id: "",
     deadline: "",
@@ -20,19 +21,19 @@ export function Process() {
     description: "",
   });
   const [task, setTask] = useState<Tasks>({
-    id: '',
-    title: '',
-    description: '',
-    status: '',
-    priority: '',
+    id: "",
+    title: "",
+    description: "",
+    status: "",
+    priority: "",
     deadline: undefined,
-  })
-  const [modalTask, setModalTask] = useState<any>(false);
+  });
   const [user, setUser] = useState<any>();
 
   const deadline = new Date();
-  const formattedDate = `${deadline.getDate()}/${deadline.getMonth() + 1
-    }/${deadline.getFullYear()}`;
+  const formattedDate = `${deadline.getDate()}/${
+    deadline.getMonth() + 1
+  }/${deadline.getFullYear()}`;
   const formattedTime = `${String(deadline.getHours()).padStart(
     2,
     "0"
@@ -113,25 +114,24 @@ export function Process() {
     }
   }
 
-  async function showModalTask(item: Tasks) {
-    if (!modalTask) {
-      setTask(item)
-    }
-    setModalTask(!modalTask);
+  function nav() {
+    navigate(`/telaTarefas/${encodeURIComponent(process.name!)}/${process.id}`);
   }
 
   return (
     <div className="flex flex-col items-center justify-center w-full px-12 gap-4">
-      <section className="flex-row w-full ">
+      <section className="flex-row w-full mb-6">
         <div className="flex gap-12 ">
           <div>
             <a href="#" className="border-b-4  border-[#53C4CD]">
               Informações
             </a>
           </div>
-          {/* <div>
-            <a href="#">Tarefas</a>
-          </div> */}
+          <div>
+            <a href="#" onClick={() => nav()}>
+              Tarefas
+            </a>
+          </div>
         </div>
       </section>
 
@@ -183,64 +183,112 @@ export function Process() {
               value={taskPercentage}
             />
             {orderedTasks?.map((task) => {
+              const isCompleted = task.status === "Finalizado";
               if (task.status === "Aguardando") {
                 return (
                   <div
                     key={task.id}
-                    className="flex gap-5 -center mt-6 items-center justify-between max-w-lg  "
+                    className="flex gap-5 - mt-6 items-center justify-between max-w-lg  "
                   >
-                                        <input
-                      type="checkbox"
-                      id={`taskCheck-${task.id}`}
-                      className="appearance-none w-12 h-12 border rounded-full focus:outline-none checked:bg-[#53C4CD]"
-                      onClick={() => completeTask(task.id)}
-                    />
-                    <div className="max-w-sm ">
-                      <h2 className="break-words">{task.title}</h2>
-                      <p className="text-gray-500 text-xs max-w-9/12 break-words">
-                        {task.description}
-                      </p>
+                    <div className="flex items-center gap-5">
+                      <input
+                        type="checkbox"
+                        id={`taskCheck-${task.id}`}
+                        className="appearance-none w-12 h-12 border rounded-full focus:outline-none checked:bg-[#53C4CD]"
+                        onClick={() => completeTask(task.id)}
+                        checked={isCompleted}
+                        disabled={isCompleted}
+                      />
+                      <div className="flex flex-col max-w-xs">
+                        <h2 className="break-words max-w-fit line-clamp-1">
+                          {task.title}
+                        </h2>
+                        <p className="text-gray-500 text-xs max-w-9/12 line-clamp-2">
+                          {task.description}
+                        </p>
+                      </div>
                     </div>
                     {task.priority === "Média" && (
-                      <div className="ml-52">
-                        <p className="text-amber-500 text-sm max-w-9/12 break-words pl-6 pr-6 rounded bg-amber-100 text-center">
+                      <div className="flex max-w-9/12">
+                        <p className="text-amber-500 text-sm rounded-lg bg-amber-100 p-2 text-center w-full">
                           {task.priority}
                         </p>
-                        <button
-                          id={`taskCheck-${task.id}`}
-                          className="text-sm"
-                          onClick={() => showModalTask(task)}
-                        >
-                          Detalhes da Tarefa
-                        </button>
                       </div>
                     )}
                     {task.priority === "Alta" && (
-                      <div className="ml-52">
-                        <p className="bg-red-200 text-sm max-w-9/12 break-words pl-6 pr-6 rounded text-amber-700 text-center">
+                      <div className="flex max-w-9/12">
+                        <p className="text-amber-700 text-sm rounded-lg bg-red-200 p-2 text-center w-full">
                           {task.priority}
                         </p>
-                        <button
-                          id={`taskCheck-${task.id}`}
-                          className="text-sm"
-                          onClick={() => showModalTask(task)}
-                        >
-                          Detalhes da Tarefa
-                        </button>
                       </div>
                     )}
                     {task.priority === "Baixa" && (
-                      <div className="ml-52">
-                        <p className="bg-green-200 text-sm max-w-9/12 break-words pl-6 pr-6 rounded text-green-600 text-center">
+                      <div className="flex max-w-9/12">
+                        <p className="text-green-600 text-sm rounded-lg bg-green-200 p-2 text-center w-full">
                           {task.priority}
                         </p>
-                        <button
-                          id={`taskCheck-${task.id}`}
-                          className="text-sm"
-                          onClick={() => showModalTask(task)}
+                      </div>
+                    )}
+                  </div>
+                );
+              } else if (task.status === "Finalizado") {
+                return (
+                  <div
+                    key={task.id}
+                    className="flex gap-5 - mt-6 items-center justify-between max-w-lg  "
+                  >
+                    <div className="flex items-center gap-5">
+                      <input
+                        type="checkbox"
+                        id={`taskCheck-${task.id}`}
+                        className="appearance-none w-12 h-12 border rounded-full focus:outline-none checked:bg-[#53C4CD]"
+                        onClick={() => completeTask(task.id)}
+                        checked={isCompleted}
+                        onChange={() => completeTask(task.id)}
+                      />
+                      {isCompleted && (
+                        <svg
+                          className="w-9  h-9 absolute"
+                          fill="none"
+                          viewBox="0 0 18 23"
+                          stroke="white"
                         >
-                          Detalhes da Tarefa
-                        </button>
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                      <div className="flex flex-col max-w-xs">
+                        <h2 className="break-words max-w-fit line-clamp-1">
+                          {task.title}
+                        </h2>
+                        <p className="text-gray-500 text-xs max-w-9/12 line-clamp-2">
+                          {task.description}
+                        </p>
+                      </div>
+                    </div>
+                    {task.priority === "Média" && (
+                      <div className="flex max-w-9/12">
+                        <p className="text-amber-500 text-sm rounded-lg bg-amber-100 p-2 text-center w-full">
+                          {task.priority}
+                        </p>
+                      </div>
+                    )}
+                    {task.priority === "Alta" && (
+                      <div className="flex max-w-9/12">
+                        <p className="text-amber-700 text-sm rounded-lg bg-red-200 p-2 text-center w-full">
+                          {task.priority}
+                        </p>
+                      </div>
+                    )}
+                    {task.priority === "Baixa" && (
+                      <div className="flex max-w-9/12">
+                        <p className="text-green-600 text-sm rounded-lg bg-green-200 p-2 text-center w-full">
+                          {task.priority}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -249,63 +297,45 @@ export function Process() {
                 return (
                   <div
                     key={task.id}
-                    className="flex gap-5 -center mt-6 items-center justify-between max-w-lg"
+                    className="flex gap-5 - mt-6 items-center justify-between max-w-lg  "
                   >
-                    <input
-                      type="checkbox"
-                      id={`taskCheck-${task.id}`}
-                      className="appearance-none w-12 h-12 border rounded-full focus:outline-none checked:bg-[#53C4CD]"
-                      onClick={() => completeTask(task.id)}
-                    />
-                    <div className="max-w-sm">
-                      <h2 className="break-words">{task.title}</h2>
-                      <p className="text-gray-500 text-xs max-w-9/12 break-words">
-                        {task.description}
-                      </p>
-                    </div>
-                    {task.priority === "Baixa" && (
-                      <div className="ml-36">
-                        <p className="bg-green-200 text-sm max-w-9/12 break-words pl-6 pr-6 rounded text-green-600 text-center">
-                          {task.priority}
+                    <div className="flex items-center gap-5">
+                      <input
+                        type="checkbox"
+                        id={`taskCheck-${task.id}`}
+                        className="appearance-none w-12 h-12 border rounded-full focus:outline-none checked:bg-[#53C4CD]"
+                        onClick={() => completeTask(task.id)}
+                        checked={isCompleted}
+                        disabled={isCompleted}
+                      />
+                      <div className="flex flex-col max-w-xs">
+                        <h2 className="break-words max-w-fit line-clamp-1">
+                          {task.title}
+                        </h2>
+                        <p className="text-gray-500 text-xs max-w-9/12 line-clamp-2">
+                          {task.description}
                         </p>
-                        <button
-                          id={`taskCheck-${task.id}`}
-                          className="text-sm"
-                          onClick={() => showModalTask(task)}
-                        >
-                          Detalhes da Tarefa
-                        </button>
-                        <div className="h-4"></div>
                       </div>
-                    )}
+                    </div>
                     {task.priority === "Média" && (
-                      <div className="ml-36">
-                        <p className="text-amber-500 text-sm max-w-9/12 pl-6 pr-6 break-words rounded bg-amber-100 text-center">
+                      <div className="flex max-w-9/12">
+                        <p className="text-amber-500 text-sm rounded-lg bg-amber-100 p-2 text-center w-full">
                           {task.priority}
                         </p>
-                        <button
-                          id={`taskCheck-${task.id}`}
-                          className="text-sm"
-                          onClick={() => showModalTask(task)}
-                        >
-                          Detalhes da Tarefa
-                        </button>
-                        <div className="h-4"></div>
                       </div>
                     )}
                     {task.priority === "Alta" && (
-                      <div className="ml-36">
-                        <p className="bg-red-200 text-sm max-w-9/12 pl-6 pr-6 break-words rounded text-amber-700 text-center">
+                      <div className="flex max-w-9/12">
+                        <p className="text-amber-700 text-sm rounded-lg bg-red-200 p-2 text-center w-full">
                           {task.priority}
                         </p>
-                        <button
-                          id={`taskCheck-${task.id}`}
-                          className="text-sm"
-                          onClick={() => showModalTask(task)}
-                        >
-                          Detalhes da Tarefa
-                        </button>
-                        <div className="h-4"></div>
+                      </div>
+                    )}
+                    {task.priority === "Baixa" && (
+                      <div className="flex max-w-9/12">
+                        <p className="text-green-600 text-sm rounded-lg bg-green-200 p-2 text-center w-full">
+                          {task.priority}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -313,19 +343,6 @@ export function Process() {
               }
             })}
           </div>
-          {modalTask && (
-            <>
-              <TaskModal id={task.id} title={task.title} members={undefined} description={task.description}
-                priority={task.priority} task={task} toggleModal={function (task: Tasks): void {
-                  throw new Error("Function not implemented.");
-                }} closeModal={
-                  showModalTask
-                } setReload={function (state: boolean): void {
-                  throw new Error("Function not implemented.");
-                }} reload={false} />
-            </>
-          )}
-
         </section>
       </section>
     </div>

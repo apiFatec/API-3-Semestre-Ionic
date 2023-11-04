@@ -1,6 +1,7 @@
 import { api } from "@/api";
 
 class IsoService {
+  
     async postIso(data : FormData, title : string, description : string) {
         return await api.post(`isos/upload`, data, {
             headers :{
@@ -9,7 +10,7 @@ class IsoService {
             }
         });
     }
-
+  
     async getIsos(){
         return await api.get('isos')
     }

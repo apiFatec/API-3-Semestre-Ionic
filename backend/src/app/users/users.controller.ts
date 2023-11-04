@@ -88,12 +88,12 @@ export class UsuariosController {
   async getOneid(@Param('id') idUsuario: string){
     return await this.usuariosService.findOneById(idUsuario)
 
-    const user = await this.usuariosService.findOne(decodedToken.email);
+    // const user = await this.usuariosService.findOne(decodedToken.email);
 
-    return {
-      id: user.id,
-      name: user.name,
-    };
+    // return {
+    //   id: user.id,
+    //   name: user.name,
+    // };
   }
 
   @Patch('/remove-team/:id')

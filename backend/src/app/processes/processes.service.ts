@@ -123,8 +123,8 @@ export class ProcessesService {
     return await this.processesRepository.find({
       where: { team: { id: id } },
       relations: {
-        tasks: true
-      }
-    })
+        tasks: true,
+      },
+    });
   }
 }

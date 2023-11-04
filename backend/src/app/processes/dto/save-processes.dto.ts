@@ -3,9 +3,9 @@ import { TeamsEntity } from '@/app/teams/entities/teams.entity';
 import { UsersEntity } from '@/app/users/entities/users.entity';
 
 export enum Status {
-  WAITING = "Aguardando",
-  INPROGRESS = "Em progresso",
-  FINISHED = "Finalizado"
+  WAITING = 'Aguardando',
+  INPROGRESS = 'Em progresso',
+  FINISHED = 'Finalizado',
 }
 export class SaveProcessDTO {
   name: string;

@@ -8,5 +8,6 @@ import { IsosEntity } from './entities/isos.entity';
   imports: [TypeOrmModule.forFeature([IsosEntity])],
   controllers: [IsosController],
   providers: [IsosService],
+  exports: [IsosService]
 })
 export class IsosModule { }

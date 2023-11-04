@@ -12,11 +12,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { hashSync } from 'bcrypt';
-import { UsersProcessesEntity } from "@/app/processes/entities/usersProcesses.entity";
-import { UsersTasksEntity } from "@/app/tasks/entities/usersTasks.entity";
-import { ProjectsEntity } from "@/app/projects/entities/projects.entity";
-import { File } from "@/app/files/entities/file.entity";
-import { TasksEntity } from '@/app/tasks/entities/tasks.entity';
+import { UsersProcessesEntity } from '@/app/processes/entities/usersProcesses.entity';
+import { UsersTasksEntity } from '@/app/tasks/entities/usersTasks.entity';
+import { ProjectsEntity } from '@/app/projects/entities/projects.entity';
+import { File } from '@/app/files/entities/file.entity';
 import { TeamsEntity } from '@/app/teams/entities/teams.entity';
 
 export enum Role {
@@ -88,4 +87,3 @@ export class UsersEntity {
   @JoinColumn({ name: 'teams_id' })
   teams: TeamsEntity;
 }
-

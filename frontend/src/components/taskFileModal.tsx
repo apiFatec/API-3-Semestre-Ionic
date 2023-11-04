@@ -42,7 +42,6 @@ export function TaskFileModal({ taskId, func }: Props) {
                 alert('Arquivo enviado');
                 func();
             }).catch(error => console.log(error))
-
     }
 
     return (

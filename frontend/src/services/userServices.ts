@@ -41,6 +41,10 @@ class UserServices {
     return await api.get(`/users/one/${id}`)
   }
 
+  async sendPicture(userName: string | null, id: string | null, data: FormData) {
+    return await api.post(`/users/profile/${userName}/${id}`, data)
+  }
+
   async removeFromTeam(id: string) {
     return await api.delete(`users/remove-team/${id}`);
   }

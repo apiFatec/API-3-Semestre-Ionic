@@ -9,7 +9,6 @@ import { multerConfig } from '../helpers/multer.config';
 import { TokenModule } from '../token/token.module';
 import { TeamsModule } from '../teams/teams.module';
 
-
 @Module({
   imports: [
     TokenModule,
@@ -22,4 +21,4 @@ import { TeamsModule } from '../teams/teams.module';
   controllers: [UsuariosController],
   exports: [UsuariosService],
 })
-export class UsuariosModule { }
+export class UsuariosModule {}

@@ -50,7 +50,12 @@ export class TeamsService {
   }
 
   async update(id: string, data: SaveTeamDTO): Promise<TeamsEntity> {
-    const team = await this.teamsRepository.findOneBy({ id: id });
+    const team = await this.teamsRepository.findOne({
+      where: { id: id },
+      relations: { users: true },
+    });
+    console.log(id);
+    console.log(team);
 
     if (!team) {
       return null;

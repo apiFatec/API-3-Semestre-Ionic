@@ -8,6 +8,7 @@ import { SaveUserDto } from './dto/save-users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TokenService } from '../token/token.service';
 import { TokenEntity } from '../token/entities/token.entity';
+import { async } from 'rxjs';
 
 @Controller('users')
 export class UsuariosController {
@@ -29,17 +30,18 @@ export class UsuariosController {
     @Param('username') username: string,
     @Param('id', new ParseUUIDPipe()) id: string,
     @UploadedFile() file: Express.Multer.File,
-    @Req() req: ReqImage
+    @Req() req: ReqImage,
   ): Promise<void> {
     const pathName: string = `${req.protocol}://${req.get('host')}/users/profile/${username}/${file.filename}`;
+    
     return await this.usuariosService.saveProfileImage(pathName, id);
   }
 
-  @Get('/profile/:username/:filename')
+  @Get('profile/:username/:filename')
   async getProfileImage(
     @Param('username') username: string,
     @Param('filename') filename: string,
-    @Res() res: Response
+    @Res() res: Response,
   ): Promise<any> {
     const path = `./uploads/${username}/${filename}`;
     return res.sendFile(path, { root: './' });

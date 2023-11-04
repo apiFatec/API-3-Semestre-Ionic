@@ -119,4 +119,3 @@ export class TasksService {
     await this.tasksRepository.softRemove({ id: id });
   }
 }
-

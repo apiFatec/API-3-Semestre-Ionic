@@ -1,4 +1,5 @@
 import { PhotoProfile } from "@/components/photoProfile";
+import { TaskModal } from "@/components/taskModal";
 import {
   Popover,
   PopoverContent,
@@ -17,7 +18,22 @@ import { useParams } from "react-router-dom";
 export function TelaTarefas() {
   const { id } = useParams();
   const { role } = useAuth();
-  const [process, setProcess] = useState<Processes>();
+  const [process, setProcess] = useState<Processes>({
+    id: "",
+    deadline: "",
+    tasks: [],
+    name: "",
+    description: "",
+  });
+  const [task, setTask] = useState<Tasks>({
+    id: "",
+    title: "",
+    description: "",
+    status: "",
+    priority: "",
+    deadline: undefined,
+  });
+  const [modalTask, setModalTask] = useState<boolean>(false);
 
   const deadline = new Date();
 
@@ -36,8 +52,13 @@ export function TelaTarefas() {
     "Dec",
   ];
 
-  const formattedDate = `${deadline.getDate()} ${months[deadline.getMonth()]
-    } ${deadline.getFullYear()}`;
+  const formattedDate = `${deadline.getDate()} ${
+    months[deadline.getMonth()]
+  } ${deadline.getFullYear()}`;
+
+  useEffect(() => {
+    getProcess(id);
+  }, [id]);
 
   async function getProcess(id: string | undefined) {
     if (id) {
@@ -89,6 +110,14 @@ export function TelaTarefas() {
       console.log(error);
     }
   }
+  function showModalTask(item: Tasks) {
+    setTask(item);
+    setModalTask(true);
+  }
+
+  function nav() {
+    navigate(`/processos/${encodeURIComponent(process.name!)}/${process.id}`);
+  }
 
   return (
     <div className="px-12">
@@ -113,7 +142,10 @@ export function TelaTarefas() {
             {orderedTasks?.map((task) => {
               if (task.status === "Aguardando") {
                 return (
-                  <div className="flex flex-col w-[23rem] p-3 mb-3 justify-items-start cursor-pointer border rounded" key={task.id}>
+                  <div
+                    className="flex flex-col w-[23rem] p-3 mb-3 justify-items-start cursor-pointer border rounded"
+                    key={task.id}
+                  >
                     <div className="flex justify-between">
                       <p className="text-sm ">{task.title}</p>
                       <Popover>
@@ -138,16 +170,16 @@ export function TelaTarefas() {
                         </PopoverContent>
                       </Popover>
                     </div>
-                    <p className="text-xs mt-4 max-w-[20rem]">
-                      {task.description}
-                    </p>
-                    <div className="mt-5 flex justify-between items-center">
-                      <p className="p-0.5 text-sm bg-[#F2F2F2] rounded-xl w-28 text-center ">
-                        {formattedDate}
+                    <div onClick={() => showModalTask(task)}>
+                      <p className="text-xs mt-4 max-w-[20rem]">
+                        {task.description}
                       </p>
-                      <PhotoProfile
-                        url={"asd"}
-                      />
+                      <div className="mt-5 flex justify-between items-center">
+                        <p className="p-0.5 text-sm bg-[#F2F2F2] rounded-xl w-28 text-center ">
+                          {formattedDate}
+                        </p>
+                        <PhotoProfile />
+                      </div>
                     </div>
                   </div>
                 );
@@ -162,7 +194,10 @@ export function TelaTarefas() {
             {orderedTasks?.map((task) => {
               if (task.status === "Em progresso") {
                 return (
-                  <div className="flex flex-col w-[23rem] p-3 mb-3 justify-items-start cursor-pointer border rounded" key={task.id}>
+                  <div
+                    className="flex flex-col w-[23rem] p-3 mb-3 justify-items-start cursor-pointer border rounded"
+                    key={task.id}
+                  >
                     <div className="flex justify-between">
                       <p className="text-sm ">{task.title}</p>
                       <Popover>
@@ -187,16 +222,16 @@ export function TelaTarefas() {
                         </PopoverContent>
                       </Popover>
                     </div>
-                    <p className="text-xs mt-4 max-w-[20rem]">
-                      {task.description}
-                    </p>
-                    <div className="mt-5 flex justify-between items-center">
-                      <p className="p-0.5 text-sm bg-[#F2F2F2] rounded-xl w-28 text-center ">
-                        {formattedDate}
+                    <div onClick={() => showModalTask(task)}>
+                      <p className="text-xs mt-4 max-w-[20rem]">
+                        {task.description}
                       </p>
-                      <PhotoProfile
-                        url={"asd"}
-                      />
+                      <div className="mt-5 flex justify-between items-center">
+                        <p className="p-0.5 text-sm bg-[#F2F2F2] rounded-xl w-28 text-center ">
+                          {formattedDate}
+                        </p>
+                        <PhotoProfile />
+                      </div>
                     </div>
                   </div>
                 );
@@ -211,7 +246,10 @@ export function TelaTarefas() {
             {orderedTasks?.map((task) => {
               if (task.status === "Finalizado") {
                 return (
-                  <div className="flex flex-col w-[23rem] p-3 mb-3 justify-items-start cursor-pointer border rounded" key={task.id}>
+                  <div
+                    className="flex flex-col w-[23rem] p-3 mb-3 justify-items-start cursor-pointer border rounded"
+                    key={task.id}
+                  >
                     <div className="flex justify-between">
                       <p className="text-sm ">{task.title}</p>
                       <Popover>
@@ -236,16 +274,16 @@ export function TelaTarefas() {
                         </PopoverContent>
                       </Popover>
                     </div>
-                    <p className="text-xs mt-4 max-w-[20rem]">
-                      {task.description}
-                    </p>
-                    <div className="mt-5 flex justify-between items-center">
-                      <p className="p-0.5 text-sm bg-[#F2F2F2] rounded-xl w-28 text-center ">
-                        {formattedDate}
+                    <div onClick={() => showModalTask(task)}>
+                      <p className="text-xs mt-4 max-w-[20rem]">
+                        {task.description}
                       </p>
-                      <PhotoProfile
-                        url={"asd"}
-                      />
+                      <div className="mt-5 flex justify-between items-center">
+                        <p className="p-0.5 text-sm bg-[#F2F2F2] rounded-xl w-28 text-center ">
+                          {formattedDate}
+                        </p>
+                        <PhotoProfile />
+                      </div>
                     </div>
                   </div>
                 );
@@ -253,6 +291,22 @@ export function TelaTarefas() {
             })}
           </ScrollArea>
         </div>
+        {modalTask && (
+          <TaskModal
+            id={task.id}
+            title={task.title}
+            members={undefined}
+            description={task.description}
+            priority={task.priority}
+            task={task}
+            closeModal={() => {
+              setModalTask(false);
+              window.location.reload();
+            }}
+            setReload={(state: boolean) => console.log(state)}
+            reload={false}
+          />
+        )}
       </div>
     </div>
   );

@@ -13,7 +13,6 @@ import { TasksModule } from '../tasks/tasks.module';
   ],
   controllers: [ProcessesController],
   providers: [ProcessesService],
-  exports: [ProcessesService]
+  exports: [ProcessesService],
 })
-
-export class ProcessesModule { }
+export class ProcessesModule {}

@@ -11,21 +11,21 @@ import { EditarEquipe } from "@/pages/editarEquipe/editarEquipe";
 import { AprovarDocumento } from "@/pages/aprovarDocumento/aprovarDocumento";
 import { CadastroIso } from "@/pages/cadastroIso/cadastroIso";
 import { TelaTarefas } from "@/pages/telaTarefas/telaTarefas";
+import { CriarEquipe } from "@/pages/criarEquipe/criarEquipe";
 import { PaginaNaoEncontrada } from "@/pages/paginaNaoEncontrada/paginaNaoEncontrada";
-
 
 export function Router() {
   return (
     <Routes>
+      <Route path="/" element={<Register />} />
       <Route element={<IsLogged />}>
         <Route path="/login" element={<Login />} />
       </Route>
 
-      <Route element={<PrivateRoutes />}>
-        <Route path="/admin-register" element={<Register />} />
-      </Route>
+      <Route element={<PrivateRoutes />}></Route>
       <Route element={<LoginRoutes />}>
-        <Route path="/criar-equipe/" element={<EditarEquipe />} />
+        <Route path="/editar-equipe/:id" element={<EditarEquipe />} />
+        <Route path="/criarEquipe/" element={<CriarEquipe />} />
         <Route path="/criar-processo" element={<CadastroProcessos />} />
         <Route path="/aprovar-documento" element={<AprovarDocumento />} />
         <Route path="/processos" element={<Home />} />

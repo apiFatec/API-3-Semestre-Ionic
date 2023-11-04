@@ -1,4 +1,18 @@
-import { Controller, UseGuards, Post, Request, Get, Body, Param, UseInterceptors, UploadedFile, Res, ParseUUIDPipe, Req } from '@nestjs/common';
+import {
+  Controller,
+  UseGuards,
+  Post,
+  Request,
+  Get,
+  Body,
+  Param,
+  UseInterceptors,
+  UploadedFile,
+  Res,
+  ParseUUIDPipe,
+  Req,
+  Patch,
+} from '@nestjs/common';
 import { Express, Request as ReqImage, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { UsuariosService } from './users.service';
@@ -14,8 +28,8 @@ export class UsuariosController {
   constructor(
     private readonly usuariosService: UsuariosService,
     private readonly authService: AuthService,
-    private readonly tokenService : TokenService,
-  ) { }
+    private readonly tokenService: TokenService,
+  ) {}
 
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
@@ -29,9 +43,11 @@ export class UsuariosController {
     @Param('username') username: string,
     @Param('id', new ParseUUIDPipe()) id: string,
     @UploadedFile() file: Express.Multer.File,
-    @Req() req: ReqImage
+    @Req() req: ReqImage,
   ): Promise<void> {
-    const pathName: string = `${req.protocol}://${req.get('host')}/${username}/${file.filename}`;
+    const pathName: string = `${req.protocol}://${req.get(
+      'host',
+    )}/users/profile/${username}/${file.filename}`;
     return await this.usuariosService.saveProfileImage(pathName, id);
   }
 
@@ -39,7 +55,7 @@ export class UsuariosController {
   async getProfileImage(
     @Param('username') username: string,
     @Param('filename') filename: string,
-    @Res() res: Response
+    @Res() res: Response,
   ): Promise<any> {
     const path = `./uploads/${username}/${filename}`;
     return res.sendFile(path, { root: './' });
@@ -57,16 +73,20 @@ export class UsuariosController {
   }
 
   @Get(':token')
-  async getOne(@Param('token') idUser: string){
+  async getOne(@Param('token') idUser: string) {
     const token = idUser;
     const decodedToken = await this.tokenService.decodeJwt(token);
 
-    console.log(decodedToken)
-    const user =await this.usuariosService.findOne(decodedToken.email);
+    const user = await this.usuariosService.findOne(decodedToken.email);
 
     return {
       id: user.id,
-      name : user.name
-    }
+      name: user.name,
+    };
+  }
+
+  @Patch('/remove-team/:id')
+  async removeFromTeam(@Param('id', new ParseUUIDPipe()) id: string) {
+    return await this.usuariosService.removeFromTeam(id);
   }
 }

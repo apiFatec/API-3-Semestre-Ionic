@@ -11,6 +11,7 @@ import { EditarEquipe } from "@/pages/editarEquipe/editarEquipe";
 import { AprovarDocumento } from "@/pages/aprovarDocumento/aprovarDocumento";
 import { CadastroIso } from "@/pages/cadastroIso/cadastroIso";
 import { TelaTarefas } from "@/pages/telaTarefas/telaTarefas";
+import { PaginaNaoEncontrada } from "@/pages/paginaNaoEncontrada/paginaNaoEncontrada";
 
 
 export function Router() {
@@ -33,6 +34,8 @@ export function Router() {
         <Route path="/processos/:process/:id" element={<Process />} />
         <Route path="/isos" element={<CadastroIso />} />
       </Route>
+
+      <Route path="*" element={<PaginaNaoEncontrada />} />
     </Routes>
   );
 }

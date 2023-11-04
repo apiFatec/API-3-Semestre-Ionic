@@ -35,7 +35,6 @@ export function ProcessCard(process: Process) {
   const currentDate = formatDate(process.processDeadline);
   const navigate = useNavigate();
 
-
   function formatDate(date: Date) {
     const deadline = new Date(date);
     const day = deadline.toLocaleString('default', { day: '2-digit' });
@@ -81,26 +80,20 @@ export function ProcessCard(process: Process) {
         <div className="w-full flex items-end">
           <Badge className="]" variant={"secondary"}>{currentDate}</Badge>
         </div>
-        <div className="flex flex-row-reverse pt-4 items-center">
-          {
-            process.users.slice(2, process.users.length).map(() => {
-              contUsers = contUsers + 1
-              return null
-            })}
-          {contUsers > 0 && (
-            <Avatar className="h-11 w-11 shadow-md border-black/20 border-[1px]">
-              <AvatarFallback>+{contUsers}</AvatarFallback>
-            </Avatar>
-          )
-          }
+        <div className="flex pt-4 items-center justify-end">
           {process.users.slice(0, 2).map((user, index) => {
             return (
               <span className="mx-[-4px]" key={index}><PhotoProfile url={user.profileImage} /></span>
             )
           })}
+          {process.users.length - 2 > 0 && (
+            <Avatar className="h-11 w-11 shadow-md border-black/20 border-[1px]">
+              <AvatarFallback>+{process.users.length - 2}</AvatarFallback>
+            </Avatar>
+          )
+          }
         </div>
       </div>
-
     </Card>
   )
 } 

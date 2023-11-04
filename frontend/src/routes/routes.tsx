@@ -18,8 +18,8 @@ export function Router() {
         <Route path="/login" element={<Login />} />
       </Route>
 
-      <Route element={<PrivateRoutes />}>
         <Route path="/admin-register" element={<Register />} />
+      <Route element={<PrivateRoutes />}>
       </Route>
       
       <Route element={<LoginRoutes />}>

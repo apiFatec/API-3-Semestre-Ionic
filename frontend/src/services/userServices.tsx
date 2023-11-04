@@ -44,6 +44,10 @@ class UserServices {
   async removeTeamUser(id: string) {
     return await api.patch(`/remove-team/${id}`);
   }
+
+  async sendPicture(userName : string | null, id : string | null, data : FormData){
+    return await api.post(`/users/profile/${userName}/${id}`, data)
+  }
 }
 
 export default new UserServices();

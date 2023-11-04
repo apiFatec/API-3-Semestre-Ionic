@@ -8,6 +8,7 @@ import IsLogged from "./IsLogged";
 import { CadastroProcessos } from "@/pages/cadastroProcesso/cadastroProcesso";
 import { Process } from "@/pages/process/process";
 import { EditarEquipe } from "@/pages/editarEquipe/editarEquipe";
+import { PerfilUsuario } from "@/pages/perfilUsuario/perfilUsuario";
 import { AprovarDocumento } from "@/pages/aprovarDocumento/aprovarDocumento";
 import { CadastroIso } from "@/pages/cadastroIso/cadastroIso";
 import { TelaTarefas } from "@/pages/telaTarefas/telaTarefas";
@@ -22,8 +23,12 @@ export function Router() {
         <Route path="/login" element={<Login />} />
       </Route>
 
-      <Route element={<PrivateRoutes />}></Route>
+      <Route element={<PrivateRoutes />}>
+        <Route path="/admin-register" element={<Register />} />
+      </Route>
+
       <Route element={<LoginRoutes />}>
+        <Route path="/perfil-usuario" element ={<PerfilUsuario/>} />
         <Route path="/editar-equipe/:id" element={<EditarEquipe />} />
         <Route path="/criarEquipe/" element={<CriarEquipe />} />
         <Route path="/criar-processo" element={<CadastroProcessos />} />

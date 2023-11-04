@@ -27,7 +27,7 @@ export class UsuariosService {
   }
 
   async findOne(email: string): Promise<UsersEntity | undefined> {
-    return await this.usuariosRepository.findOne({ where: { email: email } });
+    return await this.usuariosRepository.findOne({where : {email:email}})
   }
 
   async findOneById(id: string): Promise<UsersEntity | undefined> {
@@ -58,4 +58,5 @@ export class UsuariosService {
   async removeFromTeam(idUser: string) {
     await this.usuariosRepository.update(idUser, { teams: { id: null } });
   }
+
 }

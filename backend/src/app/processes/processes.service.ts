@@ -49,7 +49,7 @@ export class ProcessesService {
             JSON_AGG(tasks.*) AS tasks
           FROM processes
           INNER JOIN tasks ON processes.id = tasks."processes_id"
-          WHERE processes.id = $1
+          WHERE processes.id = $1 AND tasks.deleted_at IS NULL
           GROUP BY processes.id
         `;
 

@@ -9,12 +9,15 @@ import { CadastroProcessos } from "@/pages/cadastroProcesso/cadastroProcesso";
 import { Process } from "@/pages/process/process";
 import { EditarEquipe } from "@/pages/editarEquipe/editarEquipe";
 import { AprovarDocumento } from "@/pages/aprovarDocumento/aprovarDocumento";
+import { CadastroIso } from "@/pages/cadastroIso/cadastroIso";
+import { TelaTarefas } from "@/pages/telaTarefas/telaTarefas";
+
 
 export function Router() {
   return (
     <Routes>
       <Route element={<IsLogged />}>
-      <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
       </Route>
 
       <Route element={<PrivateRoutes />}>
@@ -25,8 +28,10 @@ export function Router() {
         <Route path="/criar-processo" element={<CadastroProcessos />} />
         <Route path="/aprovar-documento" element={<AprovarDocumento />} />
         <Route path="/processos" element={<Home />} />
+        <Route path="/telaTarefas/:process/:id" element={<TelaTarefas />} />
         <Route path="/" element={<Home />} />
         <Route path="/processos/:process/:id" element={<Process />} />
+        <Route path="/isos" element={<CadastroIso />} />
       </Route>
     </Routes>
   );

@@ -6,13 +6,16 @@ import { Progress } from "@/components/ui/progress";
 import { TitleContext } from "@/contexts/TitleContext";
 import { Tasks } from "@/interfaces/tasks";
 import { Processes } from "@/interfaces/processes";
-import userServices from "@/services/userServices";
+
 import { useNavigate } from "react-router-dom";
+
+import taskService from "@/services/taskService";
 
 export function Process() {
   const { id } = useParams();
   const { handleTitle } = useContext(TitleContext);
   const navigate = useNavigate();
+
   const [process, setProcess] = useState<Processes>({
     id: "",
     deadline: "",
@@ -20,16 +23,11 @@ export function Process() {
     name: "",
     description: "",
   });
-  const [task, setTask] = useState<Tasks>({
-    id: "",
-    title: "",
-    description: "",
-    status: "",
-    priority: "",
-    deadline: undefined,
-  });
-  const [user, setUser] = useState<any>();
-
+  interface usersTask {
+    id: string;
+    users_id: string;
+    tasks_id: string;
+  }
   const deadline = new Date();
   const formattedDate = `${deadline.getDate()}/${
     deadline.getMonth() + 1
@@ -88,29 +86,35 @@ export function Process() {
 
   async function completeTask(id: string | undefined) {
     try {
-      await userService.finishTask(id);
+      const result = await taskService.getUserTask(
+        id,
+        localStorage.getItem("token")
+      );
+
       const updatedTasks = process.tasks?.map((task) =>
         task.id === id ? { ...task, status: "Finalizado" } : task
       );
-      setProcess((prev) => ({ ...prev, tasks: updatedTasks }));
-    } catch (error) {
-      console.error("Erro ao concluir a tarefa:", error);
-    }
-  }
 
-  async function joinTask(updateTask: Tasks) {
-    try {
-      const userToken = localStorage.getItem("token");
-      await userService.joinTask({ task: updateTask, user: userToken });
-      if (id && process.tasks) {
-        const updatedTasks = process.tasks.map((task) =>
-          task.id === updateTask.id ? { ...task, status: "Em progresso" } : task
+      if (updatedTasks) {
+        const isUserAssigned = result.data.some(
+          (assignedUser: usersTask) => assignedUser.tasks_id === id
         );
 
-        setProcess((prev) => ({ ...prev, tasks: updatedTasks }));
+        if (isUserAssigned) {
+          await userService.finishTask(id);
+          setProcess((prev) => ({ ...prev, tasks: updatedTasks }));
+        } else {
+          console.error(
+            "Usuário não está associado a esta tarefa. Não pode ser concluída."
+          );
+        }
+      } else {
+        console.error(
+          "Não foi possível obter informações sobre o usuário e as tarefas."
+        );
       }
     } catch (error) {
-      console.error("Erro ao ingressar na tarefa:", error);
+      console.error("Erro ao concluir a tarefa:", error);
     }
   }
 

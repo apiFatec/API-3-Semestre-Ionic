@@ -11,7 +11,7 @@ Nessa segunda sprint focamos na visão geral do progresso do projeto. Identifica
 <li> Foi criada a funcionalidade de puxar os dados das tarefas do banco de dados.</li>
 <li> Area para inserir imagens e arquivos nas etapas.</li>
 <li> Telas de criar equipes.</li>
-<li> Telas de criar equipes.</li>
+<li> Telas de editar equipes.</li>
 
 
 

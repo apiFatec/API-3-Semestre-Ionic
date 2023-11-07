@@ -1,3 +1,5 @@
+import { Users } from "./users";
+
 export interface Tasks {
   id : string;
   title: string;
@@ -5,4 +7,5 @@ export interface Tasks {
   status: string;
   priority: string;
   deadline: any;
+  users: Users[]
 }

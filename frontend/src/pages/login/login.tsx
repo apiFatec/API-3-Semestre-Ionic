@@ -56,7 +56,7 @@ export function Login() {
           </div>
           <button className="text-gray-500">Esqueceu-se da senha?</button>
         </div>
-        <Button className="bg-ionic-normal active:bg-ionic-pressed hover:bg-ionic-normal w-full h-16 font-semibold text-3xl text-white">
+        <Button type="submit" className="bg-ionic-normal active:bg-ionic-pressed hover:bg-ionic-normal w-full h-16 font-semibold text-3xl text-white">
           Entrar
         </Button>
       </div>

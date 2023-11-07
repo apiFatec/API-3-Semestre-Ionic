@@ -60,8 +60,9 @@ export class TasksService {
       throw new Error('Usuário não encontrado');
     }
   }
-
+  
   async finishTask(id: string) {
+    console.log("finishing task")
     try {
       await this.tasksRepository.update(
         { id: id },
@@ -73,6 +74,7 @@ export class TasksService {
   }
 
   async leaveTask(idTask: string, id: string) {
+    console.log("leaving task")
     await this.usersTasksRepository.delete({
       tasksId: { id: idTask },
       usersId: { id: id },

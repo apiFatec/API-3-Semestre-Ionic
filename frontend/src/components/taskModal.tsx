@@ -5,7 +5,7 @@ import {
   Text,
   User,
   Paperclip,
-  Users,
+  Users as UsersIcon,
 } from "lucide-react";
 import photo from "../../public/lula.jpg";
 import { Button } from "./ui/button";
@@ -13,9 +13,11 @@ import { cn } from "@/lib/utils";
 import { Tasks } from "@/interfaces/tasks";
 import userServices from "@/services/userServices";
 import { TaskFileModal } from "./taskFileModal";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import taskService from "@/services/taskService";
 import FileList from "./fileList";
+import { UserContext } from "@/contexts/userContext";
+import { Users } from "@/interfaces/users";
 
 export interface getFiles {
   fileName: string;
@@ -41,22 +43,20 @@ interface usersTask {
 interface Modal {
   id: string | undefined;
   title: string | undefined;
-  members: string | undefined;
+  users: Users[] | undefined;
   description: string | undefined;
   priority: string | undefined;
   task?: Tasks;
-  toggleModal: (task: Tasks) => void;
+  toggleModal?: (task: Tasks) => void;
   closeModal: any;
-  setReload: (state: boolean) => void;
-  reload: boolean;
 }
 
-export function TaskModal({ task, id, title, members, description, priority, toggleModal, closeModal }: Modal) {
+export function TaskModal({ task, id, title, users, description, priority, toggleModal, closeModal }: Modal) {
   const [modalFile, setModalFile] = useState<boolean>(false);
   const [userInTask, setUserInTask] = useState<usersTask[]>();
   const [files, setFiles] = useState<getFiles[]>([]);
   const [userLog, setUserLog] = useState<userLog>();
-
+  const { id: idUser } = useContext(UserContext);
   const priorityColor = () => {
     if (priority === "Baixa") {
       return "bg-blue-300/30 text-blue-900";
@@ -72,6 +72,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
   }, []);
 
   async function getUserTask() {
+    console.log('getUsers')
     const user = await userServices.getOneUser(localStorage.getItem('id')!);
     const files = await taskService.getFileTask(id);
     const result = await taskService.getUserTask(id, localStorage.getItem('id'));
@@ -84,19 +85,20 @@ export function TaskModal({ task, id, title, members, description, priority, tog
     userServices.joinTask({
       task: task,
       user: localStorage.getItem('id')
+    }).then((response) => {
+      getUserTask();
+      task!.status = 'Em progresso'
     })
-      .then((response) => {
-        getUserTask();
-      })
       .catch((error) => {
         console.log(error);
       });
   }
 
   async function finishTask(id: string | undefined) {
-    userServices
-      .finishTask(id)
+    console.log('finishing')
+    userServices.finishTask(id)
       .then((response) => {
+        getUserTask();
       }).catch((error) => {
         console.log(error);
       });
@@ -106,8 +108,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
     idTask: string | undefined,
     tokenUser: string | null
   ) {
-    userServices
-      .leaveTask(idTask, tokenUser)
+    userServices.leaveTask(idTask, tokenUser)
       .then((response) => {
         getUserTask();
       })
@@ -136,7 +137,7 @@ export function TaskModal({ task, id, title, members, description, priority, tog
 
           <div className="flex flex-col  mb-5">
             <div className="flex gap-5">
-              <Users color="#2C2C2C" />
+              <UsersIcon color="#2C2C2C" />
               <p>Membros</p>
             </div>
             <div className="flex gap-2 items-center ml-10">
@@ -210,12 +211,13 @@ export function TaskModal({ task, id, title, members, description, priority, tog
                 </Button>
 
                 <Button
-                  onClick={() => leaveTask(task?.id, localStorage.getItem("token"))}
                   className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2 hover:bg-[#CCCCCC]"
+                  onClick={() => leaveTask(task!.id, idUser)}
                 >
                   <ArrowLeftFromLine size={18} />
                   Sair
                 </Button>
+
               </>
             )}
 

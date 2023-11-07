@@ -12,7 +12,7 @@ import { ModeToggle } from "./mode-toggle";
 import useAuth from "@/hooks/useAuth";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/userContext";
-import Logo from '@/../public/logo.svg';
+import Logo from '/logo.svg?url';
 
 export function Sidebar() {
   const { user } = useContext(UserContext);

@@ -1,5 +1,6 @@
 import { Tasks } from "./tasks";
 import { Teams } from "./teams";
+import { Users } from "./users";
 
 export interface Processes {
   id: string;

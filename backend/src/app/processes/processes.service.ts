@@ -43,16 +43,42 @@ export class ProcessesService {
     return result;
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<ProcessesEntity | undefined> {
     const query = `
-          SELECT 
-            processes.*,
-            JSON_AGG(tasks.*) AS tasks
-          FROM processes
-          INNER JOIN tasks ON processes.id = tasks."processes_id"
-          WHERE processes.id = $1 AND tasks.deleted_at IS NULL
-          GROUP BY processes.id
-        `;
+    SELECT 
+    processes.name AS name,
+    processes.description AS description,
+    processes.deadline AS deadline,
+    processes.status AS status,
+    processes.id AS id,
+    
+    (SELECT JSON_AGG(
+        json_build_object(
+            'id', tasks.id,
+            'title', tasks.title,
+            'description', tasks.description,
+            'status', tasks.status,
+            'priority', tasks.priority,
+            'users', (SELECT JSON_AGG(
+                json_build_object(
+                    'id', users.id,
+                    'name', users.name,
+                    'role', users.role,
+                    'email', users.email,
+                    'profileImage', users."profileImage"
+                )
+            ) FROM users_tasks 
+            JOIN users ON users.id = users_tasks.users_id
+            WHERE users_tasks.tasks_id = tasks.id)
+        )
+    ) 
+    FROM tasks
+    WHERE tasks.processes_id = processes.id) AS tasks
+
+FROM processes
+WHERE processes.id = $1
+GROUP BY processes.id;
+    `;
 
     const result = await this.processesRepository.query(query, [id]);
     return result[0] || null;

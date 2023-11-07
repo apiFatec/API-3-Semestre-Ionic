@@ -7,6 +7,7 @@ import userServices from "@/services/userServices";
 import { Users } from "@/interfaces/users";
 import { TitleContext } from "@/contexts/TitleContext";
 import teamsService from "@/services/teamsService";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function CriarEquipe() {
   const { handleSubmit } = useForm<TeamFormValues>();
@@ -41,6 +42,11 @@ export function CriarEquipe() {
     } catch (error) {
       console.error("Erro ao buscar os membros do time:", error);
     }
+  }
+
+  const fallbackName = (name: string) => {
+    const splitName = name.split(' ')
+    return splitName[0][0] + splitName[splitName.length - 1][0]
   }
 
   const createTeam: SubmitHandler<TeamFormValues> = () => {
@@ -111,11 +117,10 @@ export function CriarEquipe() {
                   id="check"
                   onChange={() => handleUsers(member)}
                 />
-                <img
-                  src={member.imageUrl || "./user-solid.svg"}
-                  alt={member.name}
-                  className="rounded-full w-6 cyan-400"
-                />
+                <Avatar className="h-11 w-11">
+                  <AvatarImage src={member.profileImage} />
+                  <AvatarFallback>{fallbackName(member.name)}</AvatarFallback>
+                </Avatar>
                 <div>
                   <p>{member.name}</p>
                   <p className="text-xs text-gray-500">{member.role}</p>

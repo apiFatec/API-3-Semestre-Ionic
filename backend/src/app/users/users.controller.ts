@@ -7,8 +7,6 @@ import { UsersEntity } from './entities/users.entity';
 import { SaveUserDto } from './dto/save-users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TokenService } from '../token/token.service';
-import { TokenEntity } from '../token/entities/token.entity';
-import { async } from 'rxjs';
 
 @Controller('users')
 export class UsuariosController {

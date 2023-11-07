@@ -20,6 +20,7 @@ export function Router() {
   return (
     <Routes>
       <Route path="/" element={<Register />} />
+
       <Route element={<IsLogged />}>
         <Route path="/login" element={<Login />} />
       </Route>
@@ -31,11 +32,11 @@ export function Router() {
       <Route element={<LoginRoutes />}>
         <Route path="/perfil-usuario" element={<PerfilUsuario />} />
         <Route path="/editar-equipe/:id" element={<EditarEquipe />} />
-        <Route path="/criarEquipe/" element={<CriarEquipe />} />
+        <Route path="/criar-equipe/" element={<CriarEquipe />} />
         <Route path="/criar-processo" element={<CadastroProcessos />} />
         <Route path="/aprovar-documento" element={<AprovarDocumento />} />
         <Route path="/processos" element={<Home />} />
-        <Route path="/telaTarefas/:process/:id" element={<TelaTarefas />} />
+        <Route path="/tarefas/:process/:id" element={<TelaTarefas />} />
         <Route path="/" element={<Home />} />
         <Route path="/processos/:process/:id" element={<Process />} />
         <Route path="/equipe/:id?" element={<TeamView />} />

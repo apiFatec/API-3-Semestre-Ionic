@@ -10,52 +10,35 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 export function Process() {
-  const { id } = useParams();
+  const { process: processName, id } = useParams();
   const { handleTitle } = useContext(TitleContext);
-  const navigate = useNavigate();
-  const [process, setProcess] = useState<Processes>({
-    id: "",
-    deadline: "",
-    tasks: [],
-    name: "",
-    description: ""
-  });
-  const [task, setTask] = useState<Tasks>({
-    id: "",
-    title: "",
-    description: "",
-    status: "",
-    priority: "",
-    deadline: undefined,
-  });
-  const [user, setUser] = useState<any>();
+  const [process, setProcess] = useState<Processes>();
 
   const deadline = new Date();
-  const formattedDate = `${deadline.getDate()}/${
-    deadline.getMonth() + 1
-  }/${deadline.getFullYear()}`;
+  const formattedDate = `${deadline.getDate()}/${deadline.getMonth() + 1
+    }/${deadline.getFullYear()}`;
   const formattedTime = `${String(deadline.getHours()).padStart(
     2,
     "0"
   )}:${String(deadline.getMinutes()).padStart(2, "0")}`;
   const formattedDateTime = `${formattedDate} ${formattedTime}`;
 
-  const completedTaskCounter = process.tasks
-    ? process.tasks.filter((task) => task.status === "Finalizado").length
+  const completedTaskCounter = process?.tasks
+    ? process?.tasks.filter((task) => task.status === "Finalizado").length
     : 0;
 
-  const totalTaskCounter = process.tasks ? process.tasks.length : 0;
+  const totalTaskCounter = process?.tasks ? process?.tasks.length : 0;
 
   const taskPercentage =
     totalTaskCounter > 0 ? (completedTaskCounter / totalTaskCounter) * 100 : 0;
 
-  const altaPrioridadeTasks = process.tasks?.filter(
+  const altaPrioridadeTasks = process?.tasks?.filter(
     (task) => task.priority === "Alta"
   );
-  const mediaPrioridadeTasks = process.tasks?.filter(
+  const mediaPrioridadeTasks = process?.tasks?.filter(
     (task) => task.priority === "Média"
   );
-  const baixaPrioridadeTasks = process.tasks?.filter(
+  const baixaPrioridadeTasks = process?.tasks?.filter(
     (task) => task.priority === "Baixa"
   );
 
@@ -90,10 +73,10 @@ export function Process() {
   async function completeTask(id: string | undefined) {
     try {
       await userService.finishTask(id);
-      const updatedTasks = process.tasks?.map((task) =>
+      const updatedTasks = process?.tasks?.map((task) =>
         task.id === id ? { ...task, status: "Finalizado" } : task
       );
-      setProcess((prev) => ({ ...prev, tasks: updatedTasks }));
+      setProcess((prev) => ({ ...prev!, tasks: updatedTasks! }));
     } catch (error) {
       console.error("Erro ao concluir a tarefa:", error);
     }
@@ -103,20 +86,16 @@ export function Process() {
     try {
       const userToken = localStorage.getItem("token");
       await userService.joinTask({ task: updateTask, user: userToken });
-      if (id && process.tasks) {
-        const updatedTasks = process.tasks.map((task) =>
+      if (id && process?.tasks) {
+        const updatedTasks = process?.tasks.map((task) =>
           task.id === updateTask.id ? { ...task, status: "Em progresso" } : task
         );
 
-        setProcess((prev) => ({ ...prev, tasks: updatedTasks }));
+        setProcess((prev) => ({ ...prev!, tasks: updatedTasks! }));
       }
     } catch (error) {
       console.error("Erro ao ingressar na tarefa:", error);
     }
-  }
-
-  function nav() {
-    navigate(`/telaTarefas/${encodeURIComponent(process.name!)}/${process.id}`);
   }
 
   return (
@@ -126,7 +105,7 @@ export function Process() {
           <a href="#" className="border-b-4  border-[#53C4CD]">
             Informações
           </a>
-          <Link to={`/telaTarefas/${process.name}/${process.id}`}>
+          <Link to={`/tarefas/${processName}/${id}`}>
             Tarefas
           </Link>
         </div>
@@ -136,7 +115,7 @@ export function Process() {
         <div>
           <p className="w-11/12 border-b ">Descrição</p>
           <p className="text-sm h-20 overflow-hidden whitespace-normal break-words text-ellipsis min-h-[20rem] mt-6 max-w-xl">
-            {process.description}
+            {process?.description}
           </p>
           {/* <p className="w-11/12 border-b ">Comentários</p>
 

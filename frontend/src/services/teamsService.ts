@@ -10,7 +10,7 @@ class TeamsService {
     })
   }
 
-  async getOne(id: string) {
+  async getOne(id: string  | undefined) {
     return await api.get(`/teams/${id}`, {
       headers: {
         'Accept': 'application/json'

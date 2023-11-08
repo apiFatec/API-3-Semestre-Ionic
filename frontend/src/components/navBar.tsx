@@ -8,12 +8,13 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { useTheme } from "./theme.provider"
-import { Bell, BellDot, LogOut } from "lucide-react";
+import { Bell, BellDot, LogOut, User } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import { useContext, useState } from "react";
 import { TitleContext } from "@/contexts/TitleContext";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 
 export function NavBar() {
   const { theme } = useTheme();
@@ -103,10 +104,10 @@ export function NavBar() {
               {notifications.map((notify, index) => {
                 if (notify.read && notificationSelected)
                   return (
-                    <button 
-                    key={index}
-                    onClick={() => notify.read = true}
-                    className="flex flex-col w-full bg-ionic-normal/20 rounded p-2 justify-start items-start">
+                    <button
+                      key={index}
+                      onClick={() => notify.read = true}
+                      className="flex flex-col w-full bg-ionic-normal/20 rounded p-2 justify-start items-start">
                       <h1 className="text-left text-sm font-semibold w-full">{notify.title}</h1>
                       <p className="text-left text-xs w-full">{notify.description}</p>
                     </button>
@@ -133,6 +134,12 @@ export function NavBar() {
           <DropdownMenuContent>
             <DropdownMenuLabel>{name}</DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <Link to={"/perfil-usuario"}>
+              <DropdownMenuItem className="flex justify-between cursor-pointer">
+                Meu Perfil
+                <User />
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuItem onClick={() => logout()} className="flex justify-between cursor-pointer">
               Sair
               <LogOut />

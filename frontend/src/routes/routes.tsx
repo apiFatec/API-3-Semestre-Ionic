@@ -19,8 +19,6 @@ import { PaginaNaoEncontrada } from "@/pages/paginaNaoEncontrada/paginaNaoEncont
 export function Router() {
   return (
     <Routes>
-      <Route path="/" element={<Register />} />
-
       <Route element={<IsLogged />}>
         <Route path="/login" element={<Login />} />
       </Route>

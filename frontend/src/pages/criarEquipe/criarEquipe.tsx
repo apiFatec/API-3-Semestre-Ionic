@@ -91,7 +91,7 @@ export function CriarEquipe() {
             >
               <option value="">Gestor da Equipe</option>
               {users.map((user) => {
-                if (["Gestor", "Lider"].includes(user.role))
+                if (["Gestor", "Lider"].includes(user.role) && !user.teams)
                   return (
                     <option key={user.id} value={user.id}>
                       {user.name}
@@ -105,29 +105,32 @@ export function CriarEquipe() {
           </div>{" "}
         </div>
         <div className="flex flex-wrap gap-6 justify-start max-h-[30rem] overflow-auto">
-          {users.map((member, index) => (
-            <label
-              key={index}
-              className="flex gap-4 p-4 border rounded-sm w-80 justify-between"
-            >
-              <div className="flex gap-4 ">
-                <input
-                  type="checkbox"
-                  name="check"
-                  id="check"
-                  onChange={() => handleUsers(member)}
-                />
-                <Avatar className="h-11 w-11">
-                  <AvatarImage src={member.profileImage} />
-                  <AvatarFallback>{fallbackName(member.name)}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p>{member.name}</p>
-                  <p className="text-xs text-gray-500">{member.role}</p>
-                </div>
-              </div>
-            </label>
-          ))}
+          {users.map((user, index) => {
+            if (!user.teams)
+              return (
+                <label
+                  key={index}
+                  className="flex gap-4 p-4 border rounded-sm w-80 justify-between"
+                >
+                  <div className="flex gap-4 ">
+                    <input
+                      type="checkbox"
+                      name="check"
+                      id="check"
+                      onChange={() => handleUsers(user)}
+                    />
+                    <Avatar className="h-11 w-11">
+                      <AvatarImage src={user.profileImage} />
+                      <AvatarFallback>{fallbackName(user.name)}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p>{user.name}</p>
+                      <p className="text-xs text-gray-500">{user.role}</p>
+                    </div>
+                  </div>
+                </label>
+              )
+          })}
         </div>
         <div className="w-full flex justify-end">
           <Button

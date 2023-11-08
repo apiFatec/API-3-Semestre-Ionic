@@ -34,7 +34,7 @@ export function ProcessCard(process: Process) {
   const { theme } = useTheme();
   const currentDate = formatDate(process.processDeadline);
   const navigate = useNavigate();
-
+  console.log(process)
   function formatDate(date: Date) {
     const deadline = new Date(date);
     const day = deadline.toLocaleString('default', { day: '2-digit' });
@@ -52,8 +52,6 @@ export function ProcessCard(process: Process) {
   const finishedTasks = process.tasks ? process.tasks.filter((task) => task.status === "Finalizado").length : 0;
 
   const percentage = totalTasks > 0 ? (finishedTasks / totalTasks) * 100 : 0;
-
-  let contUsers = 0;
 
   return (
     <Card onClick={() => nav()}
@@ -81,7 +79,7 @@ export function ProcessCard(process: Process) {
           <Badge className="]" variant={"secondary"}>{currentDate}</Badge>
         </div>
         <div className="flex pt-4 items-center justify-end">
-          {process.users.slice(0, 2).map((user, index) => {
+          {process?.users?.length > 0 && process.users.slice(0, 2).map((user, index) => {
             return (
               <span className="mx-[-4px]" key={index}><PhotoProfile url={user.profileImage} /></span>
             )

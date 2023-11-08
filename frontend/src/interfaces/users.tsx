@@ -1,7 +1,7 @@
 import { Teams } from "./teams";
 
 export interface Users {
-  adress: string,
+  address: string,
   name: string,
   email: string,
   role: string,

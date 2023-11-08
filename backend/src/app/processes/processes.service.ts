@@ -127,13 +127,13 @@ GROUP BY processes.id;
     const teamAndLeader = [...saveProcessDTO.team.users, saveProcessDTO.leader];
 
     const usersProcesses = teamAndLeader.map((user) => {
+      console.log(user, '\n\n');
       const userProcess = new UsersProcessesEntity();
       userProcess.role = user.role;
       userProcess.processesId = createdProcess;
       userProcess.usersId = user;
       return userProcess;
     });
-
     const createdUsersProcesses =
       await this.usersProcessesRepository.save(usersProcesses);
 

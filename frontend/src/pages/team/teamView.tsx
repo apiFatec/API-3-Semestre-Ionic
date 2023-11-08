@@ -11,6 +11,7 @@ import processService from "@/services/processService";
 import teamsService from "@/services/teamsService";
 import userServices from "@/services/userServices";
 import { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 
 export function TeamView() {
@@ -101,12 +102,14 @@ export function TeamView() {
           <p>{team?.name}</p>
         </div>
         {user.role !== "Desenvolvedor" &&
-          <Button
-            className="bg-button hover:bg-ionic-pressed"
-            onClick={() => navigate("/criar-processo")}
-          >
-            Editar equipe
-          </Button>
+          <Link to={`/editar-equipe/${team.id}`}>
+            <Button
+              className="bg-button hover:bg-ionic-pressed"
+              onClick={() => navigate("/criar-processo")}
+            >
+              Editar equipe
+            </Button>
+          </Link>
         }
       </div>
       <div className="w-full flex flex-col px-11 gap-6 max-h-[600px] overflow-auto">

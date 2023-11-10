@@ -8,6 +8,7 @@ import { Tasks } from "@/interfaces/tasks";
 import { Processes } from "@/interfaces/processes";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import taskService from "@/services/taskService";
 
 export function Process() {
   const { process: processName, id } = useParams();
@@ -92,9 +93,10 @@ export function Process() {
         );
 
         setProcess((prev) => ({ ...prev!, tasks: updatedTasks! }));
+
       }
     } catch (error) {
-      console.error("Erro ao ingressar na tarefa:", error);
+      console.error("Erro ao concluir a tarefa:", error);
     }
   }
 

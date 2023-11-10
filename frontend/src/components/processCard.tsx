@@ -5,6 +5,8 @@ import { useTheme } from "./theme.provider";
 import { useNavigate } from "react-router-dom";
 import { PhotoProfile } from "./photoProfile";
 import { Badge } from "./ui/badge";
+import { Users } from "@/interfaces/users";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 
 
 export interface Process {
@@ -17,12 +19,12 @@ export interface Process {
   tasks: Array<Task>;
 }
 
-interface Users {
-  name: string;
-  role: string;
-  id: string;
-  // url_photo: string;
-}
+// interface Users {
+//   name: string;
+//   role: string;
+//   id: string;
+//   // url_photo: string;
+// }
 
 interface Task {
   status: string;
@@ -32,14 +34,13 @@ export function ProcessCard(process: Process) {
   const { theme } = useTheme();
   const currentDate = formatDate(process.processDeadline);
   const navigate = useNavigate();
-
-
+  console.log(process)
   function formatDate(date: Date) {
     const deadline = new Date(date);
     const day = deadline.toLocaleString('default', { day: '2-digit' });
     const month = deadline.toLocaleString('default', { month: 'short' });
     const year = deadline.toLocaleString('default', { year: 'numeric' });
-    return day + ' ' + month[0].toUpperCase()+month.substring(1) + ' ' + year;
+    return day + ' ' + month[0].toUpperCase() + month.substring(1) + ' ' + year;
   }
 
   function nav() {
@@ -51,8 +52,6 @@ export function ProcessCard(process: Process) {
   const finishedTasks = process.tasks ? process.tasks.filter((task) => task.status === "Finalizado").length : 0;
 
   const percentage = totalTasks > 0 ? (finishedTasks / totalTasks) * 100 : 0;
-
-  let contUsers = 0;
 
   return (
     <Card onClick={() => nav()}
@@ -66,37 +65,33 @@ export function ProcessCard(process: Process) {
       <div className="flex flex-col">
         <p className="mb-2 w-full line-clamp-1">{process.processDescription}</p>
       </div>
-      
+
       {process.processStatus == "Em progresso" && (
         <div className="w-[17.3rem]">
-          
+
           <p className="flex justify-end text-xs text-[#949494]">{finishedTasks}/{totalTasks} tarefas</p>
           <Progress className="h-2 bg-gray-200" value={percentage} />
         </div>
-      ) }
+      )}
 
       <div className="grid grid-cols-2 w-full">
         <div className="w-full flex items-end">
           <Badge className="]" variant={"secondary"}>{currentDate}</Badge>
         </div>
-        <div className="flex flex-row-reverse pt-4">
-          {
-            process.users.slice(2, process.users.length).map(() => {
-              contUsers = contUsers + 1
-              return null
-            })}
-            {contUsers > 0 && (
-              <span className="flex p-1 w-8 h-8 rounded-full bg-slate-200 dark:bg-secondary">+{contUsers}</span>
-            )
-          }
-          {process.users.slice(0,2).map((user, index) => {
+        <div className="flex pt-4 items-center justify-end">
+          {process?.users?.length > 0 && process.users.slice(0, 2).map((user, index) => {
             return (
-              <span className="mx-[-4px]" key={index}><PhotoProfile /></span>
+              <span className="mx-[-4px]" key={index}><PhotoProfile url={user.profileImage} /></span>
             )
           })}
+          {process.users.length - 2 > 0 && (
+            <Avatar className="h-11 w-11 shadow-md border-black/20 border-[1px]">
+              <AvatarFallback>+{process.users.length - 2}</AvatarFallback>
+            </Avatar>
+          )
+          }
         </div>
       </div>
-
     </Card>
   )
 } 

@@ -1,11 +1,12 @@
 import { Tasks } from "./tasks";
+import { Teams } from "./teams";
 import { Users } from "./users";
 
 export interface ProcessFormValues {
   name: string;
   description: string;
   deadline: Date;
-  leader: string;
-  team: Array<Users>;
+  leader: Users;
+  team: Teams;
   tasks: Array<Tasks>;
 }

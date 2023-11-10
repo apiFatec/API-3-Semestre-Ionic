@@ -1,41 +1,36 @@
 import { Button } from "@/components/ui/button";
 import { useContext, useEffect, useState } from "react";
-import UserServices from "@/services/userServices";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { TeamFormValues } from "@/interfaces/teamFormValues";
 import { Users } from "@/interfaces/users";
 import { TitleContext } from "@/contexts/TitleContext";
 import teamsService from "@/services/teamsService";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useParams } from "react-router-dom";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@radix-ui/react-popover";
-import { MoreHorizontal, Trash } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { MoreHorizontal } from "lucide-react";
 import userServices from "@/services/userServices";
 
 export function EditarEquipe() {
   const { id } = useParams();
-  const { handleSubmit } = useForm<TeamFormValues>();
   const { handleTitle } = useContext(TitleContext);
-  const [team, setTeam] = useState<TeamFormValues | null>(null);
-
-  const [selectedMembers, setSelectedMembers] = useState<Users[]>([]);
-
   const [teamName, setTeamName] = useState("");
-  const [teamLeader, setTeamLeader] = useState("");
+  const [teamLeader, setTeamLeader] = useState<Users>();
   const [users, setUsers] = useState<Users[]>([]);
 
-  function handleUsers(nUser: Users) {
-    setSelectedMembers((prevSelected) => {
-      if (prevSelected.some((user) => user.id === nUser.id)) {
-        return prevSelected.filter((user) => user.id !== nUser.id);
-      } else {
-        return [...prevSelected, nUser];
-      }
-    });
-  }
+  useEffect(() => {
+    getTeam(id);
+    handleTitle("Criar equipe");
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -43,13 +38,13 @@ export function EditarEquipe() {
     }
   }, [id]);
 
-  async function getTeam(teamId: string) {
+  async function getTeam(teamId: string | undefined) {
     try {
       const teamResponse = await teamsService.getOne(teamId);
-
+      console.log(teamResponse.data.leader)
       setUsers(teamResponse.data.users);
       setTeamName(teamResponse.data.name);
-      setTeamLeader(teamResponse.data.leader.name);
+      setTeamLeader(teamResponse.data.leader);
       handleTitle("Editar equipe");
       console.log(users);
     } catch (error) {
@@ -60,7 +55,7 @@ export function EditarEquipe() {
   const handleDelete = async (userId: string | undefined) => {
     try {
       if (userId) {
-        await userServices.removeTeamUser(userId);
+        await userServices.removeFromTeam(userId);
       } else {
         console.log(
           "ID do usuário não especificado. Não é possível excluir o usuário da equipe."
@@ -79,8 +74,7 @@ export function EditarEquipe() {
           leader: teamLeader,
         };
 
-        await teamsService
-          .updateTeam(id, team)
+        await teamsService.updateTeam(id, team)
           .then((response) => {
             console.log(response);
           })
@@ -92,10 +86,16 @@ export function EditarEquipe() {
           "ID da equipe não definido. Não é possível atualizar a equipe."
         );
       }
+
     } catch (error) {
       console.error("Erro ao atualizar a equipe:", error);
     }
   };
+
+  const fallbackName = (name: string) => {
+    const splitName = name.split(' ')
+    return splitName[0][0] + splitName[splitName.length - 1][0]
+  }
 
   return (
     <section className="flex border p-5 rounded-lg m-auto w-[46rem] gap-4 flex-wrap ">
@@ -113,41 +113,41 @@ export function EditarEquipe() {
           </div>
           <div className="flex gap-2 items-center">
             <h3>Gestor da equipe</h3>
-            <select
-              id="teamLeader"
-              className="p-2 pr-6 border rounded max-w-[7rem]"
-              value={teamLeader}
-              onChange={(e) => setTeamLeader(e.target.value)}
-            >
-              <option value="">
-                {teamLeader ? ` ${teamLeader}` : "Nome do time"}
-              </option>
-              {users.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name}
-                </option>
-              ))}
-            </select>
+            <Select>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder={teamLeader?.name} />
+              </SelectTrigger>
+              <SelectContent>
+                {users.map((user) => {
+                  if (["Gestor", "Lider", "Admin"].includes(user.role))
+                    return (
+                      <SelectItem key={user.id} value={user.id}>
+                        {user.name}
+                      </SelectItem>
+                    )
+                })}
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex gap-4 items-center">
             <h3>Colaboradores</h3>
           </div>{" "}
         </div>
         <div className="flex flex-wrap gap-6 justify-start max-h-[30rem] overflow-auto">
-          {users.map((member) => (
+          {users.map((user) => (
             <div
-              key={member.id}
+              key={user.id}
               className="flex gap-4 p-4 border rounded-sm w-80 justify-between"
             >
               <div className="flex gap-4 ">
-                <img
-                  src={member.imageUrl || "./user-solid.svg"}
-                  alt={member.name}
-                  className="rounded-full w-6 cyan-400"
-                />
+                <Avatar className="h-11 w-11">
+                  <AvatarImage src={user.profileImage || "./user-solid.svg"} />
+                  <AvatarFallback>{fallbackName(user.name)}</AvatarFallback>
+                </Avatar>
+
                 <div>
-                  <p>{member.name}</p>
-                  <p className="text-xs text-gray-500">{member.role}</p>
+                  <p>{user.name}</p>
+                  <p className="text-xs text-gray-500">{user.role}</p>
                 </div>
               </div>
               <Popover>
@@ -158,7 +158,7 @@ export function EditarEquipe() {
                   <div className="flex items-center cursor-pointer bg-white shadow-md over:bg-gray-200 hover:duration-200 rounded gap">
                     <button
                       type="button"
-                      onClick={() => handleDelete(member.id)}
+                      onClick={() => handleDelete(user.id)}
                       className="cursor-pointer text-center hover:bg-gray-200 hover:duration-200  px-2 rounded"
                     >
                       Excluir
@@ -172,13 +172,13 @@ export function EditarEquipe() {
         <div className="w-full flex justify-end">
           <Button
             type="button"
-            onClick={() => updateTeam(id)}
+            onClick={() => updateTeam(id!)}
             className="mr-5 mt-4 w-32 h-11 rounded bg-[#53C4CD] text-white text-sm shadow-[0px_0px_4px_0px_rgba(0,0,0,0.25)] hover:bg-[#4bacb4]"
           >
             Salvar
           </Button>
         </div>
       </form>
-    </section>
+    </section >
   );
 }

@@ -57,7 +57,7 @@ export class TasksEntity {
   processesId: ProcessesEntity;
 
   @OneToMany(() => UsersTasksEntity, (usersTasksEntity) => usersTasksEntity.tasksId)
-  usersTasks: UsersTasksEntity;
+  usersTasks: UsersTasksEntity[];
 
   @OneToMany(() => File, (file) => file )
   files: File[];

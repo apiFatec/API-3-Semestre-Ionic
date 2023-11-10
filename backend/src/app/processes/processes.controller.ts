@@ -15,11 +15,11 @@ import { ProcessesEntity } from './entities/processes.entity';
 
 @Controller('processes')
 export class ProcessesController {
-  constructor(private readonly processesService: ProcessesService) {}
+  constructor(private readonly processesService: ProcessesService) { }
 
-  @Get()
-  async index() {
-    return await this.processesService.findAll();
+  @Get('/user/team/:id')
+  async index(@Param('id', new ParseUUIDPipe) id: string): Promise<ProcessesEntity[] | undefined> {
+    return await this.processesService.findAllByUser(id);
   }
 
   @Post()
@@ -46,9 +46,7 @@ export class ProcessesController {
   }
 
   @Get('/team/:id')
-  async getTeamProcesses(
-    @Param('id', new ParseUUIDPipe()) id: string,
-  ): Promise<ProcessesEntity[]> {
+  async getTeamProcesses(@Param('id', new ParseUUIDPipe()) id: string): Promise<ProcessesEntity[]> {
     return await this.processesService.getTeamProcesses(id);
   }
 }

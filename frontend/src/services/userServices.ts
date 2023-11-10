@@ -33,21 +33,30 @@ class UserServices {
     return await api.put(`/tasks/finish-task/${id}`);
   }
 
-  async leaveTask(idTask: string | undefined, tokenUser: string | null) {
-    return await api.delete(`tasks/leave-task/${idTask}/user/${tokenUser}`);
+  async leaveTask(idTask: string | undefined, id: string | null) {
+    return await api.delete(`tasks/leave-task/${idTask}/user/${id}`);
   }
 
-  async getOneUser(tokenUser: string | null) {
-    return await api.get(`/users/${tokenUser}`);
+  async getOneUser(id: string) {
+    return await api.get(`/users/one/${id}`)
   }
 
-  async removeTeamUser(id: string) {
-    return await api.patch(`/remove-team/${id}`);
-  }
-
-  async sendPicture(userName : string | null, id : string | null, data : FormData){
+  async sendPicture(userName: string | null, id: string | null, data: FormData) {
     return await api.post(`/users/profile/${userName}/${id}`, data)
   }
+
+  async removeFromTeam(id: string) {
+    return await api.delete(`users/remove-team/${id}`);
+  }
+
+  async getUserToTeam() {
+    return await api.get("/users/users-team", {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+  }
+
 }
 
 export default new UserServices();

@@ -1,15 +1,11 @@
-import photo from '../../public/lula.jpg';
-import { Button } from "@/components/ui/button"
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { Text } from "lucide-react"
-import { PhotoProfile } from "./photoProfile"
 import { Task as TaskInterface } from '@/pages/process/process';
 
 interface Props {

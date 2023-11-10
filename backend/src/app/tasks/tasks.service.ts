@@ -18,23 +18,15 @@ export class TasksService {
     @InjectRepository(UsersTasksEntity)
     private readonly usersTasksRepository: Repository<UsersTasksEntity>,
     private readonly usersServices: UsuariosService,
-  ) {}
+  ) { }
 
-  async store(
-    data: SaveTaskDTO[],
-    process: ProcessesEntity,
-  ): Promise<TasksEntity[]> {
+  async store(data: SaveTaskDTO[], process: ProcessesEntity): Promise<TasksEntity[]> {
     const tasks = data.map((taskDTO) => {
-      const task = new TasksEntity();
-      task.title = taskDTO.title;
-      task.description = taskDTO.description;
-      task.status = Status.WAITING;
-      task.priority = taskDTO.priority;
-      task.processesId = process;
-      return task;
+      return this.tasksRepository.create({ ...taskDTO, processesId: process });
     });
 
-    return await this.tasksRepository.save(tasks);
+    await this.tasksRepository.insert(tasks);
+    return tasks;
   }
 
   async storeMultiple(data: SaveTaskDTO[]): Promise<TasksEntity[]> {
@@ -53,9 +45,8 @@ export class TasksService {
     return savedTasks;
   }
 
-  async joinTask(task: TasksEntity, email: string): Promise<void> {
-    const user = await this.usersServices.findOne(email);
-    console.log(user);
+  async joinTask(task: TasksEntity, id: string): Promise<void> {
+    const user = await this.usersServices.findOneById(id);
     try {
       const userTask = new UsersTasksEntity();
       userTask.tasksId = task;
@@ -69,8 +60,9 @@ export class TasksService {
       throw new Error('Usuário não encontrado');
     }
   }
-
+  
   async finishTask(id: string) {
+    console.log("finishing task")
     try {
       await this.tasksRepository.update(
         { id: id },
@@ -82,6 +74,7 @@ export class TasksService {
   }
 
   async leaveTask(idTask: string, id: string) {
+    console.log("leaving task")
     await this.usersTasksRepository.delete({
       tasksId: { id: idTask },
       usersId: { id: id },
@@ -112,6 +105,7 @@ export class TasksService {
     `;
     const tasks = await this.tasksRepository.query(query, [id]);
     return tasks;
+
   }
 
   async getUserTask(taskId: string, userId: string) {

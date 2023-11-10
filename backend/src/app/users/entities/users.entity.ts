@@ -16,7 +16,6 @@ import { UsersProcessesEntity } from '@/app/processes/entities/usersProcesses.en
 import { UsersTasksEntity } from '@/app/tasks/entities/usersTasks.entity';
 import { ProjectsEntity } from '@/app/projects/entities/projects.entity';
 import { File } from '@/app/files/entities/file.entity';
-import { TasksEntity } from '@/app/tasks/entities/tasks.entity';
 import { TeamsEntity } from '@/app/teams/entities/teams.entity';
 
 export enum Role {
@@ -47,7 +46,7 @@ export class UsersEntity {
   profileImage: string;
 
   @Column({ nullable: true })
-  adress: string;
+  address: string;
 
   @Column({ nullable: true })
   gender: string;
@@ -72,16 +71,10 @@ export class UsersEntity {
     this.password = hashSync(this.password, 10);
   }
 
-  @OneToMany(
-    () => UsersProcessesEntity,
-    (usersProcessesEntity) => usersProcessesEntity.usersId,
-  )
+  @OneToMany(() => UsersProcessesEntity, (usersProcessesEntity) => usersProcessesEntity.usersId)
   usersProcesses: UsersProcessesEntity[];
 
-  @OneToMany(
-    () => UsersTasksEntity,
-    (usersTasksEntity) => usersTasksEntity.usersId,
-  )
+  @OneToMany(() => UsersTasksEntity, (usersTasksEntity) => usersTasksEntity.usersId)
   usersTasks: UsersTasksEntity[];
 
   @OneToMany(() => ProjectsEntity, (projectsEntity) => projectsEntity.usersId)

@@ -13,8 +13,8 @@ import { SaveTeamDTO } from './dto/save-team.dto';
 
 @Controller('teams')
 export class TeamsController {
-  constructor(private readonly teamsService: TeamsService) {}
-  1;
+  constructor(private readonly teamsService: TeamsService) { }
+
   @Get()
   async index() {
     return await this.teamsService.findAll();

@@ -2,59 +2,44 @@ import "@/styles/visaoDetalhada/estiloPagina/perfilUsuario.css"
 import { useEffect, useState } from "react"
 import userServices from "@/services/userServices"
 import { EditPicture } from "@/components/ModalEditPicture"
+import { Users } from "@/interfaces/users"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-interface Users{
-    id: string,
-    name: string,
-    role: string,
-    email: string,
-    password: string,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string,
-    adress: string,
-    phone: string,
-    profileImage: string
-}
+
 
 
 export function PerfilUsuario() {
     const [modal, setModal] = useState<boolean>(false)
-    const [userL, setUser] = useState<Users>(
-        {
-            id: "",
-            name: "",
-            role: "",
-            email: "",
-            password: "",
-            createdAt: "",
-            updatedAt: "",
-            deletedAt: "", 
-            adress: "",
-            phone: "",
-            profileImage: "",
-        }
-    );
-    
-    useEffect(getUser,[modal])
+    const [userL, setUser] = useState<Users>();
 
-    function getUser (){
-        userServices.getOneUser(localStorage.getItem('token'))
-        .then((resp) => {
-            console.log(resp.data)
-            setUser(resp.data)
-        })
+    useEffect(getUser, [modal])
+
+    function getUser() {
+        userServices.getOneUser(localStorage.getItem('id')!)
+            .then((resp) => {
+                console.log(resp.data)
+                setUser(resp.data)
+            })
     }
 
+    const fallbackName = (name: string | undefined) => {
+        const splitName = name?.split(' ')
+        if (splitName)
+            return splitName[0][0] + splitName[splitName.length - 1][0]
+    }
 
 
     return (<div className="container">
         <div className="centralizar">
             <div className="container-profile">
-                <img className="foto-redonda" src = {userL.profileImage}  alt="Foto" />
+                {/* <img className="foto-redonda" src={userL?.profileImage} alt="Foto" /> */}
+                <Avatar className="h-64 w-64 shadow-md border-black/20 border-[1px]">
+                    <AvatarImage src={userL?.profileImage} />
+                    <AvatarFallback className="text-6xl">{fallbackName(userL?.name)}</AvatarFallback>
+                </Avatar>
                 <button onClick={() => setModal(true)}> Editar Foto </button>
                 {modal && (
-                    <EditPicture userName={userL.name} id={userL.id} closeModal={setModal}  />
+                    <EditPicture userName={userL?.name!} id={userL?.id!} closeModal={setModal} />
 
                 )}
 
@@ -78,16 +63,16 @@ export function PerfilUsuario() {
                     </ul>
                     <ul>
                         <li>
-                            {userL.name}
+                            {userL?.name}
                         </li>
                         <li>
-                            {userL.role}
+                            {userL?.role}
                         </li>
                         <li>
-                            {userL.adress}
+                            {userL?.address}
                         </li>
                         <li>
-                            {userL.phone}
+                            {userL?.phone}
                         </li>
                     </ul>
                 </div>

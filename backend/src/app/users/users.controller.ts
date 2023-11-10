@@ -1,18 +1,4 @@
-import {
-  Controller,
-  UseGuards,
-  Post,
-  Request,
-  Get,
-  Body,
-  Param,
-  UseInterceptors,
-  UploadedFile,
-  Res,
-  ParseUUIDPipe,
-  Req,
-  Patch,
-} from '@nestjs/common';
+import { Controller, UseGuards, Post, Request, Get, Body, Param, UseInterceptors, UploadedFile, Res, ParseUUIDPipe, Req, Delete } from '@nestjs/common';
 import { Express, Request as ReqImage, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { UsuariosService } from './users.service';
@@ -21,8 +7,6 @@ import { UsersEntity } from './entities/users.entity';
 import { SaveUserDto } from './dto/save-users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TokenService } from '../token/token.service';
-import { TokenEntity } from '../token/entities/token.entity';
-import { async } from 'rxjs';
 
 @Controller('users')
 export class UsuariosController {
@@ -30,7 +14,7 @@ export class UsuariosController {
     private readonly usuariosService: UsuariosService,
     private readonly authService: AuthService,
     private readonly tokenService: TokenService,
-  ) {}
+  ) { }
 
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
@@ -46,9 +30,8 @@ export class UsuariosController {
     @UploadedFile() file: Express.Multer.File,
     @Req() req: ReqImage,
   ): Promise<void> {
-
     const pathName: string = `${req.protocol}://${req.get('host')}/users/profile/${username}/${file.filename}`;
-
+    
     return await this.usuariosService.saveProfileImage(pathName, id);
   }
 
@@ -73,32 +56,18 @@ export class UsuariosController {
     return await this.usuariosService.findAll();
   }
 
-  @Get(':token')
-  async getOne(@Param('token') idUser: string) {
-    const token = idUser;
-    const decodedToken = await this.tokenService.decodeJwt(token);
-
-
-    console.log(decodedToken)
-    const user =await this.usuariosService.findOne(decodedToken.email);
-    return user
+  @Get('/one/:id')
+  async getOneById(@Param('id', new ParseUUIDPipe()) id: string) {
+    return await this.usuariosService.findOneById(id);
   }
 
-  @Get('/id/:id')
-  async getOneid(@Param('id') idUsuario: string){
-    return await this.usuariosService.findOneById(idUsuario)
-
-    const user = await this.usuariosService.findOne(decodedToken.email);
-
-    return {
-      id: user.id,
-      name: user.name,
-    };
+  @Delete('/remove-team/:id')
+  async removeFromTeam(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
+    return await this.usuariosService.removeTeam(id);
   }
 
-  @Patch('/remove-team/:id')
-  async removeFromTeam(@Param('id', new ParseUUIDPipe()) id: string) {
-    return await this.usuariosService.removeFromTeam(id);
-
+  @Get('/users-team')
+  async userWithoutTeam(): Promise<UsersEntity[] | undefined> {
+    return await this.usuariosService.userWithoutTeam();
   }
 }

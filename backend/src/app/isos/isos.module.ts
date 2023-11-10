@@ -10,4 +10,4 @@ import { IsosEntity } from './entities/isos.entity';
   providers: [IsosService],
   exports: [IsosService]
 })
-export class IsosModule {}
+export class IsosModule { }

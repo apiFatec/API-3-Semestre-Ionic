@@ -1,5 +1,5 @@
-import { TeamsEntity } from '@/app/teams/entities/teams.entity';
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { TeamsEntity } from "@/app/teams/entities/teams.entity";
+import { IsEmail, IsNotEmpty } from "class-validator";
 
 export enum Role {
   CLEVEL = 'C-Level',
@@ -24,7 +24,7 @@ export class SaveUserDto {
   password: string;
 
   @IsNotEmpty()
-  adress: string;
+  address: string;
 
   @IsNotEmpty()
   gender: string;

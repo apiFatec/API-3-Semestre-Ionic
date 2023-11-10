@@ -6,54 +6,40 @@ import { Progress } from "@/components/ui/progress";
 import { TitleContext } from "@/contexts/TitleContext";
 import { Tasks } from "@/interfaces/tasks";
 import { Processes } from "@/interfaces/processes";
-
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
 import taskService from "@/services/taskService";
 
 export function Process() {
-  const { id } = useParams();
+  const { process: processName, id } = useParams();
   const { handleTitle } = useContext(TitleContext);
-  const navigate = useNavigate();
+  const [process, setProcess] = useState<Processes>();
 
-  const [process, setProcess] = useState<Processes>({
-    id: "",
-    deadline: "",
-    tasks: [],
-    name: "",
-    description: "",
-  });
-  interface usersTask {
-    id: string;
-    users_id: string;
-    tasks_id: string;
-  }
   const deadline = new Date();
-  const formattedDate = `${deadline.getDate()}/${
-    deadline.getMonth() + 1
-  }/${deadline.getFullYear()}`;
+  const formattedDate = `${deadline.getDate()}/${deadline.getMonth() + 1
+    }/${deadline.getFullYear()}`;
   const formattedTime = `${String(deadline.getHours()).padStart(
     2,
     "0"
   )}:${String(deadline.getMinutes()).padStart(2, "0")}`;
   const formattedDateTime = `${formattedDate} ${formattedTime}`;
 
-  const completedTaskCounter = process.tasks
-    ? process.tasks.filter((task) => task.status === "Finalizado").length
+  const completedTaskCounter = process?.tasks
+    ? process?.tasks.filter((task) => task.status === "Finalizado").length
     : 0;
 
-  const totalTaskCounter = process.tasks ? process.tasks.length : 0;
+  const totalTaskCounter = process?.tasks ? process?.tasks.length : 0;
 
   const taskPercentage =
     totalTaskCounter > 0 ? (completedTaskCounter / totalTaskCounter) * 100 : 0;
 
-  const altaPrioridadeTasks = process.tasks?.filter(
+  const altaPrioridadeTasks = process?.tasks?.filter(
     (task) => task.priority === "Alta"
   );
-  const mediaPrioridadeTasks = process.tasks?.filter(
+  const mediaPrioridadeTasks = process?.tasks?.filter(
     (task) => task.priority === "Média"
   );
-  const baixaPrioridadeTasks = process.tasks?.filter(
+  const baixaPrioridadeTasks = process?.tasks?.filter(
     (task) => task.priority === "Baixa"
   );
 
@@ -71,71 +57,59 @@ export function Process() {
 
   async function getProcess(id: string | undefined) {
     if (id) {
-      processService
-        .getOne(id)
+      processService.getOne(id)
         .then((response) => {
           const data = response.data;
           setProcess(data);
           handleTitle(data.name);
+          console.log(data)
         })
         .catch((error) => {
           console.log(error);
         });
+
     }
   }
 
   async function completeTask(id: string | undefined) {
     try {
-      const result = await taskService.getUserTask(
-        id,
-        localStorage.getItem("token")
-      );
-
-      const updatedTasks = process.tasks?.map((task) =>
+      await userService.finishTask(id);
+      const updatedTasks = process?.tasks?.map((task) =>
         task.id === id ? { ...task, status: "Finalizado" } : task
       );
+      setProcess((prev) => ({ ...prev!, tasks: updatedTasks! }));
+    } catch (error) {
+      console.error("Erro ao concluir a tarefa:", error);
+    }
+  }
 
-      if (updatedTasks) {
-        const isUserAssigned = result.data.some(
-          (assignedUser: usersTask) => assignedUser.tasks_id === id
+  async function joinTask(updateTask: Tasks) {
+    try {
+      const userToken = localStorage.getItem("token");
+      await userService.joinTask({ task: updateTask, user: userToken });
+      if (id && process?.tasks) {
+        const updatedTasks = process?.tasks.map((task) =>
+          task.id === updateTask.id ? { ...task, status: "Em progresso" } : task
         );
 
-        if (isUserAssigned) {
-          await userService.finishTask(id);
-          setProcess((prev) => ({ ...prev, tasks: updatedTasks }));
-        } else {
-          console.error(
-            "Usuário não está associado a esta tarefa. Não pode ser concluída."
-          );
-        }
-      } else {
-        console.error(
-          "Não foi possível obter informações sobre o usuário e as tarefas."
-        );
+        setProcess((prev) => ({ ...prev!, tasks: updatedTasks! }));
+
       }
     } catch (error) {
       console.error("Erro ao concluir a tarefa:", error);
     }
   }
 
-  function nav() {
-    navigate(`/telaTarefas/${encodeURIComponent(process.name!)}/${process.id}`);
-  }
-
   return (
     <div className="flex flex-col items-center justify-center w-full px-12 gap-4">
       <section className="flex-row w-full mb-6">
         <div className="flex gap-12 ">
-          <div>
-            <a href="#" className="border-b-4  border-[#53C4CD]">
-              Informações
-            </a>
-          </div>
-          <div>
-            <a href="#" onClick={() => nav()}>
-              Tarefas
-            </a>
-          </div>
+          <a href="#" className="border-b-4  border-[#53C4CD]">
+            Informações
+          </a>
+          <Link to={`/tarefas/${processName}/${id}`}>
+            Tarefas
+          </Link>
         </div>
       </section>
 
@@ -143,7 +117,7 @@ export function Process() {
         <div>
           <p className="w-11/12 border-b ">Descrição</p>
           <p className="text-sm h-20 overflow-hidden whitespace-normal break-words text-ellipsis min-h-[20rem] mt-6 max-w-xl">
-            {process.description}
+            {process?.description}
           </p>
           {/* <p className="w-11/12 border-b ">Comentários</p>
 

@@ -32,6 +32,10 @@ class ProcessServices {
       }
     });
   }
-}
+
+  async getIsos(id : string | undefined){
+    return await api.get(`/processes/${id}/isos`)
+  }
+} 
 
 export default new ProcessServices();

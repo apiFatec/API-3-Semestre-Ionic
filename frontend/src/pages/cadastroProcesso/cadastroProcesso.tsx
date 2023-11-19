@@ -36,10 +36,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { typeIso } from "@/interfaces/iso";
 
-interface Isos {
-  title: string;
-}
 
 export function CadastroProcessos() {
   const { handleTitle } = useContext(TitleContext);
@@ -57,7 +55,7 @@ export function CadastroProcessos() {
   const [teamLeader, setTeamLeader] = useState<Users>();
   const [team, setTeam] = useState<Teams | undefined>();
   const [open, setOpen] = useState(false)
-  const [isos, setIsos] = useState<Isos[]>([]);
+  const [isos, setIsos] = useState<typeIso[]>([]);
   const [selectedIsos, setSelectedIsos] = useState<Isos[]>([]);
   const [process, setProcesss] = useState<ProcessFormValues[]>([]);
   const navigate = useNavigate();
@@ -110,6 +108,7 @@ export function CadastroProcessos() {
       tasks: tasks,
       team: team!,
       leader: team!.leader,
+      isos : selectedIsos,
     };
     processService
       .createProcess(processo)
@@ -139,10 +138,8 @@ export function CadastroProcessos() {
     setTasks(filteredTasks);
   }
 
-  function addIso(title: string) {
-    const selectedIso: Isos = {
-      title: title
-    }
+  function addIso(iso: typeIso) {
+    const selectedIso = iso
     setSelectedIsos((prevState) => [...prevState, selectedIso]);
   }
 
@@ -215,7 +212,7 @@ export function CadastroProcessos() {
                               className="flex"
                               value={iso.title}
                               onSelect={(currentValue: string) => {
-                                addIso(currentValue)
+                                addIso(iso)
                                 setOpen(false)
                               }
                               }

@@ -57,9 +57,6 @@ export function PerfilUsuario() {
                         <li>
                             Endereço
                         </li>
-                        <li>
-                            Contato
-                        </li>
                     </ul>
                     <ul>
                         <li>

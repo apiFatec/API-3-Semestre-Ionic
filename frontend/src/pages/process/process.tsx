@@ -10,10 +10,27 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import taskService from "@/services/taskService";
 
+interface iso {
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+}
+
+interface result {
+  name: string;
+  isos: Array<iso>
+}
+
 export function Process() {
   const { process: processName, id } = useParams();
   const { handleTitle } = useContext(TitleContext);
   const [process, setProcess] = useState<Processes>();
+  const [isosProcess, setIsos] = useState<result>();
+  const [isos, setIso] = useState<iso[]>()
 
   const deadline = new Date();
   const formattedDate = `${deadline.getDate()}/${deadline.getMonth() + 1
@@ -53,6 +70,7 @@ export function Process() {
   }
   useEffect(() => {
     getProcess(id);
+    getIsos()
   }, []);
 
   async function getProcess(id: string | undefined) {
@@ -98,6 +116,14 @@ export function Process() {
     } catch (error) {
       console.error("Erro ao concluir a tarefa:", error);
     }
+  }
+
+  function getIsos() {
+    processService.getIsos(id).then((response) => {
+      setIsos(response.data[0])
+      console.log(response.data[0])
+      setIso(response.data[0].isos)
+    })
   }
 
   return (
@@ -146,9 +172,16 @@ export function Process() {
             <div className="w-1/3">
               <p className="border-b">Regulatório</p>
 
-              <p className="text-xs h-20 text-slate-500 overflow-hidden whitespace-normal break-words text-ellipsis mt-4 ">
-                Requisitos
-              </p>
+              {
+                isosProcess?.isos?.map( (iso) => {
+                  return (
+                    <p>
+                      <a href={iso.url}>{iso.title}</a>
+                    </p>
+                  )
+                }) 
+              }
+
             </div>
           </div>
           <div>

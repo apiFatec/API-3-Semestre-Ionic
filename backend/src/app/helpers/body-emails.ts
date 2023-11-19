@@ -6,7 +6,7 @@ class BodyEmail {
 
   async getBodyEmail(body: AttachmentDto, template: string) {
 
-    const filePath = path.join('C:\\Users\\Talison\\API-3-Semestre-Ionic\\backend\\src\\app\\templates\\', template);
+    const filePath = path.join('C:\\Users\\neyra\\Desktop\\API-3-Semestre-Ionic\\backend\\src\\app\\templates', template);
     let htmlContent = fs.readFileSync(filePath, 'utf-8');
 
     htmlContent = htmlContent.replace('{{title}}', body.title);

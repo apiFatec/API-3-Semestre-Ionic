@@ -6,6 +6,7 @@ import {
   Settings,
   UserPlus2,
   Users2,
+  FolderPlus
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "./mode-toggle";
@@ -65,6 +66,11 @@ export function Sidebar() {
       label: "cadastrar colaborador",
       icon: UserPlus2,
       href: "/admin-register",
+    },
+    {
+      label: "cadastrar ISO",
+      icon: FolderPlus,
+      href: "/isos",
     },
     {
       label: "Settings",

@@ -48,7 +48,6 @@ export function TaskFileModal({ taskId, func }: Props) {
         <>
             <div>
                 <InputFile onChange={handleFileChange} label={"Adicione o arquivo do seu computador"} id={"InputFile"} type={"file"} />
-
                 <Button onClick={() => handleSubmit(taskId, user)}>Enviar</Button>
             </div>
         </>

@@ -121,6 +121,7 @@ GROUP BY processes.id;
     newProcess.deadline = saveProcessDTO.deadline;
     newProcess.status = saveProcessDTO.status || Status.WAITING;
     newProcess.team = saveProcessDTO.team;
+    newProcess.isos = saveProcessDTO.isos;
 
     const createdProcess = await this.processesRepository.save(newProcess);
 
@@ -152,5 +153,17 @@ GROUP BY processes.id;
         tasks: true,
       },
     });
+  }
+
+  async getIsos(id: string) {
+    return await this.processesRepository.find({
+      relations: {
+        isos: true,
+      },
+      where: {
+        id: id
+      },
+      select: ['name']
+    })
   }
 }

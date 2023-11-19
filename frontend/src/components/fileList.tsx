@@ -22,11 +22,9 @@ const FileList: React.FC<FileListProps> = ({ files }) => {
       <ul>
         {files.map((file) => (
           <li key={file.id}>
-            <Button>
               <a href={file.url} target="_blank" rel="noopener noreferrer">
                 {formatName(file.fileName)}
               </a>
-            </Button>
           </li>
         ))}
       </ul>

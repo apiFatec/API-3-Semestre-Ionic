@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { UsersProcessesEntity } from "./usersProcesses.entity";
 import { TasksEntity } from "@/app/tasks/entities/tasks.entity";
 import { TeamsEntity } from "@/app/teams/entities/teams.entity";
+import { IsosEntity } from "@/app/isos/entities/isos.entity";
 
 export enum Status {
   WAITING = 'Aguardando',
@@ -51,4 +52,8 @@ export class ProcessesEntity {
 
   @ManyToOne(() => TeamsEntity, (teamsEntity) => teamsEntity.processes)
   team: TeamsEntity;
+
+  @ManyToMany(() => IsosEntity, (iso) => iso.processes)
+  @JoinTable()
+  isos : IsosEntity[]
 }

@@ -1,4 +1,3 @@
-import { PhotoProfile } from "@/components/photoProfile";
 import { TaskModal } from "@/components/taskModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -6,7 +5,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { TitleContext } from "@/contexts/TitleContext";
 import useAuth from "@/hooks/useAuth";
 import { Processes } from "@/interfaces/processes";
@@ -16,6 +14,8 @@ import { MoreHorizontal, Pencil, Trash } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+
+
 
 export function TelaTarefas() {
   const { process: processName, id } = useParams();
@@ -102,6 +102,8 @@ export function TelaTarefas() {
     setTask(item);
     setModalTask(true);
   }
+
+
 
   return (
     <div className="flex flex-col px-12">
@@ -310,12 +312,14 @@ export function TelaTarefas() {
 
         {modalTask && (
           <TaskModal
-            id={task!.id}
+            id = {id}
+            idTask={task!.id}
             title={task!.title}
             users={task?.users}
             description={task!.description}
             priority={task!.priority}
             task={task}
+            getProcess={getProcess}
             closeModal={() => {
               setModalTask(false);
             }}

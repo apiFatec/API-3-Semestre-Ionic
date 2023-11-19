@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ProcessesEntity } from "@/app/processes/entities/processes.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({name: 'isos'})
 export class IsosEntity {
@@ -23,4 +24,7 @@ export class IsosEntity {
   @DeleteDateColumn()
   deletedAt: string;
 
+  @ManyToMany(() => ProcessesEntity, (process) => process.isos)
+  @JoinTable()
+  processes: ProcessesEntity[]
 }

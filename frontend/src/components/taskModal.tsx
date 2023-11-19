@@ -41,7 +41,8 @@ interface usersTask {
 }
 
 interface Modal {
-  id: string | undefined;
+  id : any
+  idTask: string | undefined;
   title: string | undefined;
   users: Users[] | undefined;
   description: string | undefined;
@@ -49,9 +50,10 @@ interface Modal {
   task?: Tasks;
   toggleModal?: (task: Tasks) => void;
   closeModal: any;
+  getProcess: Function
 }
 
-export function TaskModal({ task, id, title, users, description, priority, toggleModal, closeModal }: Modal) {
+export function TaskModal({ task, idTask, title, users, description, priority, toggleModal, closeModal, getProcess , id }: Modal) {
   const [modalFile, setModalFile] = useState<boolean>(false);
   const [userInTask, setUserInTask] = useState<usersTask[]>();
   const [files, setFiles] = useState<getFiles[]>([]);
@@ -74,8 +76,8 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
   async function getUserTask() {
     console.log('getUsers')
     const user = await userServices.getOneUser(localStorage.getItem('id')!);
-    const files = await taskService.getFileTask(id);
-    const result = await taskService.getUserTask(id, localStorage.getItem('id'));
+    const files = await taskService.getFileTask(idTask);
+    const result = await taskService.getUserTask(idTask, localStorage.getItem('id'));
     setUserLog(user.data)
     setUserInTask(result.data);
     setFiles(files.data);
@@ -99,6 +101,7 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
     userServices.finishTask(id)
       .then((response) => {
         getUserTask();
+        window.location.reload();
       }).catch((error) => {
         console.log(error);
       });
@@ -134,7 +137,7 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
           <header className="flex items-center gap-3 mb-8">
             <h2 className="text-2xl ml-8 ">{title}</h2>
           </header>
-
+{/* 
           <div className="flex flex-col  mb-5">
             <div className="flex gap-5">
               <UsersIcon color="#2C2C2C" />
@@ -151,7 +154,7 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
                 <img src={photo} alt="caralho" />
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
@@ -161,7 +164,6 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
             <div className="ml-10 pr-4 max-h-96 overflow-auto">
               <p className="">{description}</p>
             </div>
-
             <FileList files={files} />
           </div>
         </section>
@@ -195,7 +197,7 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
               <>
                 <p className="text-sm mb-2">Ações</p>
                 <Button
-                  onClick={() => finishTask(id)}
+                  onClick={() => finishTask(idTask)}
                   className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2 hover:bg-[#CCCCCC]"
                 >
                   <CheckSquare size={18} />
@@ -221,7 +223,7 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
               </>
             )}
 
-            {modalFile && <TaskFileModal func={getUserTask} taskId={id} />}
+            {modalFile && <TaskFileModal func={getUserTask} taskId={idTask} />}
           </div>
         </aside>
       </div>

@@ -59,6 +59,7 @@ export function CriarEquipe() {
       .createTeam(team)
       .then((response) => {
         console.log(response);
+        alert('Equipe Criada!')
       })
       .catch((error) => {
         console.log(error);

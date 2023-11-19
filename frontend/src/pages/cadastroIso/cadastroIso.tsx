@@ -5,13 +5,7 @@ import { Button } from "@/components/ui/button";
 import isoService from "@/services/isoService";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useEffect, useState } from "react";
-
-interface typeIso {
-    description: ""
-    id: ""
-    title: ""
-    url: ""
-}
+import { typeIso } from "@/interfaces/iso";
 
 export function CadastroIso() {
     const [titleIso, setTitleIso] = useState<string>('');

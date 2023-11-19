@@ -49,4 +49,9 @@ export class ProcessesController {
   async getTeamProcesses(@Param('id', new ParseUUIDPipe()) id: string): Promise<ProcessesEntity[]> {
     return await this.processesService.getTeamProcesses(id);
   }
+
+  @Get(':id/isos')
+  async getIsosProcesse(@Param('id', new ParseUUIDPipe()) id: string){
+    return await this.processesService.getIsos(id)
+  }
 }

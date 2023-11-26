@@ -59,10 +59,12 @@ export function CriarEquipe() {
       .createTeam(team)
       .then((response) => {
         console.log(response);
+        alert('Equipe Criada com sucesso')
       })
       .catch((error) => {
         console.log(error);
       });
+      window.location.reload()
   };
 
   return (

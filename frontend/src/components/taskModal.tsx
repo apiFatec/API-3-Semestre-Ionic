@@ -102,6 +102,18 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
       }).catch((error) => {
         console.log(error);
       });
+      window.location.reload()
+  }
+
+  async function reviewTask(id: string | undefined) {
+    console.log('send tasks to review')
+    userServices.reviewTask(id)
+      .then((response) => {
+        getUserTask();
+      }).catch((error) => {
+        console.log(error);
+      });
+      window.location.reload()
   }
 
   async function leaveTask(
@@ -209,6 +221,16 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
                   <Paperclip size={18} />
                   Anexo
                 </Button>
+
+                {task?.status === 'Finalizado' && (
+                  <Button
+                  className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2 hover:bg-[#CCCCCC]"
+                  onClick={() => reviewTask(id)}
+                >
+                  <ArrowLeftFromLine size={18} />
+                  Voltar para progresso
+                </Button>
+                )}
 
                 <Button
                   className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2 hover:bg-[#CCCCCC]"

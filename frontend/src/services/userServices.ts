@@ -57,6 +57,10 @@ class UserServices {
     });
   }
 
+  async reviewTask(id : string | undefined) {
+    return await api.put(`/tasks/review-task/${id}`);
+  }
+
 }
 
 export default new UserServices();

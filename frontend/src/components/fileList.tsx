@@ -19,6 +19,7 @@ const FileList: React.FC<FileListProps> = ({ files }) => {
         <Paperclip color="#2C2C2C" />
         <h1>Arquivos</h1>
       </div>
+      <br />
       <ul>
         {files.map((file) => (
           <li key={file.id}>
@@ -31,6 +32,7 @@ const FileList: React.FC<FileListProps> = ({ files }) => {
         ))}
       </ul>
     </div>
+    
   );
 };
 

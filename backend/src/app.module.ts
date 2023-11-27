@@ -11,6 +11,8 @@ import { FilesModule } from './app/files/files.module';
 import { TeamsModule } from './app/teams/teams.module';
 import { IsosModule } from './app/isos/isos.module';
 import { MailModule } from './app/mail/mail.module';
+import { ComentariosModule } from './app/comentarios/comentarios.module';
+
 require('dotenv').config();
 
 @Module({
@@ -34,6 +36,7 @@ require('dotenv').config();
     TeamsModule,
     IsosModule,
     MailModule,
+    ComentariosModule,
   ],
   controllers: [],
   providers: [],

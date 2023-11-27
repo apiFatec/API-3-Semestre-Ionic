@@ -17,6 +17,7 @@ import { UsersTasksEntity } from '@/app/tasks/entities/usersTasks.entity';
 import { ProjectsEntity } from '@/app/projects/entities/projects.entity';
 import { File } from '@/app/files/entities/file.entity';
 import { TeamsEntity } from '@/app/teams/entities/teams.entity';
+import { Comentario } from '@/app/comentarios/entities/comentario.entity';
 
 export enum Role {
   CLEVEL = 'C-Level',
@@ -82,6 +83,9 @@ export class UsersEntity {
 
   @OneToMany(() => File, (file) => file.usersId)
   files: File[];
+
+  @OneToMany(() => Comentario, (comentario) => comentario.user) 
+  comentario : Comentario[]
 
   @ManyToOne(() => TeamsEntity, (teamsEntity) => teamsEntity.users)
   @JoinColumn({ name: 'teams_id' })

@@ -54,7 +54,7 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
 
 
 ## Backlog das Sprints
-![03_Sprint_Roadmap](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/97cd415b-face-4cb0-bad9-75cfb2870cd6)
+![04_Sprint_Roadmap](https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/1cb94693-6f4b-44b5-af5f-e7b6dcc0cbd4)
 
 
 
@@ -83,9 +83,9 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
     title="HTML"
     style="display: inline-block; margin: 0 auto; width: 60px"></th>
     <th><img
-    src="https://user-images.githubusercontent.com/89823203/188508718-75027df1-8a91-4a47-94b5-ce2664c6f2be.png"
+    src="https://github.com/apiFatec/API-3-Semestre-Ionic/assets/112169639/8f7699b6-4ee3-4bfb-a761-f79faa45049d"
     alt="Alt text"
-    title="CSS"
+    title="Tailwind"
     style="display: inline-block; margin: 0 auto; width: 60px"></th>
      <th><img
     src="https://user-images.githubusercontent.com/89823203/190717820-53e9f06b-1aec-4e46-91e1-94ea2cf07100.svg"
@@ -108,7 +108,7 @@ Implementar um design responsivo para garantir que a plataforma seja acessível 
     <td>Figma</td>
     <td>PostgreSQL</td>
     <td>HTML</td>
-    <td>CSS</td>
+    <td>Tailwind</td>
     <td>JavaScript</td>
     <td>Typescript</td>
     <td>Node.Js</td>

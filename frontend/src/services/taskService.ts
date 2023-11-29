@@ -29,6 +29,10 @@ class TaskService {
     async deleteComentario(idComentario : string | undefined){
         return await api.delete(`comentarios/${idComentario}`)
     }
+
+    async leaderTeam(idProcess : string | undefined){
+        return await api.get(`teams/leader/${idProcess}`)
+    }
 }
 
 export default new TaskService();

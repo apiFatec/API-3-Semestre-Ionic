@@ -73,6 +73,18 @@ export class TasksService {
     }
   }
 
+  async reviewTask(id: string) {
+    console.log("reviewing task")
+    try {
+      await this.tasksRepository.update(
+        { id: id },
+        { status: Status.INPROGRESS },
+      );
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
   async leaveTask(idTask: string, id: string) {
     console.log("leaving task")
     await this.usersTasksRepository.delete({

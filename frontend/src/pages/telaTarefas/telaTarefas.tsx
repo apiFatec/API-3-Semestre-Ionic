@@ -319,6 +319,7 @@ export function TelaTarefas() {
             closeModal={() => {
               setModalTask(false);
             }}
+            process={process}
           />
         )}
       </div>

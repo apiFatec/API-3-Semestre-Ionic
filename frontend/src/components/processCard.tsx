@@ -79,14 +79,14 @@ export function ProcessCard(process: Process) {
           <Badge className="]" variant={"secondary"}>{currentDate}</Badge>
         </div>
         <div className="flex pt-4 items-center justify-end">
-          {process?.users?.length > 0 && process.users.slice(0, 2).map((user, index) => {
+          {process?.users?.length > 0 && process.users.slice(1, 4).map((user, index) => {
             return (
               <span className="mx-[-4px]" key={index}><PhotoProfile url={user.profileImage} /></span>
             )
           })}
-          {process.users.length - 2 > 0 && (
+          {process.users.length - 4 > 0 && (
             <Avatar className="h-11 w-11 shadow-md border-black/20 border-[1px]">
-              <AvatarFallback>+{process.users.length - 2}</AvatarFallback>
+              <AvatarFallback>+{process.users.length -4}</AvatarFallback>
             </Avatar>
           )
           }

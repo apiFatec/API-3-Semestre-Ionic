@@ -18,6 +18,8 @@ import taskService from "@/services/taskService";
 import FileList from "./fileList";
 import { UserContext } from "@/contexts/userContext";
 import { Users } from "@/interfaces/users";
+import { Processes } from "@/interfaces/processes";
+import { profile } from "console";
 
 export interface getFiles {
   fileName: string;
@@ -27,11 +29,6 @@ export interface getFiles {
   id: string;
   taskIdId: string | undefined;
   usersIdId: string | undefined;
-}
-
-interface userLog {
-  id: string;
-  name: string;
 }
 
 interface usersTask {
@@ -49,13 +46,36 @@ interface Modal {
   task?: Tasks;
   toggleModal?: (task: Tasks) => void;
   closeModal: any;
+  process : Processes | undefined;
 }
 
-export function TaskModal({ task, id, title, users, description, priority, toggleModal, closeModal }: Modal) {
+interface leader{
+  email : string
+}
+
+interface Comentario {
+  id : string
+  comentario: string
+  userId: string
+  taskId: string
+  name: string
+  profileImage: string
+}
+
+export interface I2Comentario {
+  comentario: string | undefined
+  userId: string | undefined
+  taskId: string | undefined
+}
+
+export function TaskModal({ task, id, title, users, description, priority, process, closeModal }: Modal) {
+  const [comentarios, setComentarios] = useState<Comentario[]>()
+  const [comentario, setComentario] = useState<string>()
   const [modalFile, setModalFile] = useState<boolean>(false);
   const [userInTask, setUserInTask] = useState<usersTask[]>();
   const [files, setFiles] = useState<getFiles[]>([]);
-  const [userLog, setUserLog] = useState<userLog>();
+  const [userLog, setUserLog] = useState<Users>();
+  const [leaderTeam, setLeaderTeam] = useState<leader[]>([]);
   const { id: idUser } = useContext(UserContext);
   const priorityColor = () => {
     if (priority === "Baixa") {
@@ -76,9 +96,14 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
     const user = await userServices.getOneUser(localStorage.getItem('id')!);
     const files = await taskService.getFileTask(id);
     const result = await taskService.getUserTask(id, localStorage.getItem('id'));
+    const comentarios = await taskService.getComentarios(id)
+    console.log(`id do processo: ${process?.id}`)
+    const teamLeader = await taskService.leaderTeam(process?.id)
     setUserLog(user.data)
     setUserInTask(result.data);
     setFiles(files.data);
+    setComentarios(comentarios.data)
+    setLeaderTeam(teamLeader.data)
   }
 
   async function joinTask() {
@@ -96,9 +121,31 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
 
   async function finishTask(id: string | undefined) {
     console.log('finishing')
+    const mail = {
+      email : leaderTeam[0].email,
+      title : `Tarefa Finalizada`,
+      description : `Tarefa "`+task?.title+`" finalizada com sucesso pelo usuário `+userLog?.name,
+      process : process?.name,
+      processId : process?.id
+    }
+
+    userServices.notificarGestor(mail)
+
     userServices.finishTask(id)
+      .then(() => {
+        getUserTask();
+        window.location.reload()
+      }).catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function reviewTask(id: string | undefined) {
+    console.log('send tasks to review')
+    userServices.reviewTask(id)
       .then((response) => {
         getUserTask();
+        window.location.reload()
       }).catch((error) => {
         console.log(error);
       });
@@ -113,9 +160,41 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
         getUserTask();
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error); 
       });
   }
+
+  async function Comentar() {
+    if (comentario == '') {
+      alert('campo de comentário está vazio')
+    }
+    else {const newComentario : I2Comentario = {
+      comentario : comentario,
+      taskId : id,
+      userId : userLog?.id
+    }
+
+    await taskService.postComentario(newComentario)
+
+    getUserTask()
+    setComentario('')
+  }
+  }
+
+  async function ExcluirComentario(id : string) {
+    if (confirm('deseja excluir o comentário? ')){
+      taskService.deleteComentario(id)
+      getUserTask()
+      setComentario('')
+    }
+  }
+
+  async function sendEmail() {
+    console.log(leaderTeam[0].email)
+    console.log(task?.title)
+  }
+
+  console.log(comentarios)
 
   return (
     <div
@@ -127,7 +206,7 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
 
       {/* Conteúdo do modal */}
       <div
-        className="bg-white z-10 p-4 rounded-lg flex w-2/5 ml-[20%] min-h-[40rem]"
+        className="bg-white z-10 p-4 rounded-lg flex w-3/5 ml-[20%] min-h-[40rem]"
         onClick={(e) => e.stopPropagation()}
       >
         <section className="w-3/4">
@@ -141,15 +220,23 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
               <p>Membros</p>
             </div>
             <div className="flex gap-2 items-center ml-10">
-              <div className="flex w-8 h-8 rounded-full overflow-hidden">
+              {/* <div className="flex w-8 h-8 rounded-full overflow-hidden">
                 <img src={photo} alt="caralho" />
               </div>
               <div className="flex w-8 h-8 rounded-full overflow-hidden">
                 <img src={photo} alt="caralho" />
-              </div>
-              <div className="flex w-8 h-8 rounded-full overflow-hidden">
-                <img src={photo} alt="caralho" />
-              </div>
+              </div> */}
+              {users && (
+                <>
+                  {users.map(user => {
+                    return (
+                      <div className="flex w-8 h-8 rounded-full overflow-hidden">
+                        <img src={user.profileImage} alt={user.name} />
+                      </div>
+                    )
+                  })}
+                </>
+              )}
             </div>
           </div>
 
@@ -163,6 +250,38 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
             </div>
 
             <FileList files={files} />
+          </div>
+
+          <br />
+
+          <p className="w-11/12 border-b flex flex-col gap-3">Comentários</p>
+
+          <div className="flex items-center gap-4 mt-4">
+            <img src={userLog?.profileImage} alt="img" className="flex w-8 h-8 rounded-full overflow-hidden" />
+            <input
+              onChange={(e) => setComentario(e.target.value)}
+              value={comentario}
+              type="text"
+              placeholder="Adicionar comentário..."
+              className="p-2 border-solid border w-9/12 rounded"
+            />
+            <button onClick={() => Comentar()}>Enviar</button>
+          </div>
+          <br />
+          <div className="h-32 overflow-auto border-1 border-solid border-gray-300">
+            {comentarios?.map((comentario) => {
+              return (
+                <div>
+                    <div className="flex items-center gap-4 mt-4">
+                      <img src={comentario.profileImage} alt="img" className="flex w-8 h-8 rounded-full overflow-hidden" />
+                      <p
+                        className="p-2 border-solid border w-9/12 rounded"
+                      >{comentario.comentario}</p>
+                      <button onClick={() => ExcluirComentario(comentario.id)} className="">Excluir</button>
+                    </div>
+                </div>
+              )
+            })}
           </div>
         </section>
 
@@ -209,6 +328,16 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
                   <Paperclip size={18} />
                   Anexo
                 </Button>
+
+                {task?.status === 'Finalizado' && (
+                  <Button
+                    className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2 hover:bg-[#CCCCCC]"
+                    onClick={() => reviewTask(id)}
+                  >
+                    <ArrowLeftFromLine size={18} />
+                    Voltar para progresso
+                  </Button>
+                )}
 
                 <Button
                   className="flex items-center w-full justify-start rounded-none gap-2 bg-[#EBEBEB] py-0 px-2 text-slate-700 font-bold text-left mb-2 hover:bg-[#CCCCCC]"

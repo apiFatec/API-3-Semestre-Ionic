@@ -30,6 +30,11 @@ export class TeamsController {
     return await this.teamsService.findOne(id);
   }
 
+  @Get('/leader/:id')
+  async emailLeader(@Param('id', new ParseUUIDPipe()) id : string){
+    return await this.teamsService.findLeader(id)
+  }
+
   @Put(':id')
   async updateProcess(
     @Param('id', new ParseUUIDPipe()) id: string,

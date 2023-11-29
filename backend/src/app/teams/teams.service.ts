@@ -5,6 +5,7 @@ import { TeamsEntity } from './entities/teams.entity';
 import { UsersEntity } from '../users/entities/users.entity';
 import { SaveTeamDTO } from './dto/save-team.dto';
 import { UsuariosService } from '../users/users.service';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class TeamsService {
@@ -85,5 +86,16 @@ export class TeamsService {
     await this.teamsRepository.insert(team);
 
     return team;
+  }
+
+  async findLeader(id : string){
+    const query = `
+    SELECT users.email
+    FROM processes
+    JOIN teams ON processes."teamId" = teams.id
+    JOIN users ON teams.leader_id = users.id
+    WHERE processes.id = '${id}' ;`
+
+    return await this.teamsRepository.query(query)
   }
 }

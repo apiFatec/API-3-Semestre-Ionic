@@ -57,6 +57,13 @@ class UserServices {
     });
   }
 
+  async reviewTask(id : string | undefined) {
+    return await api.put(`/tasks/review-task/${id}`);
+  }
+
+  async notificarGestor(data : any){
+    return await api.post(`/notification/send`,data)
+  }
 }
 
 export default new UserServices();

@@ -32,6 +32,11 @@ export class TasksController {
   async finishTask(@Param('id') id: string) {
     return await this.tasksService.finishTask(id);
   }
+  
+  @Put('/review-task/:id')
+  async reviewTask(@Param('id') id: string) {
+    return await this.tasksService.reviewTask(id);
+  }
 
   @Delete('/leave-task/:idTask/user/:idUser')
   @HttpCode(204)

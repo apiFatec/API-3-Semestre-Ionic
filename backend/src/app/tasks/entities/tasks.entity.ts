@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { UsersTasksEntity } from './usersTasks.entity';
 import { File } from '@/app/files/entities/file.entity';
+import { Comentario } from '@/app/comentarios/entities/comentario.entity';
 
 export enum Status {
   WAITING = 'Aguardando',
@@ -55,6 +56,9 @@ export class TasksEntity {
   @ManyToOne(() => ProcessesEntity, (processesEntity) => processesEntity.tasks)
   @JoinColumn({ name: 'processes_id' })
   processesId: ProcessesEntity;
+
+  @ManyToOne(() => Comentario, comentario => comentario.task)
+  comentario : Comentario[]
 
   @OneToMany(() => UsersTasksEntity, (usersTasksEntity) => usersTasksEntity.tasksId)
   usersTasks: UsersTasksEntity[];

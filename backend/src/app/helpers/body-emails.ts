@@ -1,12 +1,13 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { AttachmentDto } from '../mail/dto/email-attachment.dto';
+import { CreateNotificationDto } from '../notification/dto/create-notification.dto';
 
 class BodyEmail {
 
   async getBodyEmail(body: AttachmentDto, template: string) {
 
-    const filePath = path.join('C:\\Users\\Talison\\API-3-Semestre-Ionic\\backend\\src\\app\\templates\\', template);
+    const filePath = path.join('src/app/templates', template);
     let htmlContent = fs.readFileSync(filePath, 'utf-8');
 
     htmlContent = htmlContent.replace('{{title}}', body.title);

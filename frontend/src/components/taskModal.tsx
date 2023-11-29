@@ -124,7 +124,7 @@ export function TaskModal({ task, id, title, users, description, priority, proce
     const mail = {
       email : leaderTeam[0].email,
       title : `Tarefa Finalizada`,
-      description : `Tarefa "`+task?.title+`" finalizada com sucesso pelo `+userLog?.name,
+      description : `Tarefa "`+task?.title+`" finalizada com sucesso pelo usuário `+userLog?.name,
       process : process?.name,
       processId : process?.id
     }

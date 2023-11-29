@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from "react";
 import UserServices from "@/services/userServices";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { TeamFormValues } from "@/interfaces/teamFormValues";
-import userServices from "@/services/userServices";
 import { Users } from "@/interfaces/users";
 import { TitleContext } from "@/contexts/TitleContext";
 import teamsService from "@/services/teamsService";
@@ -60,11 +59,11 @@ export function CriarEquipe() {
       .then((response) => {
         console.log(response);
         alert('Equipe Criada com sucesso')
+        window.location.reload()
       })
       .catch((error) => {
         console.log(error);
       });
-      window.location.reload()
   };
 
   return (

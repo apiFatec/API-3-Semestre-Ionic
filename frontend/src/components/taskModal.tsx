@@ -18,8 +18,8 @@ import taskService from "@/services/taskService";
 import FileList from "./fileList";
 import { UserContext } from "@/contexts/userContext";
 import { Users } from "@/interfaces/users";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { ScrollBar } from "./ui/scroll-area";
+import { Processes } from "@/interfaces/processes";
+import { profile } from "console";
 
 export interface getFiles {
   fileName: string;
@@ -46,6 +46,11 @@ interface Modal {
   task?: Tasks;
   toggleModal?: (task: Tasks) => void;
   closeModal: any;
+  process : Processes | undefined;
+}
+
+interface leader{
+  email : string
 }
 
 interface Comentario {
@@ -63,13 +68,14 @@ export interface I2Comentario {
   taskId: string | undefined
 }
 
-export function TaskModal({ task, id, title, users, description, priority, toggleModal, closeModal }: Modal) {
+export function TaskModal({ task, id, title, users, description, priority, process, closeModal }: Modal) {
   const [comentarios, setComentarios] = useState<Comentario[]>()
   const [comentario, setComentario] = useState<string>()
   const [modalFile, setModalFile] = useState<boolean>(false);
   const [userInTask, setUserInTask] = useState<usersTask[]>();
   const [files, setFiles] = useState<getFiles[]>([]);
   const [userLog, setUserLog] = useState<Users>();
+  const [leaderTeam, setLeaderTeam] = useState<leader[]>([]);
   const { id: idUser } = useContext(UserContext);
   const priorityColor = () => {
     if (priority === "Baixa") {
@@ -91,10 +97,13 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
     const files = await taskService.getFileTask(id);
     const result = await taskService.getUserTask(id, localStorage.getItem('id'));
     const comentarios = await taskService.getComentarios(id)
+    console.log(`id do processo: ${process?.id}`)
+    const teamLeader = await taskService.leaderTeam(process?.id)
     setUserLog(user.data)
     setUserInTask(result.data);
     setFiles(files.data);
     setComentarios(comentarios.data)
+    setLeaderTeam(teamLeader.data)
   }
 
   async function joinTask() {
@@ -112,13 +121,23 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
 
   async function finishTask(id: string | undefined) {
     console.log('finishing')
+    const mail = {
+      email : leaderTeam[0].email,
+      title : `Tarefa Finalizada`,
+      description : `Tarefa "`+task?.title+`" finalizada com sucesso pelo `+userLog?.name,
+      process : process?.name,
+      processId : process?.id
+    }
+
+    userServices.notificarGestor(mail)
+
     userServices.finishTask(id)
-      .then((response) => {
+      .then(() => {
         getUserTask();
+        window.location.reload()
       }).catch((error) => {
         console.log(error);
       });
-    window.location.reload()
   }
 
   async function reviewTask(id: string | undefined) {
@@ -126,10 +145,10 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
     userServices.reviewTask(id)
       .then((response) => {
         getUserTask();
+        window.location.reload()
       }).catch((error) => {
         console.log(error);
       });
-    window.location.reload()
   }
 
   async function leaveTask(
@@ -141,7 +160,7 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
         getUserTask();
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error); 
       });
   }
 
@@ -155,7 +174,7 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
       userId : userLog?.id
     }
 
-    taskService.postComentario(newComentario)
+    await taskService.postComentario(newComentario)
 
     getUserTask()
     setComentario('')
@@ -169,6 +188,13 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
       setComentario('')
     }
   }
+
+  async function sendEmail() {
+    console.log(leaderTeam[0].email)
+    console.log(task?.title)
+  }
+
+  console.log(comentarios)
 
   return (
     <div
@@ -247,7 +273,7 @@ export function TaskModal({ task, id, title, users, description, priority, toggl
               return (
                 <div>
                     <div className="flex items-center gap-4 mt-4">
-                      <img src={userLog?.profileImage} alt="img" className="flex w-8 h-8 rounded-full overflow-hidden" />
+                      <img src={comentario.profileImage} alt="img" className="flex w-8 h-8 rounded-full overflow-hidden" />
                       <p
                         className="p-2 border-solid border w-9/12 rounded"
                       >{comentario.comentario}</p>

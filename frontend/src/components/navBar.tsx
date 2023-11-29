@@ -129,7 +129,7 @@ export function NavBar() {
               cn("p-3 rounded-3xl w-32 shadow-md border-[1px] border-black/20 cursor-pointer", theme === 'light' ? 'bg-white' : "bg-background-secondary")
             }
           >
-            Open
+            Perfil
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>{name}</DropdownMenuLabel>

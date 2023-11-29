@@ -24,10 +24,10 @@ export class ComentariosService {
 
   findComentarioByTask(taskId: string) {
     return this.comentarioRepository.query(`
-    SELECT comentarios.id, comentario, "userId", "taskId", users.name, "profileImage"
+    SELECT comentarios.id, comentario, "userId", "taskId", users.name, "profileImage", comentarios.created_at
 	  FROM public.comentarios
 	  JOIN users ON "userId" = users.id
-	  WHERE "taskId" = '${taskId}'
+	  WHERE "taskId" = '${taskId}' ORDER BY comentarios.created_at
     `
     )
   }
